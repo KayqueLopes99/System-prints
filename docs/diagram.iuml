@@ -76,16 +76,19 @@ class "Pedido" as pedido {
   + calcularValorTotal() : double
   + confirmarPedido() : void
   + atualizarStatusPedido() : void
-  + listarFilaDePedidos() : List<Pedido>
   + cancelarPedido() : void
-  + estimarTempoFila() : String
+  
   + obterPosicaoFila() : int
+
+
+  + estimarTempoFila() : String
+  + listarFilaDePedidos() : List<Pedido>
   
   ' Métodos Sincronizados com PedidoService.java (Novos)
-  + obterEstatisticasUsuario(idUsuario) : EstatisticasPedidoDTO
-  + listarPedidosAtivos(idUsuario) : List<PedidoCardDTO>
-  + listarPedidosHistorico(idUsuario) : List<Pedido>
-  + listarPedidosPorStatus(idUsuario, status) : List<Pedido>
+  + obterEstatisticasUsuario(-) : EstatisticasPedidoDTO 
+  + listarPedidosAtivos(-) : List<PedidoCardDTO>
+  + listarPedidosHistorico(-) : List<Pedido>
+  + listarPedidosPorStatus(-, status) : List<Pedido>
 }
 
 class "Item_Pedido" as item_pedido {

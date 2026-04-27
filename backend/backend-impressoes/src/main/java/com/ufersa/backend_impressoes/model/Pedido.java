@@ -50,7 +50,7 @@ public class Pedido {
     @Column(name = "valor_total")
     private Double valorTotal;
 
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<ItemPedido> itens;
 }

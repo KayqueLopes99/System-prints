@@ -1,0 +1,267 @@
+/* Container Geral */
+.novo-pedido-container {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  font-family: Arial, sans-serif;
+  padding-bottom: 80px; /* Espaço para a navbar */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Cabeçalho */
+.novo-pedido-header {
+  background-color: #fff;
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.novo-pedido-header h1 {
+  color: #1d448b;
+  font-size: 24px;
+  margin: 0 0 5px 0;
+}
+
+.novo-pedido-header p {
+  color: #666;
+  font-size: 14px;
+  margin: 0;
+}
+
+.novo-pedido-main {
+  padding: 20px;
+}
+
+/* Títulos das seções (Pedidos / Serviços) */
+.titulo-secao {
+  text-align: center;
+  font-size: 16px;
+  color: #333;
+  font-weight: bold;
+  margin: 25px 0 15px 0;
+}
+
+/* Card Pedido em Progresso */
+.card-cabecalho-tabela {
+  background-color: #fff;
+  border: 1px solid #1d448b;
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  color: #555;
+  font-size: 14px;
+}
+
+.card-pedido-progresso {
+  background-color: #fff;
+  border: 1px solid #1d448b;
+  border-radius: 0 0 8px 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.faixa-verde-topo {
+  height: 6px;
+  background-color: #4caf50;
+  width: 90%;
+  margin: 0 auto;
+  border-radius: 0 0 4px 4px;
+}
+
+.conteudo-card {
+  padding: 15px;
+}
+
+.pedido-id {
+  font-size: 12px;
+  color: #1d448b;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.pedido-arquivo {
+  font-size: 15px;
+  color: #333;
+  margin: 0 0 4px 0;
+}
+
+.pedido-detalhes {
+  font-size: 13px;
+  color: #666;
+  margin: 0 0 12px 0;
+}
+
+.badge-status.pronto {
+  display: inline-flex;
+  align-items: center;
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+
+.dot-verde {
+  width: 8px;
+  height: 8px;
+  background-color: #4caf50;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+.pedido-valor {
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.label-valor {
+  font-size: 12px;
+  color: #666;
+}
+
+.valor-rs {
+  font-size: 16px;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Cards de Serviços */
+.card-servico {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+
+.card-servico:hover {
+  border-color: #1d448b;
+}
+
+.icone-servico {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 15px;
+  flex-shrink: 0;
+  background-color: #f0f0f0;
+}
+
+.bg-azul-claro {
+  background-color: #e3efff;
+}
+
+.info-servico {
+  flex-grow: 1;
+}
+
+.info-servico h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.sub-info {
+  font-size: 12px;
+  color: #666;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.descricao-servico {
+  font-size: 11px;
+  color: #888;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.checkbox-servico {
+  width: 20px;
+  height: 20px;
+  accent-color: #1d448b;
+  cursor: pointer;
+}
+
+/* Navbar Inferior Escura */
+.navegacao-inferior.dark-nav {
+  background-color: #1d448b;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 65px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  z-index: 100;
+}
+
+.icone-nav {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Botão Central Destacado */
+.destaque-ativo {
+  background-color: #fff;
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  justify-content: center;
+  margin-top: -30px; /* Faz ele pular para fora da barra */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  border: 4px solid #f8f9fa; /* Cria a borda que separa da barra azul */
+}
+
+/* Cabeçalho */
+.novo-pedido-header {
+  background-color: #fff;
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: center; /* 👉 ADICIONADO PARA CENTRALIZAR */
+}
+
+/* =========================================
+   BOTÃO AVANÇAR
+   ========================================= */
+.container-avancar {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 20px; /* Dá um espacinho extra antes da barra de navegação */
+}
+
+.botao-avancar {
+  background-color: #1d448b;
+  color: #ffffff;
+  border: none;
+  padding: 16px 0;
+  width: 100%;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(29, 68, 139, 0.2);
+  transition: all 0.2s ease;
+}
+
+.botao-avancar:active {
+  transform: scale(0.98);
+}

@@ -2,22 +2,38 @@ package com.ufersa.backend_impressoes.service;
 
 import com.ufersa.backend_impressoes.dto.EstatisticasPedidoDTO;
 import com.ufersa.backend_impressoes.dto.PedidoCardDTO;
+import com.ufersa.backend_impressoes.dto.PedidoRequestDTO;
+import com.ufersa.backend_impressoes.model.ItemPedido;
 import com.ufersa.backend_impressoes.model.Pedido;
+import com.ufersa.backend_impressoes.model.Usuario;
 import com.ufersa.backend_impressoes.model.enuns.StatusPedido;
-
+import com.ufersa.backend_impressoes.model.enuns.TipoCor;
 import com.ufersa.backend_impressoes.repository.PedidoRepository;
+import com.ufersa.backend_impressoes.repository.UsuarioRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 public class PedidoService {
 
     @Autowired
     private PedidoRepository pedidoRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    // Constantes de preço (Poderiam vir do banco futuramente)
+    private final double PRECO_PB = 0.15;
+    private final double PRECO_COLORIDO = 1.00;
 
     // 1. Estatísticas do Usuário (Cards do topo)
     public EstatisticasPedidoDTO obterEstatisticasUsuario(int idUsuario) {
@@ -59,5 +75,66 @@ public class PedidoService {
     // 4. Listar por Status Específico (Abas "Concluídos" ou "Cancelados")
     public List<Pedido> listarPedidosPorStatus(int idUsuario, StatusPedido status) {
         return pedidoRepository.findByUsuario_IdUsuarioAndStatusFilaOrderByDataHoraDesc(idUsuario, status);
+    }
+
+
+
+    @Transactional
+    public Pedido confirmarPedido(PedidoRequestDTO dto) {
+        // 1. Buscar usuário
+        Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        // 2. Criar o objeto Pedido (criarPedido)
+        Pedido novoPedido = new Pedido();
+        novoPedido.setUsuario(usuario);
+        novoPedido.setDataHora(LocalDateTime.now());
+        novoPedido.setStatusFila(StatusPedido.PENDENTE);
+        novoPedido.setNomeArquivoOriginal(dto.getNomeArquivo());
+        novoPedido.setTamanhoArquivoMb(dto.getTamanhoMb());
+        novoPedido.setTotalPaginasArquivo(dto.getTotalPaginas());
+
+        // 3. Simular Upload (fazerUploadArquivo)
+        String urlSimulada = "uploads/" + System.currentTimeMillis() + "_" + dto.getNomeArquivo();
+        novoPedido.setArquivoUrl(urlSimulada);
+
+        // 4. Criar Item e calcular valor (adicionarItemAoPedido + calcularValorTotal)
+        ItemPedido item = new ItemPedido();
+        item.setPedido(novoPedido);
+        item.setQuantidade(dto.getQuantidade());
+        item.setTamanhoPapel(dto.getTamanhoPapel());
+        item.setOrientacao(dto.getOrientacao());
+        item.setFrenteVerso(dto.getFrenteVerso());
+        item.setTipoCor(dto.getTipoCor());
+        item.setObservacoes(dto.getObservacoes());
+
+        double valorUnitario = (dto.getTipoCor() == TipoCor.PRETO_BRANCO) ? PRECO_PB : PRECO_COLORIDO;
+        double total = (valorUnitario * dto.getTotalPaginas()) * dto.getQuantidade();
+
+        novoPedido.setValorTotal(total);
+
+        // Relacionar item ao pedido
+        List<ItemPedido> itens = new ArrayList<>();
+        itens.add(item);
+        novoPedido.setItens(itens);
+
+        // 5. Salvar no banco
+        return pedidoRepository.save(novoPedido);
+    }
+
+    public void atualizarStatusPedido(int idPedido, StatusPedido novoStatus) {
+        Pedido p = pedidoRepository.findById(idPedido).get();
+        p.setStatusFila(novoStatus);
+        pedidoRepository.save(p);
+    }
+
+    public void cancelarPedido(int idPedido) {
+        atualizarStatusPedido(idPedido, StatusPedido.CANCELADO);
+    }
+
+    public int obterPosicaoFila(int idPedido) {
+        Pedido p = pedidoRepository.findById(idPedido)
+                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+        return pedidoRepository.contarPedidosNaFrente(p.getDataHora()) + 1;
     }
 }

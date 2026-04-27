@@ -146,11 +146,17 @@ export default function MeusPedidos() {
 
                                 <div className="pedido-arquivo">{pedido.nomeArquivoOriginal}</div>
 
-                                {/* Local exato para trocar no seu MeusPedidos.jsx */}
                                 <div className="pedido-tags">
                                     {pedido.detalhesImpressao && pedido.detalhesImpressao !== "Configurações não informadas" ? (
+                                        // Cai aqui se estiver na aba "Ativos" (Vem do DTO)
                                         <span className="tag">{pedido.detalhesImpressao}</span>
+                                    ) : pedido.itens && pedido.itens.length > 0 ? (
+                                        // Cai aqui se estiver na aba "Histórico" (Vem da Entidade pura)
+                                        <span className="tag">
+                                            {pedido.itens[0].tamanhoPapel} • {pedido.itens[0].tipoCor === 'PRETO_BRANCO' ? 'P&B' : 'Colorido'} • {pedido.itens[0].frenteVerso ? 'Frente e Verso' : 'Apenas Frente'}
+                                        </span>
                                     ) : (
+                                        // Cai aqui se realmente não houver nenhum item no banco de dados
                                         <span className="tag" style={{ color: 'orange' }}>Aguardando detalhes...</span>
                                     )}
                                     <span className="tag">{pedido.totalPaginasArquivo} páginas</span>
@@ -158,7 +164,7 @@ export default function MeusPedidos() {
 
                                 <div className="pedido-rodape">
                                     <div className={`status-badge ${pedido.statusFila === 'CONCLUIDO' ? 'status-concluido' :
-                                            pedido.statusFila === 'CANCELADO' ? 'status-cancelado' : 'status-ativo'
+                                        pedido.statusFila === 'CANCELADO' ? 'status-cancelado' : 'status-ativo'
                                         }`}>
                                         <div className="bolinha" style={{ backgroundColor: 'currentColor' }}></div>
                                         {pedido.statusFila === 'NA_FILA' ? 'Na Fila' :
@@ -182,9 +188,12 @@ export default function MeusPedidos() {
                 <div className="icone-nav" onClick={() => navigate('/estudante')} style={{ cursor: 'pointer' }}>
                     <Home size={28} />
                 </div>
-                <div className="icone-nav" style={{ cursor: 'pointer' }}>
+                <div className="icone-nav" onClick={() => navigate('/novo-pedido')}>
                     <Printer size={28} />
                 </div>
+
+        
+
                 {/* 👉 ÍCONE CENTRAL DE PEDIDOS AGORA ESTÁ ATIVO (BRANCO) */}
                 <div className="icone-nav ativo" style={{ cursor: 'pointer' }}>
                     <FileText size={28} color="#1d448b" />

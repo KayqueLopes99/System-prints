@@ -182,19 +182,19 @@ export default function Perfil() {
                     )}
                 </div>
 
-                <div className="area-perigo">
+                {/* 👉 ÁREA PERIGO ATUALIZADA COM ALINHAMENTO CENTRALIZADO EM LINHA */}
+                <div className="area-perigo" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '12px' }}>
                     <h3>Configurações Adicionais</h3>
 
-                    <button className="btn-limpar-cache" onClick={limparCache}>
+                    <button className="btn-limpar-cache" onClick={limparCache} style={{ width: '100%', maxWidth: '300px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
                         <Trash2 size={20} />
                         Limpar Cache do Aplicativo
                     </button>
 
-                    <button className="btn-sair" onClick={sairDaConta}>
+                    <button className="btn-sair" onClick={sairDaConta} style={{ width: '100%', maxWidth: '300px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
                         <LogOut size={20} />
                         Sair da Conta
                     </button>
-
                 </div>
 
             </main>

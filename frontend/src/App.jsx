@@ -9,6 +9,7 @@ import AtualizarSenha from './pages/AtualizarSenha/AtualizarSenha';
 import TelaEstudante from "./pages/TelaEstudante/TelaEstudante"; 
 import Perfil from './pages/Perfil/Perfil'; 
 import MeusPedidos from './pages/MeusPedidos/MeusPedidos'; // 👈 NOVO: Importando a tela de Pedidos!
+import NovoPedidoInicio from './pages/NovoPedidoInicio/NovoPedidoInicio';
 
 export default function App() {
   return (
@@ -33,6 +34,9 @@ export default function App() {
 
         {/* 👇 NOVA ROTA: Rota da Tela de Meus Pedidos */}
         <Route path="/pedidos" element={<MeusPedidos />} />
+
+        {/* Rota para a tela que acabamos de criar */}
+        <Route path="/novo-pedido" element={<NovoPedidoInicio />} />
 
       </Routes>
     </Router>

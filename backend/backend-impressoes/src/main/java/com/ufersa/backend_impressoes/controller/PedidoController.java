@@ -2,6 +2,7 @@ package com.ufersa.backend_impressoes.controller;
 
 import com.ufersa.backend_impressoes.dto.EstatisticasPedidoDTO;
 import com.ufersa.backend_impressoes.dto.PedidoCardDTO;
+import com.ufersa.backend_impressoes.dto.PedidoRequestDTO;
 import com.ufersa.backend_impressoes.model.Pedido;
 import com.ufersa.backend_impressoes.model.enuns.StatusPedido;
 
@@ -46,5 +47,24 @@ public class PedidoController {
             @PathVariable int idUsuario,
             @PathVariable StatusPedido status) {
         return ResponseEntity.ok(pedidoService.listarPedidosPorStatus(idUsuario, status));
+    }
+
+    // Criar um novo pedido
+    @PostMapping("/criar")
+    public ResponseEntity<Pedido> criarPedido(@RequestBody PedidoRequestDTO dto) {
+        return ResponseEntity.ok(pedidoService.confirmarPedido(dto));
+    }
+
+    // Cancelar um pedido
+    @PutMapping("/{id}/cancelar")
+    public ResponseEntity<Void> cancelar(@PathVariable int id) {
+        pedidoService.cancelarPedido(id);
+        return ResponseEntity.ok().build();
+    }
+
+    // Obter posição na fila
+    @GetMapping("/{id}/posicao")
+    public ResponseEntity<Integer> getPosicao(@PathVariable int id) {
+        return ResponseEntity.ok(pedidoService.obterPosicaoFila(id));
     }
 }

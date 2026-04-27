@@ -25,11 +25,11 @@ export default function TelaEstudante() {
     <div className="app-container">
       <header className="header-topo">
         {/* 👉 ADICIONADO onClick e cursor pointer NO MENU */}
-        <Menu 
-          size={32} 
-          color="#1d448b" 
-          onClick={() => navigate('/perfil')} 
-          style={{ cursor: 'pointer' }} 
+        <Menu
+          size={32}
+          color="#1d448b"
+          onClick={() => navigate('/perfil')}
+          style={{ cursor: 'pointer' }}
         />
         <Bell size={32} color="#1d448b" />
       </header>
@@ -74,20 +74,21 @@ export default function TelaEstudante() {
         <div className="icone-nav ativo" style={{ cursor: 'pointer' }}>
           <Home size={28} />
         </div>
-        
-        <div className="icone-nav" style={{ cursor: 'pointer' }}>
+
+        {/* 👉 ADICIONAR ISSO AQUI: */}
+        <div className="icone-nav" onClick={() => navigate('/novo-pedido')} style={{ cursor: 'pointer' }}>
           <Printer size={28} />
         </div>
-        
+
         {/* 👉 NOVO: Adicionado onClick para ir para a tela de pedidos */}
-        <div 
-          className="icone-nav" 
-          onClick={() => navigate('/pedidos')} 
+        <div
+          className="icone-nav"
+          onClick={() => navigate('/pedidos')}
           style={{ cursor: 'pointer' }}
         >
           <FileText size={28} />
         </div>
-        
+
         <div className="icone-nav" style={{ cursor: 'pointer' }}>
           <Lightbulb size={28} />
         </div>
