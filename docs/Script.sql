@@ -1,9 +1,15 @@
+setar isso no bancode dados!!!!!!!!!!!
+
+
+
+
+
 -- 1. CRIAÇÃO DOS TIPOS ENUM (Ajustados para o padrão do Java/Spring Boot)
-CREATE TYPE categoria_servico_enum AS ENUM ('IMPRESSAO', 'PLOTAGEM', 'DIGITALIZACAO', 'PRODUTO');
-CREATE TYPE status_fila_enum AS ENUM ('PENDENTE', 'NA_FILA', 'IMPRIMINDO', 'PRONTO', 'CONCLUIDO', 'CANCELADO');
+CREATE TYPE categoria_servico_enum AS ENUM ('IMPRESSAO', 'ENCADERNACAO');
+CREATE TYPE status_fila_enum AS ENUM ('PENDENTE', 'NA_FILA', 'PRONTO', 'CONCLUIDO', 'CANCELADO');
 CREATE TYPE orientacao_enum AS ENUM ('RETRATO', 'PAISAGEM');
 CREATE TYPE tipo_cor_enum AS ENUM ('PRETO_BRANCO', 'COLORIDO');
-CREATE TYPE status_pagamento_enum AS ENUM ('PENDENTE', 'PAGO');
+CREATE TYPE metodo_pagamento_enum AS ENUM ('PIX', 'DINHEIRO', 'CARTAO'); -- 👉 ADICIONADO
 
 -- 2. TABELA USUARIO (Contendo os campos de Estudante e Administrador - Estratégia de Herança)
 CREATE TABLE usuario (
@@ -26,7 +32,6 @@ ALTER TABLE usuario ADD COLUMN data_expiracao TIMESTAMP;
 -- 3. TABELA SERVICO
 CREATE TABLE servico (
     id_servico SERIAL PRIMARY KEY,
-    nome_servico VARCHAR(100) NOT NULL,
     categoria_servico categoria_servico_enum NOT NULL,
     preco_unitario DECIMAL(10,2) NOT NULL,
     disponivel BOOLEAN DEFAULT TRUE
@@ -49,21 +54,19 @@ CREATE TABLE pedido (
 CREATE TABLE item_pedido (
     id_item SERIAL PRIMARY KEY,
     id_pedido INT REFERENCES pedido(id_pedido) ON DELETE CASCADE,
-    id_servico INT REFERENCES servico(id_servico),
+    tipo_servico VARCHAR(50) NOT NULL,
     quantidade INT NOT NULL DEFAULT 1,
     tamanho_papel VARCHAR(20),
     orientacao orientacao_enum,
     frente_verso BOOLEAN DEFAULT FALSE,
     tipo_cor tipo_cor_enum,
-    observacoes TEXT
 );
 
 -- 6. TABELA PAGAMENTO
 CREATE TABLE pagamento (
     id_pagamento SERIAL PRIMARY KEY,
     id_pedido INT UNIQUE REFERENCES pedido(id_pedido) ON DELETE CASCADE,
-    metodo VARCHAR(50), -- PIX, Dinheiro, Cartao
-    status_pagamento status_pagamento_enum DEFAULT 'PENDENTE' -- 👉 Ajustado para maiúsculo
+    metodo metodo_pagamento_enum NOT NULL -- 👉 AJUSTADO para usar o ENUM
 );
 
 -- 7. TABELA NOTIFICACAO

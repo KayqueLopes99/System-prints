@@ -10,6 +10,8 @@ import com.ufersa.backend_impressoes.model.enuns.StatusPedido;
 import com.ufersa.backend_impressoes.model.enuns.TipoCor;
 import com.ufersa.backend_impressoes.repository.PedidoRepository;
 import com.ufersa.backend_impressoes.repository.UsuarioRepository;
+import com.ufersa.backend_impressoes.model.Pagamento;
+import com.ufersa.backend_impressoes.repository.PagamentoRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service
 public class PedidoService {
 
@@ -30,6 +31,9 @@ public class PedidoService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private PagamentoRepository pagamentoRepository;
 
     // Constantes de preço (Poderiam vir do banco futuramente)
     private final double PRECO_PB = 0.15;
@@ -77,8 +81,6 @@ public class PedidoService {
         return pedidoRepository.findByUsuario_IdUsuarioAndStatusFilaOrderByDataHoraDesc(idUsuario, status);
     }
 
-
-
     @Transactional
     public Pedido confirmarPedido(PedidoRequestDTO dto) {
         // 1. Buscar usuário
@@ -93,7 +95,7 @@ public class PedidoService {
         novoPedido.setNomeArquivoOriginal(dto.getNomeArquivo());
         novoPedido.setTamanhoArquivoMb(dto.getTamanhoMb());
         novoPedido.setTotalPaginasArquivo(dto.getTotalPaginas());
-
+        
         // 3. Simular Upload (fazerUploadArquivo)
         String urlSimulada = "uploads/" + System.currentTimeMillis() + "_" + dto.getNomeArquivo();
         novoPedido.setArquivoUrl(urlSimulada);
@@ -106,7 +108,7 @@ public class PedidoService {
         item.setOrientacao(dto.getOrientacao());
         item.setFrenteVerso(dto.getFrenteVerso());
         item.setTipoCor(dto.getTipoCor());
-        item.setObservacoes(dto.getObservacoes());
+        item.setTipoServico(dto.getTipoServico());
 
         double valorUnitario = (dto.getTipoCor() == TipoCor.PRETO_BRANCO) ? PRECO_PB : PRECO_COLORIDO;
         double total = (valorUnitario * dto.getTotalPaginas()) * dto.getQuantidade();
@@ -118,8 +120,18 @@ public class PedidoService {
         itens.add(item);
         novoPedido.setItens(itens);
 
-        // 5. Salvar no banco
-        return pedidoRepository.save(novoPedido);
+        // 5. Salvar o PEDIDO no banco primeiro (para gerar o ID)
+        Pedido pedidoSalvo = pedidoRepository.save(novoPedido);
+
+        // 👉 6. NOVO: Salvar o PAGAMENTO na tabela 'pagamento'
+        if (dto.getMetodoPagamento() != null) {
+            Pagamento pagamento = new Pagamento();
+            pagamento.setPedido(pedidoSalvo);
+            pagamento.setMetodo(dto.getMetodoPagamento());
+            pagamentoRepository.save(pagamento);
+        }
+
+        return pedidoSalvo;
     }
 
     public void atualizarStatusPedido(int idPedido, StatusPedido novoStatus) {

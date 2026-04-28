@@ -2,6 +2,9 @@ package com.ufersa.backend_impressoes.dto;
 
 import com.ufersa.backend_impressoes.model.enuns.Orientacao;
 import com.ufersa.backend_impressoes.model.enuns.TipoCor;
+import com.ufersa.backend_impressoes.model.enuns.TipoPagamento;
+import com.ufersa.backend_impressoes.model.enuns.CategoriaServico;
+
 import lombok.Data;
 
 @Data
@@ -17,5 +20,8 @@ public class PedidoRequestDTO {
     private Orientacao orientacao;
     private Boolean frenteVerso;
     private TipoCor tipoCor;
-    private String observacoes;
+
+    private CategoriaServico tipoServico;
+    
+    private TipoPagamento metodoPagamento;
 }

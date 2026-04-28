@@ -3,7 +3,8 @@
   min-height: 100vh;
   background-color: #f8f9fa;
   font-family: Arial, sans-serif;
-  padding-bottom: 80px; /* Espaço para a navbar */
+  /* 👉 AUMENTADO: Espaço para a navbar respirar mais */
+  padding-bottom: 110px; 
   display: flex;
   flex-direction: column;
 }
@@ -11,151 +12,79 @@
 /* Cabeçalho */
 .novo-pedido-header {
   background-color: #fff;
-  padding: 20px;
+  /* 👉 AUMENTADO: Padding vertical para dar mais destaque */
+  padding: 40px 20px; 
   border-bottom: 1px solid #e0e0e0;
+  text-align: center;
+  /* 👉 ADICIONADO: Sombra leve */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+}
+
+/* 👉 ADICIONADO: Container do ícone do topo */
+.header-icon-container {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .novo-pedido-header h1 {
   color: #1d448b;
-  font-size: 24px;
-  margin: 0 0 5px 0;
+  font-size: 28px; /* 👉 AUMENTADO */
+  margin: 0 0 8px 0; /* 👉 AJUSTADO */
+  font-weight: bold;
 }
 
 .novo-pedido-header p {
   color: #666;
-  font-size: 14px;
+  font-size: 15px; /* 👉 AUMENTADO */
   margin: 0;
+  max-width: 300px; /* 👉 ADICIONADO: Para quebrar linha bonitinho */
+  margin: 0 auto; /* 👉 ADICIONADO: Centralizar o parágrafo */
 }
 
 .novo-pedido-main {
-  padding: 20px;
+  /* 👉 AUMENTADO: Padding lateral */
+  padding: 30px 24px; 
 }
 
-/* Títulos das seções (Pedidos / Serviços) */
+/* Títulos das seções */
 .titulo-secao {
   text-align: center;
-  font-size: 16px;
+  font-size: 18px; /* 👉 AUMENTADO */
   color: #333;
   font-weight: bold;
-  margin: 25px 0 15px 0;
-}
-
-/* Card Pedido em Progresso */
-.card-cabecalho-tabela {
-  background-color: #fff;
-  border: 1px solid #1d448b;
-  border-bottom: none;
-  border-radius: 8px 8px 0 0;
-  padding: 10px;
-  text-align: center;
-  font-weight: bold;
-  color: #555;
-  font-size: 14px;
-}
-
-.card-pedido-progresso {
-  background-color: #fff;
-  border: 1px solid #1d448b;
-  border-radius: 0 0 8px 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-}
-
-.faixa-verde-topo {
-  height: 6px;
-  background-color: #4caf50;
-  width: 90%;
-  margin: 0 auto;
-  border-radius: 0 0 4px 4px;
-}
-
-.conteudo-card {
-  padding: 15px;
-}
-
-.pedido-id {
-  font-size: 12px;
-  color: #1d448b;
-  display: block;
-  margin-bottom: 5px;
-}
-
-.pedido-arquivo {
-  font-size: 15px;
-  color: #333;
-  margin: 0 0 4px 0;
-}
-
-.pedido-detalhes {
-  font-size: 13px;
-  color: #666;
-  margin: 0 0 12px 0;
-}
-
-.badge-status.pronto {
-  display: inline-flex;
-  align-items: center;
-  background-color: #e8f5e9;
-  color: #2e7d32;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 500;
-  margin-bottom: 15px;
-}
-
-.dot-verde {
-  width: 8px;
-  height: 8px;
-  background-color: #4caf50;
-  border-radius: 50%;
-  margin-right: 6px;
-}
-
-.pedido-valor {
-  border-top: 1px solid #eee;
-  padding-top: 10px;
-  display: flex;
-  flex-direction: column;
-}
-
-.label-valor {
-  font-size: 12px;
-  color: #666;
-}
-
-.valor-rs {
-  font-size: 16px;
-  color: #333;
-  font-weight: bold;
+  /* 👉 AUMENTADO: Margem inferior */
+  margin: 10px 0 25px 0; 
 }
 
 /* Cards de Serviços */
 .card-servico {
   background-color: #fff;
-  padding: 15px;
-  border-radius: 12px;
+  padding: 20px; /* 👉 AUMENTADO */
+  border-radius: 16px; /* 👉 AUMENTADO: Bordas mais arredondadas */
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin-bottom: 20px; /* 👉 AUMENTADO */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* 👉 AJUSTADO: Sombra mais suave */
   cursor: pointer;
-  border: 1px solid transparent;
-  transition: all 0.2s;
+  border: 2px solid transparent; /* 👉 AJUSTADO: Borda mais grossa para o hover */
+  transition: all 0.2s ease-in-out;
 }
 
 .card-servico:hover {
   border-color: #1d448b;
+  transform: translateY(-2px); /* 👉 ADICIONADO: Efeito de flutuar */
 }
 
 .icone-servico {
-  width: 50px;
-  height: 50px;
-  border-radius: 10px;
+  width: 55px; /* 👉 AUMENTADO */
+  height: 55px; /* 👉 AUMENTADO */
+  border-radius: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 15px;
+  margin-right: 18px; /* 👉 AUMENTADO */
   flex-shrink: 0;
   background-color: #f0f0f0;
 }
@@ -169,30 +98,32 @@
 }
 
 .info-servico h3 {
-  margin: 0;
-  font-size: 16px;
+  margin: 0 0 4px 0; /* 👉 AJUSTADO */
+  font-size: 17px; /* 👉 AUMENTADO */
   color: #333;
+  font-weight: 600;
 }
 
 .sub-info {
-  font-size: 12px;
+  font-size: 13px; /* 👉 AUMENTADO */
   color: #666;
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 5px; /* 👉 AJUSTADO */
 }
 
 .descricao-servico {
   font-size: 11px;
   color: #888;
   margin: 0;
-  line-height: 1.3;
+  line-height: 1.4; /* 👉 AUMENTADO */
 }
 
 .checkbox-servico {
-  width: 20px;
-  height: 20px;
+  width: 22px; /* 👉 AUMENTADO */
+  height: 22px; /* 👉 AUMENTADO */
   accent-color: #1d448b;
   cursor: pointer;
+  margin-left: 10px; /* 👉 ADICIONADO */
 }
 
 /* Navbar Inferior Escura */
@@ -205,10 +136,11 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  height: 65px;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
+  height: 75px; /* 👉 AUMENTADO */
+  border-top-left-radius: 20px; /* 👉 AUMENTADO */
+  border-top-right-radius: 20px; /* 👉 AUMENTADO */
   z-index: 100;
+  box-shadow: 0 -4px 10px rgba(0,0,0,0.1); /* 👉 ADICIONADO */
 }
 
 .icone-nav {
@@ -216,50 +148,35 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-/* Botão Central Destacado */
-.destaque-ativo {
-  background-color: #fff;
-  width: 65px;
-  height: 65px;
-  border-radius: 50%;
-  justify-content: center;
-  margin-top: -30px; /* Faz ele pular para fora da barra */
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-  border: 4px solid #f8f9fa; /* Cria a borda que separa da barra azul */
-}
-
-/* Cabeçalho */
-.novo-pedido-header {
-  background-color: #fff;
-  padding: 20px;
-  border-bottom: 1px solid #e0e0e0;
-  text-align: center; /* 👉 ADICIONADO PARA CENTRALIZAR */
+  padding: 10px; /* 👉 ADICIONADO: Área de clique maior */
 }
 
 /* =========================================
    BOTÃO AVANÇAR
    ========================================= */
 .container-avancar {
-  margin-top: 15px;
+  margin-top: 25px; /* 👉 AUMENTADO */
   display: flex;
   justify-content: center;
-  padding-bottom: 20px; /* Dá um espacinho extra antes da barra de navegação */
+  padding-bottom: 20px;
 }
 
 .botao-avancar {
   background-color: #1d448b;
   color: #ffffff;
   border: none;
-  padding: 16px 0;
+  padding: 18px 0; /* 👉 AUMENTADO */
   width: 100%;
-  border-radius: 12px;
-  font-size: 16px;
+  border-radius: 14px; /* 👉 AUMENTADO */
+  font-size: 17px; /* 👉 AUMENTADO */
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(29, 68, 139, 0.2);
+  box-shadow: 0 4px 12px rgba(29, 68, 139, 0.25); /* 👉 AJUSTADO */
   transition: all 0.2s ease;
+}
+
+.botao-avancar:hover {
+  background-color: #15356e; /* 👉 ADICIONADO */
 }
 
 .botao-avancar:active {

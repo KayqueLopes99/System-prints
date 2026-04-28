@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.ufersa.backend_impressoes.model.enuns.Orientacao;
 
 import com.ufersa.backend_impressoes.model.enuns.TipoCor;
+import com.ufersa.backend_impressoes.model.enuns.CategoriaServico;
+
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,6 +23,8 @@ public class ItemPedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_item")
     private int idItem;
+
+
 
     @ManyToOne
     @JoinColumn(name = "id_pedido", nullable = false)
@@ -44,6 +48,8 @@ public class ItemPedido {
     @Column(name = "tipo_cor")
     private TipoCor tipoCor;
 
-    @Column(name = "observacoes", length = 500)
-    private String observacoes;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_servico", nullable = false)
+    private CategoriaServico tipoServico;
+
 }

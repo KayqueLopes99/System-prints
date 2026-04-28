@@ -1,0 +1,274 @@
+.resumo-container {
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Reutilizando estilo do header para consistência */
+.config-header {
+    background-color: #fff;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.btn-voltar-topo {
+    background: none;
+    border: none;
+    color: #1d448b;
+    cursor: pointer;
+    margin-right: 15px;
+}
+
+.config-header h1 {
+    font-size: 20px;
+    color: #1d448b;
+    margin: 0;
+    font-weight: bold;
+}
+
+.resumo-content {
+    padding: 20px;
+    flex: 1;
+}
+
+/* Card de Resumo */
+.card-resumo-detalhes {
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+    border: 1px solid #e0e0e0;
+}
+
+.resumo-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #1d448b;
+    font-weight: bold;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 12px;
+    margin-bottom: 15px;
+}
+
+.resumo-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 9px;
+    color: #555;
+}
+
+.resumo-item strong {
+    color: #333;
+    text-align: right;
+    max-width: 65%;
+    word-break: break-all;
+}
+
+.resumo-total-caixa {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 2px dashed #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.valor-destaque {
+    font-size: 24px;
+    font-weight: 800;
+    color: #1d448b;
+}
+
+/* Pagamento */
+.titulo-pagamento {
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.grade-pagamento {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.btn-metodo {
+    background-color: #fff;
+    border: 2px solid #eee;
+    border-radius: 16px;
+    padding: 22px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #666;
+}
+
+.btn-metodo span {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.btn-metodo.selecionado {
+    border-color: #1d448b;
+    background-color: #f0f4ff;
+    color: #1d448b;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(29, 68, 139, 0.15);
+}
+
+.aviso-balcao {
+    font-size: 11px;
+    color: #999;
+    text-align: center;
+    margin-top: 30px;
+    font-style: italic;
+}
+
+/* Footer com dois botões */
+.footer-resumo-botoes {
+    padding: 20px;
+    background-color: #fff;
+    border-top: 1px solid #eee;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 👉 Dois botões iguais */
+    gap: 15px;
+}
+
+.btn-confirmar-final {
+    background-color: #1d448b;
+    color: #fff;
+    border: none;
+    padding: 16px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-confirmar-final:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* 👉 Estilo do Botão Voltar (Outline) */
+.btn-outline-voltar {
+    background: none;
+    border: 2px solid #1d448b;
+    color: #1d448b;
+    padding: 16px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-outline-voltar:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Estilo para erro de dados */
+.erro-dados-container {
+    padding: 40px;
+    text-align: center;
+    color: #d32f2f;
+}
+
+.erro-dados-container button {
+    margin-top: 20px;
+    background-color: #1d448b;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+}
+
+/* =========================================
+   👉 CSS DO MODAL (ESTILO DA IMAGEM)
+   ========================================= */
+
+/* Fundo escuro semi-transparente que cobre tudo */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Transparência igual da imagem */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Garante que fica por cima de tudo */
+    padding: 20px;
+}
+
+/* A caixa branca centralizada */
+.modal-content {
+    background-color: #fff;
+    border-radius: 20px; /* Bordas bem arredondadas igual na foto */
+    padding: 40px 30px;
+    width: 100%;
+    max-width: 340px; /* Largura boa para celular */
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    animation: abrirModal 0.3s ease-out; /* Animação leve de entrada */
+}
+
+/* Efeito de zoom na entrada do modal */
+@keyframes abrirModal {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.modal-icon-success {
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: center;
+}
+
+.modal-content h2 {
+    font-size: 22px;
+    color: #333;
+    margin: 0 0 10px 0;
+    font-weight: bold;
+}
+
+.modal-content p {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.5;
+    margin: 0 0 35px 0;
+}
+
+/* Botão final dentro do modal */
+.btn-modal-final {
+    width: 100%;
+    background-color: #1d448b;
+    color: #fff;
+    border: none;
+    padding: 16px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(29, 68, 139, 0.2);
+}
+
+.btn-modal-final:active {
+    transform: scale(0.98);
+}

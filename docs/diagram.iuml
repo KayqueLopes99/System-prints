@@ -5,8 +5,39 @@ skinparam linetype ortho
 skinparam shadowing false
 skinparam class {
     BackgroundColor White
-    ArrowColor #2688d4
-    BorderColor #2688d4
+    ArrowColor #26d451
+    BorderColor #0b3203
+}
+
+' --- Definição dos ENUMS ---
+enum CategoriaServico {
+  IMPRESSAO
+  ENCADERNACAO
+}
+
+enum StatusFila {
+  PENDENTE
+  NA_FILA
+  IMPRIMINDO
+  PRONTO
+  CONCLUIDO
+  CANCELADO
+}
+
+enum Orientacao {
+  RETRATO
+  PAISAGEM
+}
+
+enum TipoCor {
+  PRETO_BRANCO
+  COLORIDO
+}
+
+enum MetodoPagamento {
+  PIX
+  DINHEIRO
+  CARTAO
 }
 
 ' --- Definição das Classes (Tabelas + Métodos) ---
@@ -30,12 +61,10 @@ class "Estudante" as estudante {
   - matricula : String
   - curso : String
   ==
-  + atualizarPreferencias(dados) : void
 }
 
 class "Administrador" as admin {
   --
-  - cargo_setor : String
   ==
   + cadastrarAdministradorInterno() : void
   + gerenciarSolicitacoes() : void
@@ -47,14 +76,11 @@ class "Administrador" as admin {
 class "Servico" as servico {
   - id_servico : int <<PK>>
   --
-  - nome_servico : String
-  - categoria_servico : Enum ('Impressao', 'Plotagem', 'Digitalizacao', 'Produto')
+  - categoria_servico : CategoriaServico
   - preco_unitario : double
   - disponivel : boolean
   ==
-  + listarServicosAtivos() : List<Servico>
-  + cadastrarServico(dadosServico) : void
-  + atualizarDisponibilidade(idServico, status) : void
+  + listarServicos() : List<Servico>
 }
 
 class "Pedido" as pedido {
@@ -62,29 +88,21 @@ class "Pedido" as pedido {
   --
   - id_usuario : int <<FK>>
   - data_hora : Datetime
-  - status_fila : StatusPedido
+  - status_fila : StatusFila
   - arquivo_url : String
   - nome_arquivo_original : String
   - tamanho_arquivo_mb : double
   - total_paginas_arquivo : int
   - valor_total : double
   ==
-  ' Métodos de Regra de Negócio e Fila (Originais)
-  + criarPedido() : Pedido
-  + adicionarItemAoPedido() : void
-  + fazerUploadArquivo() : String
-  + calcularValorTotal() : double
-  + confirmarPedido() : void
-  + atualizarStatusPedido() : void
+  + confirmarPedido(-) : void
+
   + cancelarPedido() : void
-  
+  + atualizarStatusPedido() : void
   + obterPosicaoFila() : int
-
-
   + estimarTempoFila() : String
   + listarFilaDePedidos() : List<Pedido>
-  
-  ' Métodos Sincronizados com PedidoService.java (Novos)
+
   + obterEstatisticasUsuario(-) : EstatisticasPedidoDTO 
   + listarPedidosAtivos(-) : List<PedidoCardDTO>
   + listarPedidosHistorico(-) : List<Pedido>
@@ -98,10 +116,9 @@ class "Item_Pedido" as item_pedido {
   - id_servico : int <<FK>>
   - quantidade : int
   - tamanho_papel : String
-  - orientacao : Enum ('Retrato', 'Paisagem')
+  - orientacao : Orientacao
   - frente_verso : boolean
-  - tipo_cor : Enum ('Preto e Branco', 'Colorido')
-  - observacoes : String
+  - tipo_cor : TipoCor
   ==
 }
 
@@ -109,11 +126,9 @@ class "Pagamento" as pagamento {
   - id_pagamento : int <<PK>>
   --
   - id_pedido : int <<FK>>
-  - metodo : String ('PIX', 'Dinheiro', 'Cartao')
-  - status_pagamento : Enum ('Pendente', 'Pago')
+  - metodo : MetodoPagamento
   ==
-  + registrarPagamento(idPedido, metodo) : void
-  + atualizarStatusPagamento(idPagamento, status) : void
+  + registrarPagamento(idPedido, metodo -------) : void
 }
 
 class "Notificacao" as notificacao {
@@ -155,26 +170,14 @@ class "Configuracao_Sistema" as config {
 
 ' --- Definição dos Relacionamentos ---
 
-' Herança: Estudante e Administrador são tipos de Usuário
 usuario <|-- estudante
 usuario <|-- admin
 
-' Um Usuário pode ter ZERO ou VÁRIOS Pedidos (1:N)
 usuario ||--o{ pedido : "realiza"
-
-' Um Usuário pode receber ZERO ou VÁRIAS Notificações (1:N)
 usuario ||--o{ notificacao : "recebe"
-
-' Um Pedido deve ter UM ou VÁRIOS Itens (1:N)
 pedido ||--|{ item_pedido : "contém"
-
-' Um Serviço pode estar em ZERO ou VÁRIOS Itens de Pedido (1:N)
 servico ||--o{ item_pedido : "é adicionado em"
-
-' Um Pedido pode ter ZERO ou UM Pagamento registrado (1:1)
 pedido ||--o| pagamento : "possui"
-
-' O sistema possui vários horários de funcionamento (1:N)
 config ||--o{ horario : "possui"
 
 @enduml
