@@ -11,6 +11,7 @@ import Perfil from './pages/Perfil/Perfil';
 import MeusPedidos from './pages/MeusPedidos/MeusPedidos';
 import NovoPedidoInicio from './pages/NovoPedidoInicio/NovoPedidoInicio';
 import ResumoPagamento from './pages/ResumoPagamento/ResumoPagamento';
+import ConfiguracaoEncadernacao from './pages/ConfiguracaoEncadernacao/ConfiguracaoEncadernacao';
 
 // 👇 NOVO: Importando a tela de Configuração do Pedido!
 import PedidoConfiguracao from './pages/PedidoConfiguracao/PedidoConfiguracao'; 
@@ -46,6 +47,10 @@ export default function App() {
 
         {/* Rota para a tela de Resumo e Pagamento */}
         <Route path="/resumo-pagamento" element={<ResumoPagamento />} />
+
+
+          {/* Rota para a tela de Configuração de Encadernação */}
+          <Route path="/configuracao-encadernacao" element={<ConfiguracaoEncadernacao />} />
 
       </Routes>
     </Router>

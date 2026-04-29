@@ -69,7 +69,7 @@ export default function NovoPedidoInicio() {
                                     navigate('/configuracao-pedido', { state: { tipoServico: servicoSelecionado } });
                                 } else {
                                     // Se for encadernação, avisa o usuário (pois faremos essa tela depois)
-                                    alert("A tela de Encadernação será implementada em breve!");
+                                    navigate('/configuracao-encadernacao', { state: { tipoServico: servicoSelecionado } });
                                 }
                             }}
 

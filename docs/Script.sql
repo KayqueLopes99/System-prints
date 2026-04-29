@@ -59,7 +59,7 @@ CREATE TABLE item_pedido (
     tamanho_papel VARCHAR(20),
     orientacao orientacao_enum,
     frente_verso BOOLEAN DEFAULT FALSE,
-    tipo_cor tipo_cor_enum,
+    tipo_cor tipo_cor_enum
 );
 
 -- 6. TABELA PAGAMENTO

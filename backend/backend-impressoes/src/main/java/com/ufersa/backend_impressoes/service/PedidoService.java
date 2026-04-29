@@ -39,6 +39,10 @@ public class PedidoService {
     private final double PRECO_PB = 0.15;
     private final double PRECO_COLORIDO = 1.00;
 
+    // Novas constantes para Encadernação
+    private final double PRECO_BASE_ENCADERNACAO = 5.00; // Valor da capa + espiral
+    private final double PRECO_FOLHA_ENCADERNACAO = 0.15; // R$ 1,50 / 10 folhas
+
     // 1. Estatísticas do Usuário (Cards do topo)
     public EstatisticasPedidoDTO obterEstatisticasUsuario(int idUsuario) {
         long pedidos = pedidoRepository.contarPedidosPorUsuario(idUsuario);
@@ -87,7 +91,7 @@ public class PedidoService {
         Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        // 2. Criar o objeto Pedido (criarPedido)
+        // 2. Criar o objeto Pedido
         Pedido novoPedido = new Pedido();
         novoPedido.setUsuario(usuario);
         novoPedido.setDataHora(LocalDateTime.now());
@@ -96,11 +100,11 @@ public class PedidoService {
         novoPedido.setTamanhoArquivoMb(dto.getTamanhoMb());
         novoPedido.setTotalPaginasArquivo(dto.getTotalPaginas());
         
-        // 3. Simular Upload (fazerUploadArquivo)
-        String urlSimulada = "uploads/" + System.currentTimeMillis() + "_" + dto.getNomeArquivo();
+        // 3. Simular Upload
+        String urlSimulada = "uploads/" + System.currentTimeMillis() + "_" + (dto.getNomeArquivo() != null ? dto.getNomeArquivo() : "encadernacao.pdf");
         novoPedido.setArquivoUrl(urlSimulada);
 
-        // 4. Criar Item e calcular valor (adicionarItemAoPedido + calcularValorTotal)
+        // 4. Criar Item e calcular valor
         ItemPedido item = new ItemPedido();
         item.setPedido(novoPedido);
         item.setQuantidade(dto.getQuantidade());
@@ -108,10 +112,20 @@ public class PedidoService {
         item.setOrientacao(dto.getOrientacao());
         item.setFrenteVerso(dto.getFrenteVerso());
         item.setTipoCor(dto.getTipoCor());
-        item.setTipoServico(dto.getTipoServico());
+        item.setTipoServico(dto.getTipoServico()); // 👉 Seta o serviço (IMPRESSAO ou ENCADERNACAO)
 
-        double valorUnitario = (dto.getTipoCor() == TipoCor.PRETO_BRANCO) ? PRECO_PB : PRECO_COLORIDO;
-        double total = (valorUnitario * dto.getTotalPaginas()) * dto.getQuantidade();
+        // 💰 LÓGICA DE CÁLCULO DINÂMICA
+        double total = 0;
+
+        if (dto.getTipoServico() == com.ufersa.backend_impressoes.model.enuns.CategoriaServico.IMPRESSAO) {
+            // Lógica de Impressão (Preço por página baseado na cor)
+            double valorUnitario = (dto.getTipoCor() == TipoCor.PRETO_BRANCO) ? PRECO_PB : PRECO_COLORIDO;
+            total = (valorUnitario * dto.getTotalPaginas()) * dto.getQuantidade();
+        } 
+        else if (dto.getTipoServico() == com.ufersa.backend_impressoes.model.enuns.CategoriaServico.ENCADERNACAO) {
+            // Lógica de Encadernação (Preço Base + R$ 0,15 por folha)
+            total = (PRECO_BASE_ENCADERNACAO + (dto.getTotalPaginas() * PRECO_FOLHA_ENCADERNACAO)) * dto.getQuantidade();
+        }
 
         novoPedido.setValorTotal(total);
 
@@ -120,10 +134,10 @@ public class PedidoService {
         itens.add(item);
         novoPedido.setItens(itens);
 
-        // 5. Salvar o PEDIDO no banco primeiro (para gerar o ID)
+        // 5. Salvar o PEDIDO
         Pedido pedidoSalvo = pedidoRepository.save(novoPedido);
 
-        // 👉 6. NOVO: Salvar o PAGAMENTO na tabela 'pagamento'
+        // 6. Salvar o PAGAMENTO
         if (dto.getMetodoPagamento() != null) {
             Pagamento pagamento = new Pagamento();
             pagamento.setPedido(pedidoSalvo);

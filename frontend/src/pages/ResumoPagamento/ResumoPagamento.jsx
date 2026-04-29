@@ -43,6 +43,8 @@ export default function ResumoPagamento() {
             orientacao: dadosPedido.orientacao,
             frenteVerso: dadosPedido.frenteVerso,
             tipoCor: dadosPedido.tipoCor,
+
+            tipoServico: "IMPRESSAO",
             metodoPagamento: metodoSelecionado // PIX, DINHEIRO ou CARTAO
         };
 
@@ -142,7 +144,7 @@ export default function ResumoPagamento() {
                 </div>
                 
                 <p className="aviso-balcao">
-                    * O pagamento será validado presencialmente no momento da retirada.
+                    O pagamento será validado presencialmente no momento da retirada.
                 </p>
             </main>
 

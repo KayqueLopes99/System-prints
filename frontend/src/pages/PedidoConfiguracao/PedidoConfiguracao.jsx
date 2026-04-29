@@ -251,7 +251,7 @@ export default function PedidoConfiguracao() {
                             </div>
 
                             <div className="controle-quantidade">
-                                <label>Quantidade de Cópias (Quantas vezes imprimir tudo isso)</label>
+                                <label>Quantidade de Cópias</label>
                                 <div className="stepper">
                                     <button onClick={() => setQuantidade(q => Math.max(1, q - 1))}><Minus size={20} /></button>
                                     <span>{quantidade}</span>

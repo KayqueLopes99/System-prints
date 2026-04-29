@@ -1,0 +1,311 @@
+/* Paleta: azul escuro (#1d448b), branco, cinza claro */
+:root {
+    --blue-main: #1d448b;
+    --gray-bg: #f9f9f9;
+    --gray-light: #e0e6ed;
+    --gray-text: #666;
+    --white: #ffffff;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.encadernacao-page {
+    background-color: var(--gray-bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* 🔝 CABEÇALHO */
+.header-encadernacao {
+    width: 100%;
+    max-width: 500px;
+    background-color: var(--white);
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 2px solid var(--blue-main);
+    border-radius: 20px;
+    margin-top: 10px;
+    box-sizing: border-box;
+}
+
+.btn-voltar-circulo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1.5px solid var(--blue-main);
+    background: none;
+    color: var(--blue-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.header-titulos {
+    text-align: center;
+}
+
+/* No seu arquivo ConfiguracaoEncadernacao.css */
+
+.titulo-principal {
+    font-size: 25px;
+    color: var(--blue-main);
+    margin: 0 0 8px 0; /* 👉 ALTERADO: Aumentei o terceiro valor (bottom) para dar espaço abaixo */
+    font-weight: 700;
+}
+
+.subtitulo-principal {
+    font-size: 18px; /* 👉 ALTERADO: De 12px para 15px para ficar maior */
+    color: var(--gray-text);
+    text-transform: unset;
+    display: block; /* Garante que o espaçamento do margin funcione corretamente */
+
+}
+
+.btn-save-header {
+    background: none;
+    border: none;
+    color: var(--blue-main);
+    cursor: pointer;
+}
+
+/* CONTEÚDO */
+.content-encadernacao {
+    width: 100%;
+    max-width: 450px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.label-secao {
+    font-size: 16px;
+    font-weight: 600;
+    color: #444;
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+/* 🔢 STEPPERS */
+.stepper-container {
+    background-color: var(--white);
+    border: 1.5px solid var(--gray-light);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    box-shadow: var(--shadow);
+}
+
+.step-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.step-btn:active { transform: scale(0.9); }
+
+.step-minus {
+    background-color: #f0f0f0;
+    color: #999;
+}
+
+.step-plus {
+    background-color: var(--blue-main);
+    color: var(--white);
+}
+
+.step-value {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--blue-main);
+}
+
+/* 📎 UPLOAD */
+.secao-upload-vincular {
+    display: flex;
+    flex-direction: column;
+}
+
+.dropzone-encadernacao {
+    background-color: var(--white);
+    border: 1.5px solid var(--blue-main);
+    border-radius: 20px;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+}
+
+.icon-upload-blue {
+    color: var(--blue-main);
+    margin-bottom: 10px;
+}
+
+.text-drop {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin: 5px 0;
+}
+
+.text-ou {
+    color: #999;
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.btn-selecionar-file {
+    background-color: var(--blue-main);
+    color: var(--white);
+    border: none;
+    padding: 10px 25px;
+    border-radius: 10px;
+    font-weight: 600;
+    margin: 10px 0;
+    cursor: pointer;
+}
+
+.text-small {
+    font-size: 11px;
+    color: #aaa;
+}
+
+.arquivo-selecionado {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #26d451;
+    font-weight: 600;
+}
+
+/* 💰 TOTAL */
+.container-total-estimado {
+    display: flex;
+    justify-content: center;
+}
+
+.caixa-total-azul {
+    background-color: #e8f0fe;
+    border: 2.5px solid var(--blue-main);
+    border-radius: 10px;
+    padding: 12px 30px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.label-total {
+    font-weight: 600;
+    color: #333;
+}
+
+.valor-total {
+    color: var(--blue-main);
+    font-weight: 800;
+    font-size: 18px;
+}
+
+/* 🔘 BOTÃO CONTINUAR */
+.btn-continuar-encadernacao {
+    background-color: var(--blue-main);
+    color: var(--white);
+    border: none;
+    padding: 18px;
+    border-radius: 15px;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: lowercase;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(29, 68, 139, 0.3);
+    margin-top: 10px;
+}
+
+.btn-continuar-encadernacao:hover {
+    filter: brightness(1.1);
+}
+
+/* --- NOVO DESIGN DO CARD DE ARQUIVO --- */
+
+.arquivo-selecionado-card {
+    margin-top: 20px;
+    background-color: #ffffff;
+    border: 1px solid #e0e6ed;
+    padding: 8px 12px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%; /* Ajustado para não colar nas bordas da dropzone */
+    max-width: 320px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    animation: fadeIn 0.3s ease;
+}
+
+.arquivo-info-detalhes {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    overflow: hidden;
+}
+
+.badge-sucesso {
+    background-color: #26d451;
+    color: white;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.nome-arquivo-texto {
+    color: #333;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Corta nomes longos com "..." */
+}
+
+.btn-remover-arquivo-minimal {
+    background-color: #fee2e2;
+    color: #ef4444;
+    border: none;
+    border-radius: 8px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.btn-remover-arquivo-minimal:hover {
+    background-color: #fecaca;
+    color: #dc2626;
+    transform: scale(1.1);
+}
+
+/* Animação suave para aparecer */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
