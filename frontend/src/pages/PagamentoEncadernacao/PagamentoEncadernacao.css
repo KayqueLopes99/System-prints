@@ -1,0 +1,210 @@
+.pagamento-encadernacao-container {
+    background-color: #f1f5f9;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Inter', sans-serif;
+}
+
+.header-pagamento {
+    background-color: white;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.btn-voltar {
+    background: #f1f5f9;
+    border: none;
+    color: #1d448b;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.header-pagamento h1 {
+    font-size: 1.15rem;
+    color: #1d448b;
+    margin: 0;
+    font-weight: 700;
+}
+
+.resumo-pagamento-content {
+    padding: 24px;
+    flex: 1;
+}
+
+.card-detalhes-encadernacao {
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+    margin-bottom: 30px;
+}
+
+.card-header-servico {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.card-header-servico span {
+    font-weight: 700;
+    color: #1d448b;
+    font-size: 1rem;
+}
+
+.linha-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+}
+
+.linha-info span { color: #64748b; }
+.linha-info strong { color: #1e293b; }
+
+.divisor-pagamento {
+    height: 1px;
+    background: #f1f5f9;
+    margin: 15px 0;
+}
+
+.caixa-valor-final {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
+}
+
+.valor-real {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #1d448b;
+}
+
+.instrucao-pagamento {
+    font-size: 1rem;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #475569;
+    font-weight: 600;
+}
+
+.opcoes-pagamento-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.card-metodo {
+    background: white;
+    border: 2px solid #f1f5f9;
+    border-radius: 16px;
+    padding: 25px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-metodo.ativo {
+    border-color: #1d448b;
+    background-color: #eff6ff;
+    color: #1d448b;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(29, 68, 139, 0.1);
+}
+
+.footer-pagamento {
+    padding: 24px;
+    background: white;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 16px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.btn-finalizar-pedido {
+    background-color: #1d448b;
+    color: white;
+    border: none;
+    border-radius: 14px;
+    padding: 16px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(29, 68, 139, 0.2);
+}
+
+.btn-finalizar-pedido:disabled {
+    background-color: #cbd5e1;
+    box-shadow: none;
+}
+
+.btn-editar-pedido {
+    background: none;
+    border: 1.5px solid #1d448b;
+    color: #1d448b;
+    border-radius: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* MODAL OVERLAY */
+.overlay-sucesso {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(15, 23, 42, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 9999;
+    backdrop-filter: blur(4px);
+}
+
+.modal-sucesso-card {
+    background: white;
+    border-radius: 30px;
+    padding: 45px 30px;
+    text-align: center;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.modal-sucesso-card h2 {
+    color: #1e293b;
+    margin: 20px 0 10px;
+    font-size: 1.5rem;
+}
+
+.modal-sucesso-card p {
+    color: #64748b;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.btn-concluir {
+    background: #1d448b;
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 16px;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+}

@@ -11,21 +11,42 @@ export default function ConfiguracaoEncadernacao() {
     const [unidades, setUnidades] = useState(1);
     const [folhas, setFolhas] = useState(100);
     const [arquivo, setArquivo] = useState(null);
-    const [isDragging, setIsDragging] = useState(false); // Feedback visual do drag
+    const [isDragging, setIsDragging] = useState(false); 
     const [total, setTotal] = useState(20.00);
 
     // 💰 Lógica de Cálculo
     useEffect(() => {
-        const precoBaseEncadernacao = 5.00; // Capa + Espiral
-        const precoPorFolha = 0.15; // Preço da folha P&B
+        const precoBaseEncadernacao = 5.00; 
+        const precoPorFolha = 0.15; 
         const resultado = (precoBaseEncadernacao + (folhas * precoPorFolha)) * unidades;
         setTotal(resultado);
     }, [unidades, folhas]);
 
+    // 👉 FUNÇÃO DE ROTEAMENTO ADICIONADA
+    const avancarParaPagamento = () => {
+        const dadosParaEnvio = {
+            idUsuario: 1, // ID fixo temporário
+            nomeArquivo: arquivo ? arquivo.name : "Encadernação Manual",
+            totalPaginas: folhas,
+            tamanhoMb: arquivo ? parseFloat((arquivo.size / (1024 * 1024)).toFixed(2)) : 0,
+            quantidade: unidades,
+            valorTotal: total,
+            tipoServico: "ENCADERNACAO",
+            // Campos padrão para compatibilidade com o DTO do Java
+            tamanhoPapel: "A4", 
+            orientacao: "RETRATO",
+            frenteVerso: false,
+            tipoCor: "PRETO_BRANCO"
+        };
+
+        // Navega enviando o estado para a tela de pagamento específica
+        navigate('/pagamento-encadernacao', { state: dadosParaEnvio });
+    };
+
     const alterarUnidades = (valor) => setUnidades(prev => Math.max(1, prev + valor));
     const alterarFolhas = (valor) => setFolhas(prev => Math.max(1, prev + valor));
 
-    // 🖱️ Handlers de Drag and Drop
+    // Handlers de Drag and Drop
     const handleDragOver = (e) => {
         e.preventDefault();
         setIsDragging(true);
@@ -61,7 +82,7 @@ export default function ConfiguracaoEncadernacao() {
                     <span className="subtitulo-principal">organize seu pedido</span>
                 </div>
                 <button className="btn-save-header">
-                    <Save size={24} strokeWidth={1.5} />
+                    <Save size={35} strokeWidth={1.5} />
                 </button>
             </header>
 
@@ -141,7 +162,8 @@ export default function ConfiguracaoEncadernacao() {
                     </div>
                 </div>
 
-                <button className="btn-continuar-encadernacao">
+                {/* 👉 BOTÃO ATUALIZADO COM ONCLICK */}
+                <button className="btn-continuar-encadernacao" onClick={avancarParaPagamento}>
                     continuar
                 </button>
             </main>
