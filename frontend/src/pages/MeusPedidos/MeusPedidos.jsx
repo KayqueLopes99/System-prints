@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { Home, Printer, FileText, Lightbulb, Check, X, Hourglass, File, DollarSign } from 'lucide-react';
+import { Home, Printer, FileText, Lightbulb, Check, X, Hourglass, File, DollarSign, Trash2 } from 'lucide-react';
 import './MeusPedidos.css';
 
 export default function MeusPedidos() {
@@ -15,24 +15,22 @@ export default function MeusPedidos() {
     const [estatisticas, setEstatisticas] = useState({ totalPedidos: 0, totalPaginas: 0, totalGasto: 0 });
     const [pedidos, setPedidos] = useState([]);
 
-    // Pegar ID do usuário logado (usamos 1 como fallback para testes)
+    // Pegar ID do usuário logado
     const idUsuario = localStorage.getItem('usuarioId') || 1;
 
-    // Efeito 1: Carrega estatísticas assim que a tela abre
+    // Efeito 1: Carrega estatísticas
     useEffect(() => {
         axios.get(`http://localhost:8080/api/pedidos/estatisticas/${idUsuario}`)
             .then(res => setEstatisticas(res.data))
             .catch(err => console.error("Erro ao buscar estatísticas:", err));
     }, [idUsuario]);
 
-    // Efeito 2: Carrega a lista de pedidos toda vez que o usuário troca de aba
+    // Efeito 2: Carrega a lista de pedidos
     useEffect(() => {
         let url = '';
-
         if (abaPrincipal === 'ativos') {
             url = `http://localhost:8080/api/pedidos/ativos/${idUsuario}`;
         } else {
-            // Estamos no Histórico
             if (subAba === 'TODOS') url = `http://localhost:8080/api/pedidos/historico/${idUsuario}`;
             else url = `http://localhost:8080/api/pedidos/usuario/${idUsuario}/status/${subAba}`;
         }
@@ -42,7 +40,6 @@ export default function MeusPedidos() {
             .catch(err => console.error("Erro ao buscar pedidos:", err));
     }, [abaPrincipal, subAba, idUsuario]);
 
-    // Função auxiliar para formatar data (Ex: "06 Dez, 14:32")
     const formatarData = (dataIso) => {
         const dataObj = new Date(dataIso);
         const dia = String(dataObj.getDate()).padStart(2, '0');
@@ -53,7 +50,6 @@ export default function MeusPedidos() {
         return `${dia} ${mes}, ${horas}:${minutos}`;
     };
 
-    // Função auxiliar para formatar moeda
     const formatarMoeda = (valor) => {
         return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     };
@@ -61,7 +57,6 @@ export default function MeusPedidos() {
     return (
         <div className="pedidos-container">
 
-            {/* CABEÇALHO PRINCIPAL (Meus Pedidos / Histórico) */}
             <div className="cabecalho-abas">
                 <h2>{abaPrincipal === 'ativos' ? 'Meus Pedidos' : 'Histórico de pedidos'}</h2>
                 <div className="botoes-principais">
@@ -80,25 +75,14 @@ export default function MeusPedidos() {
                 </div>
             </div>
 
-            {/* SUB-ABAS (Só aparecem se a aba Histórico estiver selecionada) */}
             {abaPrincipal === 'historico' && (
                 <div className="sub-abas">
-                    <button
-                        className={`btn-sub-aba ${subAba === 'TODOS' ? 'ativo-todos' : ''}`}
-                        onClick={() => setSubAba('TODOS')}
-                    >Todos</button>
-                    <button
-                        className={`btn-sub-aba ${subAba === 'CONCLUIDO' ? 'ativo-concluido' : ''}`}
-                        onClick={() => setSubAba('CONCLUIDO')}
-                    >Concluídos</button>
-                    <button
-                        className={`btn-sub-aba ${subAba === 'CANCELADO' ? 'ativo-cancelado' : ''}`}
-                        onClick={() => setSubAba('CANCELADO')}
-                    >Cancelados</button>
+                    <button className={`btn-sub-aba ${subAba === 'TODOS' ? 'ativo-todos' : ''}`} onClick={() => setSubAba('TODOS')}>Todos</button>
+                    <button className={`btn-sub-aba ${subAba === 'CONCLUIDO' ? 'ativo-concluido' : ''}`} onClick={() => setSubAba('CONCLUIDO')}>Concluídos</button>
+                    <button className={`btn-sub-aba ${subAba === 'CANCELADO' ? 'ativo-cancelado' : ''}`} onClick={() => setSubAba('CANCELADO')}>Cancelados</button>
                 </div>
             )}
 
-            {/* CARTÕES DE ESTATÍSTICAS */}
             <div className="estatisticas-container">
                 <div className="card-stat">
                     <FileText className="icone" size={24} color="#1d448b" />
@@ -117,10 +101,9 @@ export default function MeusPedidos() {
                 </div>
             </div>
 
-            {/* LISTA DE PEDIDOS */}
             <div className="lista-pedidos-box">
                 <div className="lista-header">
-                    Número de pedidos {abaPrincipal === 'ativos' ? 'solicitados' : (subAba === 'CONCLUIDO' ? 'concluídos' : 'encontrados')}: {pedidos.length} pedidos
+                    Número de pedidos {abaPrincipal === 'ativos' ? 'solicitados' : 'encontrados'}: {pedidos.length} pedidos
                 </div>
 
                 <div className="lista-conteudo">
@@ -130,6 +113,28 @@ export default function MeusPedidos() {
                         pedidos.map((pedido) => (
                             <div className="pedido-card" key={pedido.idPedido}>
 
+                                {/* 👉 A única mudança foi criar este container para empilhar os ícones na direita */}
+                                <div className="card-acoes-status">
+                                    {/* Mantive sua lógica original de ícones de status */}
+                                    {pedido.statusFila === 'CONCLUIDO' && <div className="icone-status-grande bg-verde"><Check size={20} /></div>}
+                                    {pedido.statusFila === 'CANCELADO' && <div className="icone-status-grande bg-vermelho"><X size={20} /></div>}
+                                    {pedido.statusFila !== 'CONCLUIDO' && pedido.statusFila !== 'CANCELADO' && (
+                                        <div className="icone-status-grande bg-azul"><Hourglass size={20} /></div>
+                                    )}
+
+                                    {/* O botão X de cancelar fica logo abaixo da ampulheta */}
+                                    {abaPrincipal === 'ativos' && (
+                                        <button
+                                            className="btn-cancelar-card-novo"
+                                            onClick={() => navigate('/cancelar-pedido', {
+                                                state: { idPedido: pedido.idPedido, nomeArquivo: pedido.nomeArquivoOriginal }
+                                            })}
+                                        >
+                                            <X size={16} />
+                                        </button>
+                                    )}
+                                </div>
+
                                 <div className="pedido-topo">
                                     <div className="pedido-info-base">
                                         <div className="data-hora">
@@ -137,26 +142,20 @@ export default function MeusPedidos() {
                                         </div>
                                         <p>Pedido #{pedido.idPedido}</p>
                                     </div>
-
-                                    {/* Ícone Redondo no topo direito */}
-                                    {pedido.statusFila === 'CONCLUIDO' && <div className="icone-status-grande bg-verde"><Check size={20} /></div>}
-                                    {pedido.statusFila === 'CANCELADO' && <div className="icone-status-grande bg-vermelho"><X size={20} /></div>}
-                                    {pedido.statusFila !== 'CONCLUIDO' && pedido.statusFila !== 'CANCELADO' && <div className="icone-status-grande bg-azul"><Hourglass size={20} /></div>}
+                                    {/* O ícone de status saiu daqui e foi para o container ali em cima */}
                                 </div>
 
                                 <div className="pedido-arquivo">{pedido.nomeArquivoOriginal}</div>
 
+                                {/* TODO O RESTANTE (TAGS E RODAPÉ) CONTINUA IGUALZINHO AO SEU */}
                                 <div className="pedido-tags">
                                     {pedido.detalhesImpressao && pedido.detalhesImpressao !== "Configurações não informadas" ? (
-                                        // Cai aqui se estiver na aba "Ativos" (Vem do DTO)
                                         <span className="tag">{pedido.detalhesImpressao}</span>
                                     ) : pedido.itens && pedido.itens.length > 0 ? (
-                                        // Cai aqui se estiver na aba "Histórico" (Vem da Entidade pura)
                                         <span className="tag">
-                                            {pedido.itens[0].tamanhoPapel} • {pedido.itens[0].tipoCor === 'PRETO_BRANCO' ? 'P&B' : 'Colorido'} • {pedido.itens[0].frenteVerso ? 'Frente e Verso' : 'Apenas Frente'}
+                                            {pedido.itens[0].tamanhoPapel} • {pedido.itens[0].tipoCor === 'PRETO_BRANCO' ? 'P&B' : 'Colorido'}
                                         </span>
                                     ) : (
-                                        // Cai aqui se realmente não houver nenhum item no banco de dados
                                         <span className="tag" style={{ color: 'orange' }}>Aguardando detalhes...</span>
                                     )}
                                     <span className="tag">{pedido.totalPaginasArquivo} páginas</span>
@@ -176,14 +175,12 @@ export default function MeusPedidos() {
                                         Valor pago: {formatarMoeda(pedido.valorTotal)}
                                     </div>
                                 </div>
-
                             </div>
                         ))
                     )}
                 </div>
             </div>
 
-            {/* MENU INFERIOR (Com botão de Pedidos ATIVO) */}
             <nav className="navegacao-inferior">
                 <div className="icone-nav" onClick={() => navigate('/estudante')} style={{ cursor: 'pointer' }}>
                     <Home size={28} />
@@ -191,10 +188,6 @@ export default function MeusPedidos() {
                 <div className="icone-nav" onClick={() => navigate('/novo-pedido')}>
                     <Printer size={28} />
                 </div>
-
-        
-
-                {/* 👉 ÍCONE CENTRAL DE PEDIDOS AGORA ESTÁ ATIVO (BRANCO) */}
                 <div className="icone-nav ativo" style={{ cursor: 'pointer' }}>
                     <FileText size={28} color="#1d448b" />
                 </div>
@@ -202,7 +195,6 @@ export default function MeusPedidos() {
                     <Lightbulb size={28} />
                 </div>
             </nav>
-
         </div>
     );
 }

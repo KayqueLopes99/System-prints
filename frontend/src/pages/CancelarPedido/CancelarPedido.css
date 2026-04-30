@@ -1,0 +1,192 @@
+.cancelar-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(29, 68, 139, 0.4); /* Tons de azul com transparência */
+    backdrop-filter: blur(8px); /* Fundo desfocado */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal-card {
+    background: white;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+    background-color: #1d448b;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    font-weight: 600;
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.alerta-amarelo {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    margin: 20px;
+    padding: 15px;
+    border-radius: 12px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.alerta-texto strong {
+    display: block;
+    color: #856404;
+    font-size: 1.1rem;
+}
+
+.alerta-texto p {
+    margin: 5px 0 0;
+    color: #856404;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.info-pedido-card {
+    background-color: #f8f9fa;
+    margin: 0 20px 20px;
+    padding: 15px;
+    border-radius: 12px;
+    border-left: 4px solid #1d448b;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.nome-arquivo-cancelar {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+    word-break: break-all;
+}
+
+.modal-acoes {
+    padding: 0 20px 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn-confirmar-cancelar {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(217, 83, 79, 0.3);
+    transition: background 0.2s;
+}
+
+.btn-confirmar-cancelar:hover { background-color: #c9302c; }
+
+.btn-manter-pedido {
+    background-color: #f1f3f5;
+    color: #495057;
+    border: none;
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+
+/* --- Estilos de Feedback (Aviso React) --- */
+
+.feedback-conteudo {
+    padding: 40px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.titulo-feedback {
+    font-size: 1.5rem;
+    margin: 10px 0 0;
+    font-weight: 800;
+}
+
+.titulo-feedback.sucesso { color: #26d451; }
+.titulo-feedback.erro { color: #d9534f; }
+
+.texto-feedback {
+    color: #64748b;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.btn-voltar-feedback {
+    background-color: #1d448b;
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.btn-voltar-feedback:hover {
+    transform: scale(1.02);
+}
+
+.feedback-animacao {
+    animation: bounceIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes bounceIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}

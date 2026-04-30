@@ -13,6 +13,7 @@ import NovoPedidoInicio from './pages/NovoPedidoInicio/NovoPedidoInicio';
 import ResumoPagamento from './pages/ResumoPagamento/ResumoPagamento';
 import ConfiguracaoEncadernacao from './pages/ConfiguracaoEncadernacao/ConfiguracaoEncadernacao';
 import  PagamentoEncadernacao from './pages/PagamentoEncadernacao/PagamentoEncadernacao';
+import CancelarPedido from './pages/CancelarPedido/CancelarPedido';
 
 // 👇 NOVO: Importando a tela de Configuração do Pedido!
 import PedidoConfiguracao from './pages/PedidoConfiguracao/PedidoConfiguracao'; 
@@ -55,6 +56,9 @@ export default function App() {
 
           {/* Rota para a tela de Pagamento de Encadernação */}
           <Route path="/pagamento-encadernacao" element={<PagamentoEncadernacao />} />
+
+        {/* Rota para a tela de Cancelar Pedido */}
+        <Route path="/cancelar-pedido" element={<CancelarPedido />} />
 
       </Routes>
     </Router>

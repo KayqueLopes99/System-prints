@@ -12,26 +12,24 @@ import java.util.List;
 @Repository
 public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
 
-    // Busca pedidos de um usuário filtrando por uma LISTA de status (ex: PENDENTE,
-    // IMPRIMINDO)
     List<Pedido> findByUsuario_IdUsuarioAndStatusFilaInOrderByDataHoraDesc(int idUsuario, List<StatusPedido> status);
 
-    // Busca pedidos de um usuário filtrando por UM status específico (ex:
-    // CONCLUIDO)
     List<Pedido> findByUsuario_IdUsuarioAndStatusFilaOrderByDataHoraDesc(int idUsuario, StatusPedido status);
 
-    // --- Consultas para as Estatísticas ---
+    // --- Consultas para as Estatísticas (AJUSTADAS) ---
 
-    @Query("SELECT COUNT(p) FROM Pedido p WHERE p.usuario.idUsuario = :idUsuario")
+    // 1. Conta apenas pedidos que NÃO foram cancelados
+    @Query("SELECT COUNT(p) FROM Pedido p WHERE p.usuario.idUsuario = :idUsuario AND p.statusFila <> com.ufersa.backend_impressoes.model.enuns.StatusPedido.CANCELADO")
     long contarPedidosPorUsuario(@Param("idUsuario") int idUsuario);
 
-    @Query("SELECT COALESCE(SUM(p.totalPaginasArquivo), 0) FROM Pedido p WHERE p.usuario.idUsuario = :idUsuario")
+    // 2. Soma as páginas apenas de pedidos que NÃO foram cancelados
+    @Query("SELECT COALESCE(SUM(p.totalPaginasArquivo), 0) FROM Pedido p WHERE p.usuario.idUsuario = :idUsuario AND p.statusFila <> com.ufersa.backend_impressoes.model.enuns.StatusPedido.CANCELADO")
     long somarPaginasPorUsuario(@Param("idUsuario") int idUsuario);
 
-    @Query("SELECT COALESCE(SUM(p.valorTotal), 0.0) FROM Pedido p WHERE p.usuario.idUsuario = :idUsuario")
+    // 3. Soma o gasto apenas de pedidos que NÃO foram cancelados
+    @Query("SELECT COALESCE(SUM(p.valorTotal), 0.0) FROM Pedido p WHERE p.usuario.idUsuario = :idUsuario AND p.statusFila <> com.ufersa.backend_impressoes.model.enuns.StatusPedido.CANCELADO")
     double somarGastoPorUsuario(@Param("idUsuario") int idUsuario);
 
-    // Conta quantos pedidos Ativos existem criados ANTES do pedido atual
     @Query("SELECT COUNT(p) FROM Pedido p WHERE p.statusFila IN ('PENDENTE', 'NA_FILA', 'IMPRIMINDO') AND p.dataHora < :dataHora")
     int contarPedidosNaFrente(@Param("dataHora") java.time.LocalDateTime dataHora);
 }

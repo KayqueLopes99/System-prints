@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.transaction.annotation.Transactional;
+import java.time.Duration;
 
 @Service
 public class PedidoService {
@@ -99,9 +100,10 @@ public class PedidoService {
         novoPedido.setNomeArquivoOriginal(dto.getNomeArquivo());
         novoPedido.setTamanhoArquivoMb(dto.getTamanhoMb());
         novoPedido.setTotalPaginasArquivo(dto.getTotalPaginas());
-        
+
         // 3. Simular Upload
-        String urlSimulada = "uploads/" + System.currentTimeMillis() + "_" + (dto.getNomeArquivo() != null ? dto.getNomeArquivo() : "encadernacao.pdf");
+        String urlSimulada = "uploads/" + System.currentTimeMillis() + "_"
+                + (dto.getNomeArquivo() != null ? dto.getNomeArquivo() : "encadernacao.pdf");
         novoPedido.setArquivoUrl(urlSimulada);
 
         // 4. Criar Item e calcular valor
@@ -121,10 +123,10 @@ public class PedidoService {
             // Lógica de Impressão (Preço por página baseado na cor)
             double valorUnitario = (dto.getTipoCor() == TipoCor.PRETO_BRANCO) ? PRECO_PB : PRECO_COLORIDO;
             total = (valorUnitario * dto.getTotalPaginas()) * dto.getQuantidade();
-        } 
-        else if (dto.getTipoServico() == com.ufersa.backend_impressoes.model.enuns.CategoriaServico.ENCADERNACAO) {
+        } else if (dto.getTipoServico() == com.ufersa.backend_impressoes.model.enuns.CategoriaServico.ENCADERNACAO) {
             // Lógica de Encadernação (Preço Base + R$ 0,15 por folha)
-            total = (PRECO_BASE_ENCADERNACAO + (dto.getTotalPaginas() * PRECO_FOLHA_ENCADERNACAO)) * dto.getQuantidade();
+            total = (PRECO_BASE_ENCADERNACAO + (dto.getTotalPaginas() * PRECO_FOLHA_ENCADERNACAO))
+                    * dto.getQuantidade();
         }
 
         novoPedido.setValorTotal(total);
@@ -155,7 +157,28 @@ public class PedidoService {
     }
 
     public void cancelarPedido(int idPedido) {
-        atualizarStatusPedido(idPedido, StatusPedido.CANCELADO);
+        // 1. Busca o pedido ou lança erro se não existir
+        Pedido p = pedidoRepository.findById(idPedido)
+                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+
+        // 2. Regra de Negócio: Verificar tempo decorrido
+        LocalDateTime agora = LocalDateTime.now();
+        Duration duracao = Duration.between(p.getDataHora(), agora);
+
+        // Se a diferença for de 3 minutos ou mais, impede o cancelamento
+        if (duracao.toMinutes() >= 3) {
+            throw new RuntimeException(
+                    "O prazo de 3 minutos para cancelamento expirou. O pedido já está em processamento.");
+        }
+
+        // 3. Verifica se o pedido já não foi concluído ou cancelado antes
+        if (p.getStatusFila() == StatusPedido.CONCLUIDO || p.getStatusFila() == StatusPedido.CANCELADO) {
+            throw new RuntimeException("Este pedido não pode mais ser cancelado.");
+        }
+
+        // 4. Atualiza o status
+        p.setStatusFila(StatusPedido.CANCELADO);
+        pedidoRepository.save(p);
     }
 
     public int obterPosicaoFila(int idPedido) {
