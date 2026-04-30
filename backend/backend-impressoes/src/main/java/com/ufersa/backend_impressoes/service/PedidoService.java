@@ -165,10 +165,10 @@ public class PedidoService {
         LocalDateTime agora = LocalDateTime.now();
         Duration duracao = Duration.between(p.getDataHora(), agora);
 
-        // Se a diferença for de 3 minutos ou mais, impede o cancelamento
-        if (duracao.toMinutes() >= 3) {
+        // Se a diferença for de 5 minutos ou mais, impede o cancelamento
+        if (duracao.toMinutes() >= 5) {
             throw new RuntimeException(
-                    "O prazo de 3 minutos para cancelamento expirou. O pedido já está em processamento.");
+                    "O prazo de 5 minutos para cancelamento expirou. O pedido já está em processamento.");
         }
 
         // 3. Verifica se o pedido já não foi concluído ou cancelado antes

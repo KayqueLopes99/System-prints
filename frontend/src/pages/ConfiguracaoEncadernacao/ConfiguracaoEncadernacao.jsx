@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronLeft, Save, Plus, Minus, Upload, Check, X } from 'lucide-react';
+import { ChevronLeft, Notebook, Plus, Minus, Upload, Check, X } from 'lucide-react'; //
 import { useNavigate } from 'react-router-dom';
 import './ConfiguracaoEncadernacao.css';
 
@@ -11,13 +11,13 @@ export default function ConfiguracaoEncadernacao() {
     const [unidades, setUnidades] = useState(1);
     const [folhas, setFolhas] = useState(100);
     const [arquivo, setArquivo] = useState(null);
-    const [isDragging, setIsDragging] = useState(false); 
+    const [isDragging, setIsDragging] = useState(false);
     const [total, setTotal] = useState(20.00);
 
     // 💰 Lógica de Cálculo
     useEffect(() => {
-        const precoBaseEncadernacao = 5.00; 
-        const precoPorFolha = 0.15; 
+        const precoBaseEncadernacao = 5.00;
+        const precoPorFolha = 0.15;
         const resultado = (precoBaseEncadernacao + (folhas * precoPorFolha)) * unidades;
         setTotal(resultado);
     }, [unidades, folhas]);
@@ -33,7 +33,7 @@ export default function ConfiguracaoEncadernacao() {
             valorTotal: total,
             tipoServico: "ENCADERNACAO",
             // Campos padrão para compatibilidade com o DTO do Java
-            tamanhoPapel: "A4", 
+            tamanhoPapel: "A4",
             orientacao: "RETRATO",
             frenteVerso: false,
             tipoCor: "PRETO_BRANCO"
@@ -82,7 +82,7 @@ export default function ConfiguracaoEncadernacao() {
                     <span className="subtitulo-principal">organize seu pedido</span>
                 </div>
                 <button className="btn-save-header">
-                    <Save size={35} strokeWidth={1.5} />
+                    <Notebook size={35} strokeWidth={1.5} /> {/* */}
                 </button>
             </header>
 

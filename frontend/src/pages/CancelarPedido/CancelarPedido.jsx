@@ -25,7 +25,7 @@ export default function CancelarPedido() {
             });
         } catch (error) {
             // Captura a regra de 3 minutos do Service
-            const msgErro = error.response?.data?.message || "O prazo de 3 minutos para cancelamento expirou.";
+            const msgErro = error.response?.data?.message || "O prazo de 5 minutos para cancelamento expirou.";
             
             setStatusFeedback({ 
                 tipo: 'erro', 
