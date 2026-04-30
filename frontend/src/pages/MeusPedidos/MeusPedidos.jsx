@@ -191,7 +191,7 @@ export default function MeusPedidos() {
                 <div className="icone-nav ativo" style={{ cursor: 'pointer' }}>
                     <FileText size={28} color="#1d448b" />
                 </div>
-                <div className="icone-nav" style={{ cursor: 'pointer' }}>
+                <div className="icone-nav" onClick={() => navigate('/dicas-contextuais')}>
                     <Lightbulb size={28} />
                 </div>
             </nav>

@@ -14,6 +14,7 @@ import ResumoPagamento from './pages/ResumoPagamento/ResumoPagamento';
 import ConfiguracaoEncadernacao from './pages/ConfiguracaoEncadernacao/ConfiguracaoEncadernacao';
 import  PagamentoEncadernacao from './pages/PagamentoEncadernacao/PagamentoEncadernacao';
 import CancelarPedido from './pages/CancelarPedido/CancelarPedido';
+import DicasContextuais from './pages/DicasContextuais/DicasContextuais';
 
 // 👇 NOVO: Importando a tela de Configuração do Pedido!
 import PedidoConfiguracao from './pages/PedidoConfiguracao/PedidoConfiguracao'; 
@@ -60,6 +61,8 @@ export default function App() {
         {/* Rota para a tela de Cancelar Pedido */}
         <Route path="/cancelar-pedido" element={<CancelarPedido />} />
 
+        {/* Rota para a tela de Dicas Contextuais */}
+        <Route path="/dicas-contextuais" element={<DicasContextuais />} />
       </Routes>
     </Router>
   );

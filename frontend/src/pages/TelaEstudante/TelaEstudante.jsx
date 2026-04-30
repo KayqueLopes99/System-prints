@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Home, Printer, FileText, Lightbulb, Bell, Menu } from 'lucide-react';
-import { useNavigate } from 'react-router-dom'; // 👉 NOVO IMPORT
+import { Home, Printer, FileText, Lightbulb, Bell, Menu, Info } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import './TelaEstudante.css';
 
 export default function TelaEstudante() {
   const [horarios, setHorarios] = useState([]);
-  const navigate = useNavigate(); // 👉 INICIALIZANDO O REDIRECIONADOR
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('http://localhost:8080/api/horarios')
@@ -24,7 +24,6 @@ export default function TelaEstudante() {
   return (
     <div className="app-container">
       <header className="header-topo">
-        {/* 👉 ADICIONADO onClick e cursor pointer NO MENU */}
         <Menu
           size={32}
           color="#1d448b"
@@ -43,6 +42,7 @@ export default function TelaEstudante() {
 
         <h2 className="titulo-secao">Quadro de Horários</h2>
 
+        {/* Tabela de Horários */}
         <div className="tabela-container">
           <table className="tabela">
             <thead>
@@ -67,20 +67,43 @@ export default function TelaEstudante() {
             </tbody>
           </table>
         </div>
+
+        {/* 👉 NOVO: Card de Informações Úteis (Padronizado com a tabela)[cite: 15, 16] */}
+        <div className="tabela-container">
+          <div className="info-topo-azul">
+            <Info size={20} color="#fff" />
+            <span>Informações Úteis</span>
+          </div>
+
+          <div className="info-corpo-tabela">
+            <div className="info-linha-item">
+              <strong>Local:</strong>
+              <p>Setor de impressões - Bloco 2</p>
+            </div>
+
+            <div className="info-linha-item">
+              <strong>E-mail:</strong>
+              <p>grafica.universitaria@ufersa.edu.br</p>
+            </div>
+
+            <div className="info-linha-item">
+              <strong>WhatsApp:</strong>
+              <p>(84) 99999-8888</p>
+            </div>
+          </div>
+        </div>
+
       </main>
 
       <nav className="navegacao-inferior">
-        {/* Home continua ativa nesta tela */}
         <div className="icone-nav ativo" style={{ cursor: 'pointer' }}>
           <Home size={28} />
         </div>
 
-        {/* 👉 ADICIONAR ISSO AQUI: */}
         <div className="icone-nav" onClick={() => navigate('/novo-pedido')} style={{ cursor: 'pointer' }}>
           <Printer size={28} />
         </div>
 
-        {/* 👉 NOVO: Adicionado onClick para ir para a tela de pedidos */}
         <div
           className="icone-nav"
           onClick={() => navigate('/pedidos')}
@@ -89,7 +112,7 @@ export default function TelaEstudante() {
           <FileText size={28} />
         </div>
 
-        <div className="icone-nav" style={{ cursor: 'pointer' }}>
+        <div className="icone-nav" onClick={() => navigate('/dicas-contextuais')}>
           <Lightbulb size={28} />
         </div>
       </nav>

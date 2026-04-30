@@ -1,21 +1,19 @@
-/* Fundo geral da tela baseado na imagem */
+/* Fundo geral da tela[cite: 15] */
 .app-container {
   background-color: #f8f7f2;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   font-family: Arial, sans-serif;
-  padding-bottom: 70px; /* Espaço para a barra inferior não cobrir a tabela */
+  padding-bottom: 70px;
 }
 
-/* Cabeçalho */
 .header-topo {
   display: flex;
   justify-content: space-between;
   padding: 20px;
 }
 
-/* Conteúdo central */
 .conteudo-principal {
   padding: 0 20px;
   display: flex;
@@ -30,12 +28,11 @@
   font-weight: bold;
 }
 
-/* Botão Verde */
 .botao-aberto {
   background-color: #388e3c;
   color: white;
   width: 100%;
-  max-width: 300px; /* 👉 ADICIONADO AQUI: Limita a largura do botão e deixa ele menorzinho no meio */
+  max-width: 300px;
   text-align: center;
   padding: 15px;
   border-radius: 8px;
@@ -51,7 +48,7 @@
   font-weight: bold;
 }
 
-/* TABELA AZUL E BRANCA */
+/* --- TABELA E CONTAINER PADRÃO[cite: 15] --- */
 .tabela-container {
   width: 100%;
   border-radius: 12px;
@@ -83,12 +80,51 @@
   color: #333;
 }
 
-/* Regra para o texto "Fechado" em vermelho */
 .texto-vermelho {
   color: #a32a2a;
 }
 
-/* NAVEGAÇÃO INFERIOR */
+/* --- ESTILOS DO CARD DE INFO (Padronizado com Tabela)[cite: 15] --- */
+.info-topo-azul {
+  background-color: #1d448b; /* Mesmo azul do thead[cite: 15] */
+  color: white;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.info-corpo-tabela {
+  padding: 20px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.info-linha-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.info-linha-item strong {
+  color: #333;
+  font-size: 1.0rem;
+  margin-bottom: 4px;
+}
+
+.info-linha-item p {
+  margin: 0;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+/* NAVEGAÇÃO INFERIOR[cite: 15] */
 .navegacao-inferior {
   position: fixed;
   bottom: 0;
@@ -110,7 +146,6 @@
   cursor: pointer;
 }
 
-/* O ícone da "Home" que está selecionado tem o fundo branco e ícone azul */
 .icone-nav.ativo {
   background-color: white;
   color: #1d448b;

@@ -95,8 +95,8 @@ export default function NovoPedidoInicio() {
                     <FileText size={26} color="#fff" />
                 </div>
 
-                <div className="icone-nav">
-                    <Lightbulb size={26} color="#fff" />
+                <div className="icone-nav" onClick={() => navigate('/dicas-contextuais')}>
+                    <Lightbulb size={28} />
                 </div>
             </nav>
         </div>

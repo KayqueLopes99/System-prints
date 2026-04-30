@@ -1,0 +1,133 @@
+.dicas-container {
+    background-color: #f8f7f2;
+    min-height: 100vh;
+    padding-bottom: 90px;
+    font-family: Arial, sans-serif;
+}
+
+/* 👉 OVERLAY: Escurece o fundo ao dar zoom */
+.overlay-escuro {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+    z-index: 90;
+    animation: fadeIn 0.2s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.header-dicas {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: white;
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+.header-dicas h1 {
+    font-size: 1.3rem;
+    color: #1d448b;
+    margin: 0;
+    font-weight: bold;
+}
+
+.btn-voltar {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.lista-dicas {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 0 20px;
+    /* 👉 CENTRALIZAÇÃO: Limita o tamanho no notebook e centraliza */
+    max-width: 600px; 
+    margin: 0 auto;
+}
+
+.card-dica {
+    background-color: white;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid #eee;
+    position: relative; /* Para manter o z-index funcionando */
+}
+
+.card-dica.borda-azul { border-left: 6px solid #1d448b; }
+.card-dica.borda-verde { border-left: 6px solid #378C26; }
+
+/* 👉 ZOOM CENTRALIZADO: Fica grandinho e à frente de tudo[cite: 20] */
+.card-dica.zoom-ativo {
+    transform: scale(1.12); /* Fica "grandinho" na medida certa */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    z-index: 100; /* Acima do overlay */
+    border: 1px solid rgba(29, 68, 139, 0.2);
+}
+
+.card-dica-topo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.icone-info {
+    color: #1d448b;
+    opacity: 0.8;
+}
+
+.card-dica h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    color: #333;
+    font-weight: bold;
+}
+
+.card-dica p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.5;
+}
+
+/* Menu inferior[cite: 20] */
+.navegacao-inferior {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #1d448b;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 0;
+    border-radius: 20px 20px 0 0;
+    z-index: 80; /* Abaixo do overlay */
+}
+
+.icone-nav {
+    color: white;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.icone-nav.ativo {
+    background-color: white;
+    color: #1d448b;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}

@@ -96,9 +96,9 @@ class "Pedido" as pedido {
   - valor_total : double
   ==
   + confirmarPedido(-) : void
+  + cancelarPedido(-) : void
+  + atualizarStatusPedido(-) : void
 
-  + cancelarPedido() : void
-  + atualizarStatusPedido() : void
   + obterPosicaoFila() : int
   + estimarTempoFila() : String
   + listarFilaDePedidos() : List<Pedido>
