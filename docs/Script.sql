@@ -1,12 +1,8 @@
-setar isso no bancode dados!!!!!!!!!!!
-
-
-
-
+-- SETAR isso no bancode dados!!!!!!!!!!!
 
 -- 1. CRIAÇÃO DOS TIPOS ENUM (Ajustados para o padrão do Java/Spring Boot)
 CREATE TYPE categoria_servico_enum AS ENUM ('IMPRESSAO', 'ENCADERNACAO');
-CREATE TYPE status_fila_enum AS ENUM ('PENDENTE', 'NA_FILA', 'PRONTO', 'CONCLUIDO', 'CANCELADO');
+CREATE TYPE status_fila_enum AS ENUM ('PENDENTE', 'PRONTO', 'CONCLUIDO', 'CANCELADO');
 CREATE TYPE orientacao_enum AS ENUM ('RETRATO', 'PAISAGEM');
 CREATE TYPE tipo_cor_enum AS ENUM ('PRETO_BRANCO', 'COLORIDO');
 CREATE TYPE metodo_pagamento_enum AS ENUM ('PIX', 'DINHEIRO', 'CARTAO'); -- 👉 ADICIONADO

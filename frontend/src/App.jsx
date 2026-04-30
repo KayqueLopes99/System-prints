@@ -15,6 +15,7 @@ import ConfiguracaoEncadernacao from './pages/ConfiguracaoEncadernacao/Configura
 import  PagamentoEncadernacao from './pages/PagamentoEncadernacao/PagamentoEncadernacao';
 import CancelarPedido from './pages/CancelarPedido/CancelarPedido';
 import DicasContextuais from './pages/DicasContextuais/DicasContextuais';
+import DetalhesFila from './pages/DetalhesFila/DetalhesFila';
 
 // 👇 NOVO: Importando a tela de Configuração do Pedido!
 import PedidoConfiguracao from './pages/PedidoConfiguracao/PedidoConfiguracao'; 
@@ -63,6 +64,9 @@ export default function App() {
 
         {/* Rota para a tela de Dicas Contextuais */}
         <Route path="/dicas-contextuais" element={<DicasContextuais />} />
+
+        {/* Rota para a tela de Detalhes da Fila */}
+        <Route path="/detalhes-fila" element={<DetalhesFila />} />
       </Routes>
     </Router>
   );

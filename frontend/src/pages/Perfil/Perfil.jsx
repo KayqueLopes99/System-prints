@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-// 👉 Importamos o GraduationCap da lucide e FiEye/FiEyeOff da react-icons
 import { ArrowLeft, User, Mail, BookOpen, GraduationCap, Lock, Trash2, Edit2, Save, LogOut } from 'lucide-react';
-import { FiEye, FiEyeOff } from 'react-icons/fi'; // Ícones do olho
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 import axios from 'axios';
 import './Perfil.css';
 
 export default function Perfil() {
     const navigate = useNavigate();
     const [editando, setEditando] = useState(false);
-
-    // 👉 Novo estado para controlar a visibilidade da senha
     const [mostrarSenha, setMostrarSenha] = useState(false);
 
-    // Estado para armazenar os dados do usuário
+    // 👉 NOVO: Estado para a mensagem de aviso na tela
+    const [feedback, setFeedback] = useState(null);
+
     const [perfil, setPerfil] = useState({
         nomeCompleto: '',
         email: '',
@@ -22,11 +21,17 @@ export default function Perfil() {
         senha: ''
     });
 
-    // Tenta pegar o ID real do localStorage, se não tiver, usa o 1 como teste
     const idUsuarioLogado = localStorage.getItem('usuarioId') || 1;
 
+    // 👉 NOVO: Efeito para limpar a mensagem automaticamente
     useEffect(() => {
-        // 1. VISUALIZAR PERFIL (GET)
+        if (feedback) {
+            const timer = setTimeout(() => setFeedback(null), 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [feedback]);
+
+    useEffect(() => {
         axios.get(`http://localhost:8080/api/usuarios/${idUsuarioLogado}`)
             .then(response => {
                 setPerfil({
@@ -39,7 +44,6 @@ export default function Perfil() {
             })
             .catch(error => {
                 console.error("Erro ao carregar perfil:", error);
-                // Se der erro de conexão, limpa os campos pra não mostrar dados antigos
                 setPerfil({ nomeCompleto: 'Erro ao carregar', email: '', matricula: '', curso: '', senha: '' });
             });
     }, [idUsuarioLogado]);
@@ -52,36 +56,31 @@ export default function Perfil() {
     const salvarPerfil = async () => {
         try {
             const dadosParaEnviar = { ...perfil };
-
-            // Remove a senha do envio se estiver vazia para não dar erro de constraint no Java
             if (!dadosParaEnviar.senha || dadosParaEnviar.senha.trim() === "") {
                 delete dadosParaEnviar.senha;
             }
 
             await axios.put(`http://localhost:8080/api/usuarios/${idUsuarioLogado}`, dadosParaEnviar);
 
-            alert("Perfil atualizado com sucesso!");
+            // 👉 Substituído Alert por Feedback na tela
+            setFeedback({ texto: "Perfil atualizado com sucesso!", tipo: "sucesso" });
             setEditando(false);
         } catch (error) {
-            console.error("Erro completo:", error);
-
-            // 👉 Extrai a mensagem exata para evitar o [object Object]
-            const mensagemAmigavel = error.response?.data?.message || error.response?.data || "Erro desconhecido";
-            alert("Erro ao salvar: " + mensagemAmigavel);
+            const msgErro = error.response?.data?.message || "Erro desconhecido";
+            // 👉 Substituído Alert por Feedback na tela
+            setFeedback({ texto: "Erro ao salvar: " + msgErro, tipo: "erro" });
         }
     };
 
     const limparCache = () => {
-        // 3. LIMPAR CACHE
         localStorage.clear();
         sessionStorage.clear();
-        alert("Cache limpo com sucesso! Você precisará fazer login novamente.");
-        navigate('/');
+        // 👉 Mostra aviso rápido antes de sair
+        setFeedback({ texto: "Cache limpo! Redirecionando...", tipo: "sucesso" });
+        setTimeout(() => navigate('/'), 1500);
     };
 
-    // 👉 4. FUNÇÃO PARA SAIR DA CONTA
     const sairDaConta = () => {
-        // Limpa qualquer dado de sessão que exista e manda pro login
         localStorage.clear();
         sessionStorage.clear();
         navigate('/');
@@ -89,6 +88,13 @@ export default function Perfil() {
 
     return (
         <div className="perfil-container">
+            {/* 👉 NOVO: Componente de Aviso na Tela */}
+            {feedback && (
+                <div className={`feedback-perfil feedback-${feedback.tipo}`}>
+                    {feedback.texto}
+                </div>
+            )}
+
             <header className="perfil-header">
                 <ArrowLeft size={28} color="#1d448b" onClick={() => navigate('/estudante')} style={{ cursor: 'pointer' }} />
                 <h2>Meu Perfil</h2>
@@ -96,7 +102,6 @@ export default function Perfil() {
             </header>
 
             <main className="perfil-conteudo">
-
                 <div className="card-dados">
                     <div className="cabecalho-card">
                         <h3>Dados Pessoais</h3>
@@ -134,7 +139,6 @@ export default function Perfil() {
                     </div>
 
                     <div className="campo-grupo">
-                        {/* 👉 MUDANÇA AQUI: Trocamos o ícone Hash pelo GraduationCap */}
                         <label><GraduationCap size={18} /> Matrícula</label>
                         <input
                             type="text"
@@ -159,16 +163,14 @@ export default function Perfil() {
                     {editando && (
                         <div className="campo-grupo destaque-senha">
                             <label><Lock size={16} /> Nova Senha (Opcional)</label>
-                            {/* 👉 MUDANÇA AQUI: Adicionamos o wrapper e o botão do olho */}
                             <div className="input-wrapper-senha">
                                 <input
-                                    // Controla o tipo baseado no estado mostrarSenha
                                     type={mostrarSenha ? "text" : "password"}
                                     name="senha"
                                     placeholder="Digite para alterar sua senha"
                                     value={perfil.senha}
                                     onChange={handleInputChange}
-                                    style={{ paddingRight: '40px' }} // Espaço para o ícone
+                                    style={{ paddingRight: '40px' }}
                                 />
                                 <button
                                     type="button"
@@ -182,7 +184,6 @@ export default function Perfil() {
                     )}
                 </div>
 
-                {/* 👉 ÁREA PERIGO ATUALIZADA COM ALINHAMENTO CENTRALIZADO EM LINHA */}
                 <div className="area-perigo" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '12px' }}>
                     <h3>Configurações Adicionais</h3>
 
@@ -196,7 +197,6 @@ export default function Perfil() {
                         Sair da Conta
                     </button>
                 </div>
-
             </main>
         </div>
     );

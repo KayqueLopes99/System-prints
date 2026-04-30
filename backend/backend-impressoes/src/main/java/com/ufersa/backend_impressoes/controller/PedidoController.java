@@ -3,6 +3,7 @@ package com.ufersa.backend_impressoes.controller;
 import com.ufersa.backend_impressoes.dto.EstatisticasPedidoDTO;
 import com.ufersa.backend_impressoes.dto.PedidoCardDTO;
 import com.ufersa.backend_impressoes.dto.PedidoRequestDTO;
+import com.ufersa.backend_impressoes.dto.StatusFilaDTO;
 import com.ufersa.backend_impressoes.model.Pedido;
 import com.ufersa.backend_impressoes.model.enuns.StatusPedido;
 
@@ -66,5 +67,41 @@ public class PedidoController {
     @GetMapping("/{id}/posicao")
     public ResponseEntity<Integer> getPosicao(@PathVariable int id) {
         return ResponseEntity.ok(pedidoService.obterPosicaoFila(id));
+    }
+
+    // Detalhes de um pedido específico
+    @GetMapping("/{id}")
+    public ResponseEntity<PedidoCardDTO> getDetalhes(@PathVariable int id) {
+        return ResponseEntity.ok(pedidoService.obterDetalhesPedido(id));
+    }
+
+    // Estimação de tempo para o estudante
+    @GetMapping("/{id}/tempo-estimado")
+    public ResponseEntity<String> getTempoEstimado(@PathVariable int id) {
+        return ResponseEntity.ok(pedidoService.estimarTempoFila(id));
+    }
+
+    // --- ROTAS DO ADMINISTRADOR ---
+
+    @GetMapping("/admin/fila")
+    public ResponseEntity<List<PedidoCardDTO>> getFilaGlobal() {
+        return ResponseEntity.ok(pedidoService.listarFilaGlobalAdmin());
+    }
+
+    @PutMapping("/admin/chamar-proximo")
+    public ResponseEntity<PedidoCardDTO> chamarProximo() {
+        return ResponseEntity.ok(pedidoService.chamarProximoPedido());
+    }
+
+    @PutMapping("/{id}/concluir")
+    public ResponseEntity<Void> concluir(@PathVariable int id) {
+        pedidoService.concluirImpressao(id);
+        return ResponseEntity.ok().build();
+    }
+
+    // Rota consolidada para otimizar o carregamento no React[cite: 12]
+    @GetMapping("/fila/status-geral")
+    public ResponseEntity<StatusFilaDTO> getStatusFilaGeral() {
+        return ResponseEntity.ok(pedidoService.obterStatusFilaGeral());
     }
 }

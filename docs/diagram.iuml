@@ -17,8 +17,6 @@ enum CategoriaServico {
 
 enum StatusFila {
   PENDENTE
-  NA_FILA
-  IMPRIMINDO
   PRONTO
   CONCLUIDO
   CANCELADO
@@ -141,7 +139,6 @@ class "Notificacao" as notificacao {
   - data_hora : Datetime
   ==
   + listarNotificacoes(idUsuario) : List<Notificacao>
-  + marcarComoLida(idNotificacao) : void
 }
 
 class "Horario_Funcionamento" as horario {

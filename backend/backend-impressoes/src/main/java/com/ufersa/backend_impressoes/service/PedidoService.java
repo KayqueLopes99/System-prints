@@ -3,15 +3,18 @@ package com.ufersa.backend_impressoes.service;
 import com.ufersa.backend_impressoes.dto.EstatisticasPedidoDTO;
 import com.ufersa.backend_impressoes.dto.PedidoCardDTO;
 import com.ufersa.backend_impressoes.dto.PedidoRequestDTO;
+import com.ufersa.backend_impressoes.dto.StatusFilaDTO;
 import com.ufersa.backend_impressoes.model.ItemPedido;
 import com.ufersa.backend_impressoes.model.Pedido;
 import com.ufersa.backend_impressoes.model.Usuario;
+import com.ufersa.backend_impressoes.model.enuns.NivelOcupacao;
 import com.ufersa.backend_impressoes.model.enuns.StatusPedido;
 import com.ufersa.backend_impressoes.model.enuns.TipoCor;
 import com.ufersa.backend_impressoes.repository.PedidoRepository;
 import com.ufersa.backend_impressoes.repository.UsuarioRepository;
 import com.ufersa.backend_impressoes.model.Pagamento;
 import com.ufersa.backend_impressoes.repository.PagamentoRepository;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -185,5 +188,99 @@ public class PedidoService {
         Pedido p = pedidoRepository.findById(idPedido)
                 .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
         return pedidoRepository.contarPedidosNaFrente(p.getDataHora()) + 1;
+    }
+
+    // 1. Estimar o tempo de espera (Baseado em 2s por página + 30s de setup)
+    public String estimarTempoFila(int idPedido) {
+        Pedido p = pedidoRepository.findById(idPedido)
+                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+
+        long paginasNaFrente = pedidoRepository.somarPaginasNaFrente(p.getDataHora());
+        int pedidosNaFrente = pedidoRepository.contarPedidosNaFrente(p.getDataHora());
+
+        // Fórmula: (Páginas * 2 segundos) + (Pedidos * 30 segundos de setup)
+        long totalSegundos = (paginasNaFrente * 2) + (pedidosNaFrente * 30);
+
+        if (totalSegundos < 60)
+            return "Menos de 1 minuto";
+        return (totalSegundos / 60) + " minutos";
+    }
+
+    // 2. Listar Fila Global (Visão do Admin)
+    public List<PedidoCardDTO> listarFilaGlobalAdmin() {
+        List<StatusPedido> statusAtivos = Arrays.asList(StatusPedido.PENDENTE, StatusPedido.NA_FILA,
+                StatusPedido.IMPRIMINDO);
+        return pedidoRepository.findByStatusFilaInOrderByDataHoraAsc(statusAtivos)
+                .stream().map(PedidoCardDTO::new).collect(Collectors.toList());
+    }
+
+    // 3. Chamar o próximo da fila (Admin)[cite: 17]
+    @Transactional
+    public PedidoCardDTO chamarProximoPedido() {
+        List<StatusPedido> statusAguardando = Arrays.asList(StatusPedido.PENDENTE, StatusPedido.NA_FILA);
+        Pedido proximo = pedidoRepository.findFirstByStatusFilaInOrderByDataHoraAsc(statusAguardando)
+                .orElseThrow(() -> new RuntimeException("Não há pedidos aguardando na fila."));
+
+        proximo.setStatusFila(StatusPedido.IMPRIMINDO);
+        return new PedidoCardDTO(pedidoRepository.save(proximo));
+    }
+
+    // 4. Concluir Impressão (Admin)[cite: 17]
+    @Transactional
+    public void concluirImpressao(int idPedido) {
+        Pedido p = pedidoRepository.findById(idPedido)
+                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+        p.setStatusFila(StatusPedido.PRONTO);
+        pedidoRepository.save(p);
+    }
+
+    // 5. Obter detalhes de um único pedido[cite: 17]
+    public PedidoCardDTO obterDetalhesPedido(int idPedido) {
+        Pedido p = pedidoRepository.findById(idPedido)
+                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+        return new PedidoCardDTO(p);
+    }
+
+    public NivelOcupacao obterNivelOcupacao() {
+        List<StatusPedido> statusAtivos = Arrays.asList(
+                StatusPedido.PENDENTE,
+                StatusPedido.NA_FILA,
+                StatusPedido.IMPRIMINDO);
+
+        long totalPedidos = pedidoRepository.countByStatusFilaIn(statusAtivos);
+
+        if (totalPedidos <= 4) {
+            return NivelOcupacao.BAIXA;
+        } else if (totalPedidos <= 7) {
+            return NivelOcupacao.MODERADA;
+        } else {
+            return NivelOcupacao.CHEIA;
+        }
+    }
+
+    // Método consolidado para o Status da Fila[cite: 13, 17]
+    public StatusFilaDTO obterStatusFilaGeral() {
+        List<StatusPedido> statusAtivos = Arrays.asList(
+                StatusPedido.PENDENTE,
+                StatusPedido.NA_FILA,
+                StatusPedido.IMPRIMINDO);
+
+        // 1. Conta o total de pedidos ativos[cite: 14]
+        long totalPedidos = pedidoRepository.countByStatusFilaIn(statusAtivos);
+
+        // 2. Define o nível de ocupação[cite: 13]
+        NivelOcupacao nivel = (totalPedidos <= 4) ? NivelOcupacao.BAIXA
+                : (totalPedidos <= 7) ? NivelOcupacao.MODERADA : NivelOcupacao.CHEIA;
+
+        // 3. Calcula o tempo estimado do próximo pedido na fila (ou do geral)[cite: 13]
+        // Buscamos o primeiro da fila para ter uma base de tempo[cite: 14]
+        String tempo = "Vazia";
+        Optional<Pedido> proximo = pedidoRepository.findFirstByStatusFilaInOrderByDataHoraAsc(statusAtivos);
+
+        if (proximo.isPresent()) {
+            tempo = estimarTempoFila(proximo.get().getIdPedido());
+        }
+
+        return new StatusFilaDTO(tempo, nivel, totalPedidos);
     }
 }

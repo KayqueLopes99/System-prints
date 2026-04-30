@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.ufersa.backend_impressoes.model.enuns.StatusPedido;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
@@ -32,4 +33,25 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
 
     @Query("SELECT COUNT(p) FROM Pedido p WHERE p.statusFila IN ('PENDENTE', 'NA_FILA', 'IMPRIMINDO') AND p.dataHora < :dataHora")
     int contarPedidosNaFrente(@Param("dataHora") java.time.LocalDateTime dataHora);
+
+    // Busca pedidos ativos para a fila do Administrador (Ordenados por
+    // chegada)[cite: 18]
+    List<Pedido> findByStatusFilaInOrderByDataHoraAsc(List<StatusPedido> status);
+
+    // Busca pedidos por status para o Admin (Ex: Ver tudo que está 'PRONTO')[cite:
+    // 18]
+    List<Pedido> findByStatusFilaOrderByDataHoraAsc(StatusPedido status);
+
+    // Busca o próximo pedido da fila (O mais antigo que ainda não foi
+    // impresso)[cite: 18]
+    Optional<Pedido> findFirstByStatusFilaInOrderByDataHoraAsc(List<StatusPedido> status);
+
+    // Soma o total de páginas de todos os pedidos que estão na frente de um
+    // determinado momento[cite: 18]
+    @Query("SELECT COALESCE(SUM(p.totalPaginasArquivo), 0) FROM Pedido p WHERE p.statusFila IN ('PENDENTE', 'NA_FILA', 'IMPRIMINDO') AND p.dataHora < :dataHora")
+    long somarPaginasNaFrente(@Param("dataHora") java.time.LocalDateTime dataHora);
+
+    // Conta quantos pedidos existem com os status informados na lista[cite: 16]
+    long countByStatusFilaIn(List<StatusPedido> status);
+
 }

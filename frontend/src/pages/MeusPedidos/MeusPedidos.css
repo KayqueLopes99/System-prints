@@ -293,3 +293,82 @@
     background-color: #ffebee;
     transform: scale(1.1);
 }
+
+/* --- Novo Card Status da Fila --- */
+.card-status-fila {
+    background-color: #ffffff;
+    border: 2px solid #1d448b; /* Borda azul oficial */
+    border-radius: 20px;
+    margin: 0 15px 20px 15px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.titulo-fila {
+    font-size: 1rem;
+    color: #444;
+    font-weight: 600;
+}
+
+.fila-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.fila-icone-bg {
+    width: 40px;
+    height: 40px;
+    background-color: #f5f5f5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fila-info-texto {
+    display: flex;
+    flex-direction: column;
+}
+
+.label-fila {
+    font-size: 0.95rem;
+    color: #8fa2bc; /* Tom de azul acinzentado do print */
+    font-weight: 500;
+}
+
+.valor-fila {
+    font-size: 1rem;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Botão Ver Fila Detalhada */
+.btn-ver-fila-detalhada {
+    margin-top: 5px;
+    padding: 10px;
+    border: 1.5px solid #1d448b;
+    border-radius: 12px;
+    background-color: transparent;
+    color: #1d448b;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-ver-fila-detalhada:active {
+    transform: scale(0.98);
+    background-color: #f0f4f8;
+}
+
+/* Garante que o card de estatísticas não suba demais */
+.estatisticas-container {
+    margin-top: 5px;
+}
