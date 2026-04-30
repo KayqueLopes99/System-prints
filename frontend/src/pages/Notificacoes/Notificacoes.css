@@ -1,0 +1,99 @@
+.notificacoes-container {
+    background-color: #f8f7f2;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.header-notificacoes {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.btn-voltar {
+    background: white;
+    border: 2px solid #1d448b;
+    border-radius: 10px;
+    padding: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.titulo-notificacoes {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.titulo-notificacoes h1 {
+    font-size: 1.6rem;
+    color: #1d448b;
+    margin: 0;
+}
+
+/* Cards de Notificação */
+.lista-notificacoes {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.card-notificacao {
+    background: white;
+    border-radius: 12px;
+    display: flex;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: transform 0.2s;
+    position: relative;
+    border: 1px solid #e0e0e0;
+}
+
+.card-notificacao:active {
+    transform: scale(0.98);
+}
+
+.faixa-lateral {
+    width: 6px;
+    background-color: #1d448b; /* Tudo azul conforme pedido */
+}
+
+.nao-lida {
+    border: 1.5px solid #1d448b;
+    background-color: #f0f4f8;
+}
+
+.conteudo-notificacao {
+    padding: 15px;
+    flex: 1;
+}
+
+.conteudo-notificacao h3 {
+    margin: 0 0 5px 0;
+    font-size: 1.05rem;
+    color: #1d448b;
+}
+
+.conteudo-notificacao p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.4;
+}
+
+.data-notificacao {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.75rem;
+    color: #999;
+    text-align: right;
+}
+
+.msg-vazia {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+}

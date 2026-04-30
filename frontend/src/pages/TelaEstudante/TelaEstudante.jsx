@@ -8,6 +8,7 @@ export default function TelaEstudante() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Busca os horários de funcionamento do backend[cite: 10]
     fetch('http://localhost:8080/api/horarios')
       .then(response => response.json())
       .then(data => setHorarios(data))
@@ -23,6 +24,7 @@ export default function TelaEstudante() {
 
   return (
     <div className="app-container">
+      {/* Cabeçalho com ícones de Perfil e Notificações[cite: 10] */}
       <header className="header-topo">
         <Menu
           size={32}
@@ -30,7 +32,12 @@ export default function TelaEstudante() {
           onClick={() => navigate('/perfil')}
           style={{ cursor: 'pointer' }}
         />
-        <Bell size={32} color="#1d448b" />
+        <Bell
+          size={32}
+          color="#1d448b"
+          onClick={() => navigate('/notificacoes')} // 👉 Navegação para a tela de avisos[cite: 10]
+          style={{ cursor: 'pointer' }}
+        />
       </header>
 
       <main className="conteudo-principal">
@@ -42,7 +49,7 @@ export default function TelaEstudante() {
 
         <h2 className="titulo-secao">Quadro de Horários</h2>
 
-        {/* Tabela de Horários */}
+        {/* Tabela de Horários de Funcionamento[cite: 10] */}
         <div className="tabela-container">
           <table className="tabela">
             <thead>
@@ -68,7 +75,7 @@ export default function TelaEstudante() {
           </table>
         </div>
 
-        {/* 👉 NOVO: Card de Informações Úteis (Padronizado com a tabela)[cite: 15, 16] */}
+        {/* Card de Informações Úteis padronizado[cite: 10] */}
         <div className="tabela-container">
           <div className="info-topo-azul">
             <Info size={20} color="#fff" />
@@ -95,6 +102,7 @@ export default function TelaEstudante() {
 
       </main>
 
+      {/* Menu de Navegação Inferior[cite: 10] */}
       <nav className="navegacao-inferior">
         <div className="icone-nav ativo" style={{ cursor: 'pointer' }}>
           <Home size={28} />
@@ -112,7 +120,7 @@ export default function TelaEstudante() {
           <FileText size={28} />
         </div>
 
-        <div className="icone-nav" onClick={() => navigate('/dicas-contextuais')}>
+        <div className="icone-nav" onClick={() => navigate('/dicas-contextuais')} style={{ cursor: 'pointer' }}>
           <Lightbulb size={28} />
         </div>
       </nav>

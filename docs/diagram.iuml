@@ -69,6 +69,7 @@ class "Administrador" as admin {
   + visualizarRelatorios() : void
   + gerenciarUsuarios() : void
   + gerenciarHorarios() : void
+  + cadastarNotificacao() : void
 }
 
 class "Servico" as servico {
@@ -97,9 +98,9 @@ class "Pedido" as pedido {
   + cancelarPedido(-) : void
   + atualizarStatusPedido(-) : void
 
-  + obterPosicaoFila() : int
-  + estimarTempoFila() : String
-  + listarFilaDePedidos() : List<Pedido>
+  + obterPosicaoFila(-) : int
+  + estimarTempoFila(-) : String
+  + listarFilaDePedidos(-) : List<Pedido>
 
   + obterEstatisticasUsuario(-) : EstatisticasPedidoDTO 
   + listarPedidosAtivos(-) : List<PedidoCardDTO>
@@ -138,7 +139,8 @@ class "Notificacao" as notificacao {
   - lida : boolean
   - data_hora : Datetime
   ==
-  + listarNotificacoes(idUsuario) : List<Notificacao>
+  + listarNotificacoes(idUsuario---) : List<Notificacao>
+  + marcarComoLida(-----) : void // quando clicar na notificação, ela é marcada como lida
 }
 
 class "Horario_Funcionamento" as horario {

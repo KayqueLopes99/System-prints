@@ -11,7 +11,7 @@ export default function DicasContextuais() {
         { id: 1, titulo: "Pagamento no local", texto: "O pagamento é realizado presencialmente no setor de impressões, no momento da retirada do material." },
         { id: 2, titulo: "Prefira arquivos em PDF", texto: "Para evitar problemas de formatação, recomendamos o envio de arquivos em PDF. Assim, seu documento será impresso exatamente como você visualizou." },
         { id: 3, titulo: "Revise antes de confirmar", texto: "Confira com atenção o arquivo, quantidade de páginas, tipo de impressão e demais configurações antes de finalizar o pedido." },
-        { id: 4, titulo: "Prazo para cancelamento", texto: "Após a confirmação, você terá um curto período (cerca de 3 minutos) para cancelar o pedido, caso necessário. Após esse tempo, o arquivo pode ser enviado para impressão normalmente." },
+        { id: 4, titulo: "Prazo para cancelamento", texto: "Após a confirmação, você terá um curto período (cerca de 5 minutos) para cancelar o pedido, caso necessário. Após esse tempo, o arquivo pode ser enviado para impressão normalmente." },
         { id: 5, titulo: "Nomeie bem seu arquivo", texto: "Utilize nomes claros e organizados (ex: “Trabalho_Matematica.pdf”) para facilitar a identificação." },
         { id: 6, titulo: "Verifique a quantidade de páginas", texto: "Certifique-se de que o número de páginas está correto para evitar custos inesperados." },
         { id: 7, titulo: "Atenção ao tipo de impressão", texto: "Escolha corretamente entre preto e branco ou colorido, pois isso influencia no valor final." },

@@ -39,6 +39,9 @@ public class PedidoService {
     @Autowired
     private PagamentoRepository pagamentoRepository;
 
+    @Autowired
+    private NotificacaoService notificacaoService;
+
     // Constantes de preço (Poderiam vir do banco futuramente)
     private final double PRECO_PB = 0.15;
     private final double PRECO_COLORIDO = 1.00;
@@ -258,6 +261,8 @@ public class PedidoService {
         }
     }
 
+
+
     // Método consolidado para o Status da Fila[cite: 13, 17]
     public StatusFilaDTO obterStatusFilaGeral() {
         List<StatusPedido> statusAtivos = Arrays.asList(
@@ -282,5 +287,35 @@ public class PedidoService {
         }
 
         return new StatusFilaDTO(tempo, nivel, totalPedidos);
+    }
+
+    // 👉 ADICIONE ESTE MÉTODO NO FINAL DA CLASSE
+    private void dispararNotificacaoStatus(Pedido pedido) {
+        String titulo = "";
+        String mensagem = "";
+
+        switch (pedido.getStatusFila()) {
+            case PENDENTE:
+                titulo = "Pedido Recebido";
+                mensagem = "Seu pedido #" + pedido.getIdPedido() + " foi recebido e está aguardando análise.";
+                break;
+            case IMPRIMINDO:
+                titulo = "Pedido em Impressão";
+                mensagem = "O serviço de " + (pedido.getNomeArquivoOriginal() != null ? "impressão" : "encadernação")
+                        + " #" + pedido.getIdPedido() + " começou!";
+                break;
+            case PRONTO:
+                titulo = "Pedido Pronto!";
+                mensagem = "Boa notícia! Seu pedido #" + pedido.getIdPedido()
+                        + " já está pronto. Pode vir buscar na gráfica.";
+                break;
+            case CANCELADO:
+                titulo = "Pedido Cancelado";
+                mensagem = "O pedido #" + pedido.getIdPedido() + " foi cancelado. Se tiver dúvidas, entre em contato.";
+                break;
+            default:
+                return;
+        }
+        notificacaoService.gerarNotificacao(pedido.getUsuario(), titulo, mensagem); //
     }
 }

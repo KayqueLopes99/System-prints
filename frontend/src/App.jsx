@@ -16,6 +16,7 @@ import  PagamentoEncadernacao from './pages/PagamentoEncadernacao/PagamentoEncad
 import CancelarPedido from './pages/CancelarPedido/CancelarPedido';
 import DicasContextuais from './pages/DicasContextuais/DicasContextuais';
 import DetalhesFila from './pages/DetalhesFila/DetalhesFila';
+import Notificacoes from './pages/Notificacoes/Notificacoes';
 
 // 👇 NOVO: Importando a tela de Configuração do Pedido!
 import PedidoConfiguracao from './pages/PedidoConfiguracao/PedidoConfiguracao'; 
@@ -67,6 +68,9 @@ export default function App() {
 
         {/* Rota para a tela de Detalhes da Fila */}
         <Route path="/detalhes-fila" element={<DetalhesFila />} />
+
+        {/* Rota para a tela de Notificações */}
+        <Route path="/notificacoes" element={<Notificacoes />} />
       </Routes>
     </Router>
   );
