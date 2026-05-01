@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
+@Getter 
 @Setter
 
 @JsonTypeInfo(

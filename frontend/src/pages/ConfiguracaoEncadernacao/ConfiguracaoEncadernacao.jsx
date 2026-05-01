@@ -24,8 +24,10 @@ export default function ConfiguracaoEncadernacao() {
 
     // 👉 FUNÇÃO DE ROTEAMENTO ADICIONADA
     const avancarParaPagamento = () => {
-        const dadosParaEnvio = {
-            idUsuario: 1, // ID fixo temporário
+        const idLogado = parseInt(localStorage.getItem('usuarioId'));
+        const dadosParaEnvio = {      
+            idUsuario: idLogado,
+           
             nomeArquivo: arquivo ? arquivo.name : "Encadernação Manual",
             totalPaginas: folhas,
             tamanhoMb: arquivo ? parseFloat((arquivo.size / (1024 * 1024)).toFixed(2)) : 0,

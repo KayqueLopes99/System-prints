@@ -92,23 +92,21 @@ public class UsuarioService {
         Usuario usuarioExistente = repository.findById(idUsuario)
                 .orElseThrow(() -> new RuntimeException("Utilizador não encontrado."));
 
-        // Atualiza campos comuns de Usuario
         if (dto.getNomeCompleto() != null) usuarioExistente.setNomeCompleto(dto.getNomeCompleto());
         if (dto.getEmail() != null) usuarioExistente.setEmail(dto.getEmail());
 
-        // Só atualiza a senha se o usuário digitou algo
         if (dto.getSenha() != null && !dto.getSenha().trim().isEmpty()) {
             usuarioExistente.setSenha(dto.getSenha());
         }
 
-        // Se o usuário for um Estudante, atualiza os campos específicos
+        
         if (usuarioExistente instanceof Estudante) {
             Estudante estudante = (Estudante) usuarioExistente;
             
             if (dto.getMatricula() != null) estudante.setMatricula(dto.getMatricula());
             if (dto.getCurso() != null) estudante.setCurso(dto.getCurso());
             
-            return repository.save(estudante); // Salva como Estudante (garante todas as colunas)
+            return repository.save(estudante); 
         }
 
         return repository.save(usuarioExistente);

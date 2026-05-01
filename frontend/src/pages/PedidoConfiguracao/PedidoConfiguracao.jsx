@@ -75,9 +75,10 @@ export default function PedidoConfiguracao() {
     };
 
     const prepararPedidoDTO = () => {
-        // Monta os dados capturados
+        const idLogado = parseInt(localStorage.getItem('usuarioId'));
+
         const dadosParaResumo = {
-            idUsuario: 1,
+            idUsuario: idLogado,
             nomeArquivo: arquivo.nome,
             totalPaginas: Number(paginasAImprimir),
             tamanhoMb: parseFloat(arquivo.tamanhoMb),
