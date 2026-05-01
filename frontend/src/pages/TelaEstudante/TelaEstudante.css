@@ -28,17 +28,28 @@
   font-weight: bold;
 }
 
+/* Estilo para quando estiver aberto (Verde) */
 .botao-aberto {
-  background-color: #388e3c;
-  color: white;
-  width: 100%;
-  max-width: 300px;
-  text-align: center;
-  padding: 15px;
-  border-radius: 8px;
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 30px;
+    background-color: #4ade80; /* Verde */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+/* Estilo para quando estiver fechado (Vermelho) */
+.botao-fechado {
+    background-color: #f87171; /* Vermelho */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    display: inline-block;
 }
 
 .titulo-secao {

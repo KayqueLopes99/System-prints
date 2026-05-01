@@ -39,7 +39,7 @@ export default function PagamentoEncadernacao() {
             orientacao: "RETRATO",
             frenteVerso: false,
             tipoCor: "PRETO_BRANCO",
-            tipoServico: "ENCADERNACAO", 
+            tipoServico: "ENCADERNACAO",
             metodoPagamento: metodoSelecionado
         };
 

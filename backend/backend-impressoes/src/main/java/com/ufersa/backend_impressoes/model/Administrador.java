@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Entity
-@DiscriminatorValue("ADMINITRADOR")
+@DiscriminatorValue("ADMINISTRADOR")
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Administrador extends Usuario {

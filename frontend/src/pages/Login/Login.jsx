@@ -32,22 +32,34 @@ export default function Login() {
       localStorage.setItem('usuarioLogado', JSON.stringify(resposta.data));
       // Mantém o ID se já usar em outros lugares
       localStorage.setItem('usuarioId', resposta.data.idUsuario);
-
       setExibirSucesso(true);
-      setTimeout(() => { navigate('/estudante'); }, 2000);
+
+      // 1. Pega o campo que agora o Java vai enviar corretamente
+      const tipo = resposta.data.tipo_usuario;
+
+      // 2. Define o destino
+      const destino = tipo === 'ADMINISTRADOR' ? '/admin' : '/estudante';
+
+      console.log("Tipo do usuário logado:", tipo);
+      console.log("Indo para:", destino);
+
+      // 3. REMOVA as aspas e use a variável 'destino' aqui!
+      setTimeout(() => {
+        navigate(destino); // 👉 Sem aspas, para usar a variável!
+      }, 2000);
     } catch (erro) {
       console.error("Erro no login:", erro);
-      
+
       // Tratamento inteligente da mensagem de erro (igual fizemos no cadastro)
       let textoErro = "E-mail/Matrícula ou senha incorretos.";
       if (erro.response && erro.response.data) {
-          if (typeof erro.response.data === 'string') {
-              textoErro = erro.response.data;
-          } else if (erro.response.data.message) {
-              textoErro = erro.response.data.message;
-          }
+        if (typeof erro.response.data === 'string') {
+          textoErro = erro.response.data;
+        } else if (erro.response.data.message) {
+          textoErro = erro.response.data.message;
+        }
       } else if (erro.message) {
-          textoErro = "Erro de conexão com o servidor.";
+        textoErro = "Erro de conexão com o servidor.";
       }
 
       // 👉 Em vez de alert(), salvamos no estado para aparecer na tela!
@@ -83,15 +95,15 @@ export default function Login() {
 
             {/* 👉 AVISO DE ERRO NA TELA (Renderiza apenas se erroAviso não for vazio) */}
             {erroAviso && (
-              <div style={{ 
-                backgroundColor: '#ffebee', 
-                color: '#c62828', 
-                padding: '12px', 
-                borderRadius: '8px', 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '8px', 
-                marginBottom: '20px', 
+              <div style={{
+                backgroundColor: '#ffebee',
+                color: '#c62828',
+                padding: '12px',
+                borderRadius: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                marginBottom: '20px',
                 border: '1px solid #ef9a9a',
                 fontSize: '0.9rem',
                 fontWeight: '500'
@@ -164,3 +176,4 @@ export default function Login() {
     </main>
   );
 }
+

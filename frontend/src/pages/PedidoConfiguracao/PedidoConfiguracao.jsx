@@ -7,44 +7,77 @@ import { useNavigate } from 'react-router-dom';
 import './PedidoConfiguracao.css';
 import * as pdfjsLib from 'pdfjs-dist';
 
-// Forma correta de linkar o worker no Vite para evitar erro 404/500
+// Link do worker para o pdfjs-dist
 pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
     'pdfjs-dist/build/pdf.worker.mjs',
     import.meta.url
 ).toString();
 
 export default function PedidoConfiguracao() {
-
-
     const navigate = useNavigate();
+
+    // --- ESTADOS DE DADOS DO BACKEND ---
+    const [servicos, setServicos] = useState([]); // Armazena preços dinâmicos[cite: 8]
+    const [setorAberto, setSetorAberto] = useState(true); // Status da gráfica[cite: 9]
+    const [mensagemSetor, setMensagemSetor] = useState('');
 
     // Estados do Arquivo
     const [arquivo, setArquivo] = useState(null);
     const [arquivoUrl, setArquivoUrl] = useState(null);
-    const [isPdf, setIsPdf] = useState(false); // Para mostrar o preview ou não
+    const [isPdf, setIsPdf] = useState(false);
 
-    // O usuário vai digitar manualmente quantas páginas tem o arquivo
+    // Configurações do Pedido
     const [paginasAImprimir, setPaginasAImprimir] = useState(1);
-
-    // Estados de Configuração
     const [tamanhoPapel, setTamanhoPapel] = useState('A4');
     const [tipoCor, setTipoCor] = useState('PRETO_BRANCO');
     const [orientacao, setOrientacao] = useState('RETRATO');
     const [frenteVerso, setFrenteVerso] = useState(false);
     const [quantidade, setQuantidade] = useState(1);
-    // Dentro do componente PedidoConfiguracao
-    const [erroAviso, setErroAviso] = useState(''); // 👉 Novo estado para o erro
-
+    const [erroAviso, setErroAviso] = useState('');
     const [valorTotal, setValorTotal] = useState(0.00);
+
     const sugestoesFormato = ['A4', 'A3'];
 
-    // Lógica de cálculo de valor
+    // --- BUSCA DADOS INICIAIS (PREÇOS E STATUS) ---
     useEffect(() => {
-        const precoBase = tipoCor === 'PRETO_BRANCO' ? 0.15 : 1.00;
+        // Busca os preços configurados pelo Admin[cite: 8]
+        fetch('http://localhost:8080/api/admin/servicos')
+            .then(res => res.json())
+            .then(data => setServicos(data))
+            .catch(err => console.error("Erro ao buscar preços:", err));
+
+        // Busca o status atual da gráfica[cite: 9]
+        fetch('http://localhost:8080/api/admin/status-setor')
+            .then(res => res.json())
+            .then(data => {
+                setSetorAberto(data.setorAberto);
+                setMensagemSetor(data.mensagemAviso);
+            })
+            .catch(err => console.error("Erro ao buscar status do setor:", err));
+    }, []);
+
+    // --- LÓGICA DE CÁLCULO DINÂMICA ATUALIZADA PARA NÃO ZERAR ---
+    useEffect(() => {
+        // 1. Define preços padrão (fallback) caso o banco ainda não tenha respondido
+        let precoBase = tipoCor === 'PRETO_BRANCO' ? 0.15 : 1.00;
+
+        // 2. Se o banco já carregou, busca o preço oficial pelo ID[cite: 11]
+        if (servicos.length > 0) {
+            // Nota: usamos id_servico para bater com a imagem do banco de dados
+            const servicoAtual = servicos.find(s => 
+                (s.id_servico || s.idServico) === (tipoCor === 'PRETO_BRANCO' ? 1 : 2)
+            );
+
+            if (servicoAtual) {
+                precoBase = servicoAtual.preco_unitario || servicoAtual.precoUnitario;
+            }
+        }
+
         const paginasValidas = Number(paginasAImprimir) || 1;
         const calculo = (precoBase * paginasValidas) * quantidade;
+        
         setValorTotal(calculo);
-    }, [tipoCor, quantidade, paginasAImprimir, frenteVerso]);
+    }, [tipoCor, quantidade, paginasAImprimir, servicos]);
 
     const processarArquivo = async (file) => {
         if (!file) return;
@@ -65,31 +98,23 @@ export default function PedidoConfiguracao() {
                 }
                 setPaginasAImprimir(pdf.numPages);
             } catch (error) {
-                setErroAviso("Erro ao ler o arquivo PDF. Tente novamente.");
-                console.error(error);
-                return; // Para a execução se der erro no PDF
+                setErroAviso("Erro ao ler o arquivo PDF.");
+                return;
             }
         }
 
-        // 👉 AS LINHAS QUE FALTAVAM AQUI:
         setArquivo({
             nome: file.name,
             tamanhoMb: (file.size / (1024 * 1024)).toFixed(2)
         });
-
         setArquivoUrl(URL.createObjectURL(file));
     };
-    const handleFileUpload = (event) => {
-        processarArquivo(event.target.files[0]);
-    };
 
-    const handleDragOver = (event) => {
-        event.preventDefault();
-    };
-
-    const handleDrop = (event) => {
-        event.preventDefault();
-        processarArquivo(event.dataTransfer.files[0]);
+    const handleFileUpload = (event) => processarArquivo(event.target.files[0]);
+    const handleDragOver = (e) => e.preventDefault();
+    const handleDrop = (e) => {
+        e.preventDefault();
+        processarArquivo(e.dataTransfer.files[0]);
     };
 
     const removerArquivo = () => {
@@ -102,7 +127,6 @@ export default function PedidoConfiguracao() {
 
     const prepararPedidoDTO = () => {
         const idLogado = parseInt(localStorage.getItem('usuarioId'));
-
         const dadosParaResumo = {
             idUsuario: idLogado,
             nomeArquivo: arquivo.nome,
@@ -113,34 +137,21 @@ export default function PedidoConfiguracao() {
             orientacao: orientacao,
             frenteVerso: frenteVerso,
             tipoCor: tipoCor,
-            valorTotal: valorTotal // Passa o valor calculado
+            valorTotal: valorTotal
         };
-
-        // 👉 NAVEGA PARA A TELA DE PAGAMENTO
         navigate('/resumo-pagamento', { state: dadosParaResumo });
     };
 
     const handleMudancaPaginas = (e) => {
         const valorDigitado = e.target.value;
-
-        if (valorDigitado === '') {
-            setPaginasAImprimir('');
-            return;
-        }
-
+        if (valorDigitado === '') { setPaginasAImprimir(''); return; }
         let valor = parseInt(valorDigitado) || 1;
-
-        if (valor < 1) {
-            valor = 1;
-        }
-
+        if (valor < 1) valor = 1;
         setPaginasAImprimir(valor);
     };
 
     const handleBlurPaginas = () => {
-        if (paginasAImprimir === '' || paginasAImprimir < 1) {
-            setPaginasAImprimir(1);
-        }
+        if (paginasAImprimir === '' || paginasAImprimir < 1) setPaginasAImprimir(1);
     };
 
     return (
@@ -153,27 +164,26 @@ export default function PedidoConfiguracao() {
             </header>
 
             <main className="config-content">
+                {!setorAberto && (
+                    <div className="aviso-setor-fechado" style={{
+                        backgroundColor: '#ffebee', color: '#c62828', padding: '15px',
+                        borderRadius: '8px', marginBottom: '20px', border: '1px solid #ef9a9a',
+                        fontWeight: 'bold', textAlign: 'center'
+                    }}>
+                        ⚠️ {mensagemSetor || "O setor de impressão está fechado no momento."}
+                    </div>
+                )}
+
+                {erroAviso && <div className="erro-pdf">{erroAviso}</div>}
+
                 {!arquivo ? (
                     <section className="secao-upload">
                         <p className="subtitulo-config">Selecione o arquivo que deseja</p>
-
-                        <div
-                            className="caixa-upload"
-                            onDragOver={handleDragOver}
-                            onDrop={handleDrop}
-                        >
+                        <div className="caixa-upload" onDragOver={handleDragOver} onDrop={handleDrop}>
                             <Upload size={48} color="#1d448b" strokeWidth={1.5} />
                             <p>Arraste e solte seu arquivo aqui ou</p>
-                            <label htmlFor="input-file" className="btn-selecionar">
-                                Selecionar Arquivo
-                            </label>
-                            <input
-                                type="file"
-                                id="input-file"
-                                hidden
-                                accept=".pdf,.doc,.docx"
-                                onChange={handleFileUpload}
-                            />
+                            <label htmlFor="input-file" className="btn-selecionar">Selecionar Arquivo</label>
+                            <input type="file" id="input-file" hidden accept=".pdf,.doc,.docx" onChange={handleFileUpload} />
                             <span className="info-formatos">Formatos aceitos: PDF, DOC ou DOCX até 50MB</span>
                         </div>
                     </section>
@@ -181,17 +191,11 @@ export default function PedidoConfiguracao() {
                     <>
                         <section className="secao-visualizacao">
                             <h2 className="titulo-secao-interna">Visualização</h2>
-
                             <div className="card-arquivo">
                                 <div className="faixa-sucesso">
-                                    <div className="status-ok">
-                                        <Check size={16} /> Arquivo Carregado
-                                    </div>
-                                    <button className="btn-remover" onClick={removerArquivo}>
-                                        <X size={20} />
-                                    </button>
+                                    <div className="status-ok"><Check size={16} /> Arquivo Carregado</div>
+                                    <button className="btn-remover" onClick={removerArquivo}><X size={20} /></button>
                                 </div>
-
                                 <div className="info-doc-carregado">
                                     <FileText size={40} color="#1d448b" />
                                     <div className="detalhes-texto">
@@ -202,46 +206,29 @@ export default function PedidoConfiguracao() {
                                     </div>
                                 </div>
                             </div>
-
                             {isPdf ? (
                                 <div className="preview-documento-real">
-                                    <iframe src={arquivoUrl} title="Visualização do Documento" className="iframe-preview"></iframe>
+                                    <iframe src={arquivoUrl} title="Visualização" className="iframe-preview"></iframe>
                                 </div>
                             ) : (
                                 <div className="preview-indisponivel">
                                     <FileText size={50} color="#ccc" />
-                                    <p style={{ marginTop: '15px', fontWeight: 'bold' }}>A visualização direta está disponível apenas para PDF.</p>
-                                    <p style={{ fontSize: '14px', marginTop: '5px' }}>Seu arquivo foi carregado com sucesso. Configure os detalhes abaixo.</p>
+                                    <p>A visualização direta está disponível apenas para PDF.</p>
                                 </div>
                             )}
                         </section>
 
                         <section className="secao-configuracoes">
-
-                            {/* Campo manual e obrigatório para as páginas */}
                             <div className="campo-input">
-                                <label style={{ color: '#1d448b', fontWeight: 'bold' }}>
-                                    Total de páginas do documento:
-                                </label>
+                                <label style={{ color: '#1d448b', fontWeight: 'bold' }}>Total de páginas:</label>
                                 <input
-                                    type="number"
-                                    min="1"
-                                    value={paginasAImprimir}
-                                    onChange={handleMudancaPaginas}
-                                    onBlur={handleBlurPaginas}
-                                    readOnly={isPdf}
-                                    className="input-paginas"
+                                    type="number" min="1" value={paginasAImprimir}
+                                    onChange={handleMudancaPaginas} onBlur={handleBlurPaginas}
+                                    readOnly={isPdf} className="input-paginas"
                                     style={{
-                                        borderColor: '#1d448b',
-                                        borderWidth: '2px',
-                                        // 👉 Lógica de cor ajustada:
-                                        // Se for PDF (automático) -> Cinza (#f0f0f0)
-                                        // Se for DOC/DOCX (manual) -> Azul clarinho (#f0f7ff) para destacar[cite: 15, 16]
-                                        backgroundColor: isPdf ? '#f0f0f0' : '#f0f7ff',
-
-                                        color: '#000',        // Garante que o número fique sempre preto
-                                        fontWeight: 'bold',   // Deixa o número em negrito
-                                        cursor: isPdf ? 'not-allowed' : 'text' // Mostra ícone de "bloqueado" se for PDF
+                                        borderColor: '#1d448b', borderWidth: '2px',
+                                        backgroundColor: isPdf ? '#3c3b3b' : '#3d3e3e',
+                                        fontWeight: 'bold', cursor: isPdf ? 'not-allowed' : 'text'
                                     }}
                                 />
                             </div>
@@ -313,10 +300,10 @@ export default function PedidoConfiguracao() {
                 <button className="btn-outline" onClick={() => navigate(-1)}>Voltar</button>
                 <button
                     className="btn-filled"
-                    disabled={!arquivo}
+                    disabled={!arquivo || !setorAberto} 
                     onClick={prepararPedidoDTO}
                 >
-                    Continuar
+                    {setorAberto ? "Continuar" : "Indisponível"}
                 </button>
             </footer>
         </div>

@@ -17,6 +17,9 @@ import CancelarPedido from './pages/CancelarPedido/CancelarPedido';
 import DicasContextuais from './pages/DicasContextuais/DicasContextuais';
 import DetalhesFila from './pages/DetalhesFila/DetalhesFila';
 import Notificacoes from './pages/Notificacoes/Notificacoes';
+import TelaAdmin from './pages/TelaAdmin/TelaAdmin';
+import ConfiguracoesAdmin from './pages/ConfiguracoesAdmin/ConfiguracoesAdmin';
+import GerenciarUsuarios from './pages/GerenciarUsuarios/GerenciarUsuarios';
 
 // 👇 NOVO: Importando a tela de Configuração do Pedido!
 import PedidoConfiguracao from './pages/PedidoConfiguracao/PedidoConfiguracao'; 
@@ -71,6 +74,15 @@ export default function App() {
 
         {/* Rota para a tela de Notificações */}
         <Route path="/notificacoes" element={<Notificacoes />} />
+
+        {/* Rota para a tela de Administração */}
+        <Route path="/admin" element={<TelaAdmin />} />
+
+        {/* Rota para a tela de Configurações do Admin */}
+        <Route path="/admin/configuracoes" element={<ConfiguracoesAdmin />} />
+
+        {/* Rota para a tela de Gerenciamento de Usuários */}
+        <Route path="/admin/gerenciar-usuarios" element={<GerenciarUsuarios />} />
       </Routes>
     </Router>
   );

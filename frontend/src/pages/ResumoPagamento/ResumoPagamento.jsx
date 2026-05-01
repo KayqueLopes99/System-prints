@@ -10,7 +10,7 @@ export default function ResumoPagamento() {
 
     const [metodoSelecionado, setMetodoSelecionado] = useState(null);
     const [carregando, setCarregando] = useState(false);
-    
+
     // 👉 NOVO: Estado para controlar a exibição do Modal de Sucesso
     const [modalSucesso, setModalSucesso] = useState(false);
 
@@ -32,9 +32,9 @@ export default function ResumoPagamento() {
 
         setCarregando(true);
 
-        // Monta o JSON final para o PedidoRequestDTO (Caminho B)
         const payload = {
-            idUsuario: dadosPedido.idUsuario,
+            // Garanta que esses nomes batem com o seu PedidoRequestDTO no Java
+            idUsuario: parseInt(dadosPedido.idUsuario),
             nomeArquivo: dadosPedido.nomeArquivo,
             totalPaginas: dadosPedido.totalPaginas,
             tamanhoMb: dadosPedido.tamanhoMb,
@@ -44,12 +44,12 @@ export default function ResumoPagamento() {
             frenteVerso: dadosPedido.frenteVerso,
             tipoCor: dadosPedido.tipoCor,
 
+            // 👉 Para esta tela, o tipo deve ser IMPRESSAO
             tipoServico: "IMPRESSAO",
-            metodoPagamento: metodoSelecionado // PIX, DINHEIRO ou CARTAO
+            metodoPagamento: metodoSelecionado
         };
 
         try {
-            // 👇 CHAMADA REAL PARA O BACKEND
             const response = await fetch("http://localhost:8080/api/pedidos/criar", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -57,14 +57,16 @@ export default function ResumoPagamento() {
             });
 
             if (response.ok) {
-                // 👉 SUCESSO: Em vez de alert(), abre o modal
                 setModalSucesso(true);
             } else {
-                alert("Erro ao processar pedido no servidor. Verifique o console do backend.");
+                // Tenta capturar a mensagem real do erro do Java
+                const erroTexto = await response.text();
+                console.error("Erro do Servidor:", erroTexto);
+                alert(`Erro 500: ${erroTexto || "Verifique os IDs de serviço no banco."}`);
             }
         } catch (error) {
-            console.error("Erro:", error);
-            alert("Não foi possível conectar ao servidor. O backend está rodando em http://localhost:8080?");
+            console.error("Erro na conexão:", error);
+            alert("Não foi possível conectar ao servidor.");
         } finally {
             setCarregando(false);
         }
@@ -88,7 +90,7 @@ export default function ResumoPagamento() {
                         <Printer size={20} color="#1d448b" />
                         <span>Detalhes da Impressão</span>
                     </div>
-                    
+
                     <div className="resumo-item">
                         <span>Arquivo:</span>
                         <strong>{dadosPedido.nomeArquivo}</strong>
@@ -118,7 +120,7 @@ export default function ResumoPagamento() {
 
                 {/* BOTÕES DE PAGAMENTO */}
                 <div className="grade-pagamento">
-                    <button 
+                    <button
                         className={`btn-metodo ${metodoSelecionado === 'PIX' ? 'selecionado' : ''}`}
                         onClick={() => setMetodoSelecionado('PIX')}
                     >
@@ -126,7 +128,7 @@ export default function ResumoPagamento() {
                         <span>PIX</span>
                     </button>
 
-                    <button 
+                    <button
                         className={`btn-metodo ${metodoSelecionado === 'DINHEIRO' ? 'selecionado' : ''}`}
                         onClick={() => setMetodoSelecionado('DINHEIRO')}
                     >
@@ -134,7 +136,7 @@ export default function ResumoPagamento() {
                         <span>Dinheiro</span>
                     </button>
 
-                    <button 
+                    <button
                         className={`btn-metodo ${metodoSelecionado === 'CARTAO' ? 'selecionado' : ''}`}
                         onClick={() => setMetodoSelecionado('CARTAO')}
                     >
@@ -142,7 +144,7 @@ export default function ResumoPagamento() {
                         <span>Cartão</span>
                     </button>
                 </div>
-                
+
                 <p className="aviso-balcao">
                     O pagamento será validado presencialmente no momento da retirada.
                 </p>
@@ -154,9 +156,9 @@ export default function ResumoPagamento() {
                 <button className="btn-outline-voltar" onClick={() => navigate(-1)} disabled={carregando}>
                     Voltar e editar
                 </button>
-                
-                <button 
-                    className="btn-confirmar-final" 
+
+                <button
+                    className="btn-confirmar-final"
                     disabled={!metodoSelecionado || carregando}
                     onClick={confirmarPedidoFinal}
                 >
@@ -176,7 +178,7 @@ export default function ResumoPagamento() {
                         </div>
                         <h2>Tudo pronto!</h2>
                         <p>
-                            Seu pedido foi enviado para a fila.<br/>
+                            Seu pedido foi enviado para a fila.<br />
                             Dirija-se ao balcão para pagamento e retirada.
                         </p>
                         {/* Botão final que leva para a lista de pedidos */}

@@ -6,11 +6,13 @@ import com.ufersa.backend_impressoes.dto.PedidoRequestDTO;
 import com.ufersa.backend_impressoes.dto.StatusFilaDTO;
 import com.ufersa.backend_impressoes.model.ItemPedido;
 import com.ufersa.backend_impressoes.model.Pedido;
+import com.ufersa.backend_impressoes.model.Servico;
 import com.ufersa.backend_impressoes.model.Usuario;
 import com.ufersa.backend_impressoes.model.enuns.NivelOcupacao;
 import com.ufersa.backend_impressoes.model.enuns.StatusPedido;
 import com.ufersa.backend_impressoes.model.enuns.TipoCor;
 import com.ufersa.backend_impressoes.repository.PedidoRepository;
+import com.ufersa.backend_impressoes.repository.ServicoRepository;
 import com.ufersa.backend_impressoes.repository.UsuarioRepository;
 import com.ufersa.backend_impressoes.model.Pagamento;
 import com.ufersa.backend_impressoes.repository.PagamentoRepository;
@@ -22,10 +24,12 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
+import java.util.Map;
 
 @Service
 public class PedidoService {
@@ -43,12 +47,30 @@ public class PedidoService {
     private NotificacaoService notificacaoService;
 
     // Constantes de preço (Poderiam vir do banco futuramente)
-    private final double PRECO_PB = 0.15;
-    private final double PRECO_COLORIDO = 1.00;
+    // private final double PRECO_PB = 0.15;
+    // private final double PRECO_COLORIDO = 1.00;
 
-    // Novas constantes para Encadernação
-    private final double PRECO_BASE_ENCADERNACAO = 5.00; // Valor da capa + espiral
-    private final double PRECO_FOLHA_ENCADERNACAO = 0.15; // R$ 1,50 / 10 folhas
+    // // Novas constantes para Encadernação
+    // private final double PRECO_BASE_ENCADERNACAO = 5.00; // Valor da capa +
+    // espiral
+    // private final double PRECO_FOLHA_ENCADERNACAO = 0.15; // R$ 1,50 / 10 folhas
+
+    // --- REMOVA AS CONSTANTES ANTIGAS ---
+    // private final double PRECO_PB = 0.15; ... (apague todas)
+
+    // --- ADICIONE ESTAS INJEÇÕES ---
+    @Autowired
+    private ServicoRepository servicoRepository; // Para buscar os preços ID 1, 2, 3 e 4
+
+    @Autowired
+    private ConfiguracaoService configuracaoService; // Para verificar se o setor está aberto
+
+    // --- ADICIONE ESTE MÉTODO AUXILIAR NO FINAL DA CLASSE ---
+    private Double buscarPrecoPorId(Integer id) {
+        return servicoRepository.findById(id)
+                .map(Servico::getPrecoUnitario)
+                .orElseThrow(() -> new RuntimeException("Preço ID " + id + " não configurado no banco!"));
+    }
 
     // 1. Estatísticas do Usuário (Cards do topo)
     public EstatisticasPedidoDTO obterEstatisticasUsuario(int idUsuario) {
@@ -95,10 +117,16 @@ public class PedidoService {
     @Transactional
     public Pedido confirmarPedido(PedidoRequestDTO dto) {
 
-        // 1. VALIDAÇÃO DE SEGURANÇA: Limite de 1.000 páginas
-    if (dto.getTotalPaginas() > 120) {
-        throw new RuntimeException("O limite de 1.000 páginas foi excedido. Por favor, divida seu arquivo.");
-    }
+        // 1. VERIFICAÇÃO DE SEGURANÇA: O SETOR ESTÁ ABERTO?[cite: 9]
+        var config = configuracaoService.obterConfiguracao();
+        if (!config.isSetorAberto()) {
+            throw new RuntimeException("Gráfica Fechada: " + config.getMensagemAviso());
+        }
+
+        // Validação de limite de páginas (mantenha a sua lógica)
+        if (dto.getTotalPaginas() > 120) {
+            throw new RuntimeException("O limite de 120 páginas foi excedido.");
+        }
 
         // 1. Buscar usuário
         Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())
@@ -129,16 +157,23 @@ public class PedidoService {
         item.setTipoServico(dto.getTipoServico()); // 👉 Seta o serviço (IMPRESSAO ou ENCADERNACAO)
 
         // 💰 LÓGICA DE CÁLCULO DINÂMICA
+        // 💰 LÓGICA DE CÁLCULO DINÂMICA (SUBSTITUA A ANTIGA POR ESTA)
         double total = 0;
 
         if (dto.getTipoServico() == com.ufersa.backend_impressoes.model.enuns.CategoriaServico.IMPRESSAO) {
-            // Lógica de Impressão (Preço por página baseado na cor)
-            double valorUnitario = (dto.getTipoCor() == TipoCor.PRETO_BRANCO) ? PRECO_PB : PRECO_COLORIDO;
+            // Busca ID 1 para P&B ou ID 2 para Colorido[cite: 12]
+            double valorUnitario = (dto.getTipoCor() == TipoCor.PRETO_BRANCO)
+                    ? buscarPrecoPorId(1)
+                    : buscarPrecoPorId(2);
+
             total = (valorUnitario * dto.getTotalPaginas()) * dto.getQuantidade();
+
         } else if (dto.getTipoServico() == com.ufersa.backend_impressoes.model.enuns.CategoriaServico.ENCADERNACAO) {
-            // Lógica de Encadernação (Preço Base + R$ 0,15 por folha)
-            total = (PRECO_BASE_ENCADERNACAO + (dto.getTotalPaginas() * PRECO_FOLHA_ENCADERNACAO))
-                    * dto.getQuantidade();
+            // Busca ID 3 (Valor Base) e ID 4 (Adicional por folha)
+            double valorBase = buscarPrecoPorId(3);
+            double adicionalFolha = buscarPrecoPorId(4);
+
+            total = (valorBase + (dto.getTotalPaginas() * adicionalFolha)) * dto.getQuantidade();
         }
 
         novoPedido.setValorTotal(total);
@@ -267,8 +302,6 @@ public class PedidoService {
         }
     }
 
-
-
     // Método consolidado para o Status da Fila[cite: 13, 17]
     public StatusFilaDTO obterStatusFilaGeral() {
         List<StatusPedido> statusAtivos = Arrays.asList(
@@ -307,7 +340,8 @@ public class PedidoService {
                 break;
             case IMPRIMINDO:
                 titulo = "Pedido em Impressão";
-                mensagem = "O serviço de " + (pedido.getNomeArquivoOriginal() != null ? "impressão" : "encadernação")
+                mensagem = "O serviço de " + (pedido
+                        .getNomeArquivoOriginal() != null ? "impressão" : "encadernação")
                         + " #" + pedido.getIdPedido() + " começou!";
                 break;
             case PRONTO:
@@ -323,5 +357,28 @@ public class PedidoService {
                 return;
         }
         notificacaoService.gerarNotificacao(pedido.getUsuario(), titulo, mensagem); //
+    }
+
+    // Adicione este método ao seu PedidoService
+    public Map<String, Long> obterEstatisticasGerais() {
+        LocalDateTime inicioDoDia = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);
+
+        Map<String, Long> stats = new HashMap<>();
+
+        // 1. Pendentes: PENDENTE + NA_FILA[cite: 10]
+        stats.put("pendentes", pedidoRepository.countByStatusFila(StatusPedido.PENDENTE) +
+                pedidoRepository.countByStatusFila(StatusPedido.NA_FILA));
+
+        // 2. Em Processamento: IMPRIMINDO[cite: 10]
+        stats.put("processando", pedidoRepository.countByStatusFila(StatusPedido.IMPRIMINDO));
+
+        // 3. Concluídos Hoje: PRONTO ou CONCLUIDO[cite: 10]
+        stats.put("concluidos", pedidoRepository.countByStatusFilaAndDataHoraAfter(StatusPedido.PRONTO, inicioDoDia));
+
+        // 4. Cancelados Hoje[cite: 10]
+        stats.put("cancelados",
+                pedidoRepository.countByStatusFilaAndDataHoraAfter(StatusPedido.CANCELADO, inicioDoDia));
+
+        return stats;
     }
 }

@@ -46,12 +46,12 @@ class "Usuario" as usuario {
   - email : String
   - senha : String
   ==
-  + autenticarUsuario(-) : boolean
-  + visualizarPerfil(-) : Usuario
-  + atualizarPerfil(-) : void
-  + recuperarSenha(-) : void
-  + alterarSenha(-) : void
-  + cadastrarUsuario(-) : void
+  + autenticarUsuario() // concluido
+  + visualizarPerfil() // concluido
+  + atualizarPerfil() // concluido
+  + recuperarSenha() // concluido
+  + alterarSenha() // concluido
+  + cadastrarUsuario() // concluido
 }
 
 class "Estudante" as estudante {
@@ -64,12 +64,36 @@ class "Estudante" as estudante {
 class "Administrador" as admin {
   --
   ==
-  + cadastrarAdministradorInterno() : void
-  + gerenciarSolicitacoes() : void
-  + visualizarRelatorios() : void
-  + gerenciarUsuarios() : void
-  + gerenciarHorarios() : void
-  + cadastarNotificacao() : void
+  ' Gestão de Pessoas e Acessos
+  + cadastrarAdministradorInterno()
+  + gerenciarUsuarios()
+  
+  ' Gestão Operacional da Fila (Métodos do PedidoService)
+  + listarFilaGlobalAdmin() // concluido
+  + chamarProximoPedido() // concluido
+  + concluirImpressao(idPedido: int) // concluido
+  + obterDetalhesPedido(idPedido: int) // concluido
+  + obterNivelOcupacao() // concluido
+  + obterStatusFilaGeral() // concluido
+  
+  ' Gestão de Configurações e Preços
+  + verificarStatusSetor()
+  + alterarStatusSetor(status: boolean, mensagem: String)
+  + gerenciarPreços(idServico: int, novoPreco: double) 
+  + listarServicos()
+  + alterarDisponibilidadeServico(idServico: int, disponivel: boolean)
+  
+  ' Gestão de Horários // concluido
+  + gerenciarHorarios() 
+  + cadastrarHorario(dados)
+  + atualizarHorario(id, dados)
+  + obterQuadroHorariosCompleto()
+  
+  ' Comunicação e Inteligência
+  + visualizarRelatorios() 
+  + cadastarNotificacao(titulo, mensagem, idUsuario) 
+  + registrarPagamento(idPedido, metodo)
+  + gerenciarSolicitacoes() 
 }
 
 class "Servico" as servico {
@@ -94,18 +118,21 @@ class "Pedido" as pedido {
   - total_paginas_arquivo : int
   - valor_total : double
   ==
-  + confirmarPedido(-) : void
-  + cancelarPedido(-) : void
-  + atualizarStatusPedido(-) : void
+  + confirmarPedido() // concluido
+  + cancelarPedido() // concluido
 
-  + obterPosicaoFila(-) : int
-  + estimarTempoFila(-) : String
-  + listarFilaDePedidos(-) : List<Pedido>
+  + cancelarPedidoAdmin() 
 
-  + obterEstatisticasUsuario(-) : EstatisticasPedidoDTO 
-  + listarPedidosAtivos(-) : List<PedidoCardDTO>
-  + listarPedidosHistorico(-) : List<Pedido>
-  + listarPedidosPorStatus(-, status) : List<Pedido>
+  + atualizarStatusPedido() // concluido
+
+  + obterPosicaoFila() // concluido
+  + estimarTempoFila() // concluido
+  + listarFilaDePedidos() // concluido
+
+  + obterEstatisticasUsuario() // concluido 
+  + listarPedidosAtivos() // concluido
+  + listarPedidosHistorico() // concluido
+  + listarPedidosPorStatus(status) // concluido
 }
 
 class "Item_Pedido" as item_pedido {
@@ -127,7 +154,7 @@ class "Pagamento" as pagamento {
   - id_pedido : int <<FK>>
   - metodo : MetodoPagamento
   ==
-  + registrarPagamento(idPedido, metodo -------) : void
+  + registrarPagamento(idPedido, metodo) // concluido
 }
 
 class "Notificacao" as notificacao {
@@ -139,8 +166,8 @@ class "Notificacao" as notificacao {
   - lida : boolean
   - data_hora : Datetime
   ==
-  + listarNotificacoes(idUsuario---) : List<Notificacao>
-  + marcarComoLida(-----) : void // quando clicar na notificação, ela é marcada como lida
+  + listarNotificacoes(idUsuario) 
+  + marcarComoLida() 
 }
 
 class "Horario_Funcionamento" as horario {
@@ -151,8 +178,7 @@ class "Horario_Funcionamento" as horario {
   - tarde : String
   - noite : String
   ==
-  + cadastrarHorario(dados) : void
-  + atualizarHorario(id, dados) : void
+
 }
 
 class "Configuracao_Sistema" as config {
@@ -161,10 +187,8 @@ class "Configuracao_Sistema" as config {
   - setor_aberto : boolean
   - mensagem_aviso : String
   ==
-  + verificarStatusSetor() : boolean
-  + alterarStatusSetor(status, mensagem) : void
   + enviarNotificacao(idUsuario, mensagem) : void
-  + obterQuadroHorariosCompleto(-) : List<Horario_Funcionamento>
+  + obterQuadroHorariosCompleto() // concluido
 }
 
 ' --- Definição dos Relacionamentos ---
@@ -172,11 +196,15 @@ class "Configuracao_Sistema" as config {
 usuario <|-- estudante
 usuario <|-- admin
 
-usuario ||--o{ pedido : "realiza"
+
 usuario ||--o{ notificacao : "recebe"
 pedido ||--|{ item_pedido : "contém"
 servico ||--o{ item_pedido : "é adicionado em"
 pedido ||--o| pagamento : "possui"
 config ||--o{ horario : "possui"
+
+estudante "1   " -- "0..*  " pedido : "realiza"
+admin "1   " -- "0..*  " config : "gerencia"
+admin "1   " -- "0..*  " pedido : "gerencia"
 
 @enduml

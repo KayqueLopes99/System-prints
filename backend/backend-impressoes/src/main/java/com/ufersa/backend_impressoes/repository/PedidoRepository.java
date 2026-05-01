@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import com.ufersa.backend_impressoes.model.enuns.StatusPedido;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,5 +54,11 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
 
     // Conta quantos pedidos existem com os status informados na lista[cite: 16]
     long countByStatusFilaIn(List<StatusPedido> status);
+
+    // No PedidoRepository, adicione estes métodos:
+    long countByStatusFila(StatusPedido status);
+
+    // Para contar os concluídos e cancelados de "Hoje"
+    long countByStatusFilaAndDataHoraAfter(StatusPedido status, LocalDateTime data);
 
 }

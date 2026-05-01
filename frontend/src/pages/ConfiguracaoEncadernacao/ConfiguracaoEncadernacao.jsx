@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronLeft, Notebook, Plus, Minus, Upload, Check, X } from 'lucide-react'; //
+import { ChevronLeft, Notebook, Plus, Minus, Upload, Check, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import './ConfiguracaoEncadernacao.css';
 
@@ -7,57 +7,78 @@ export default function ConfiguracaoEncadernacao() {
     const navigate = useNavigate();
     const fileInputRef = useRef(null);
 
-    // Estados
+    // --- ESTADOS PARA DADOS DINÂMICOS ---
+    const [servicos, setServicos] = useState([]); //[cite: 8]
+    const [setorAberto, setSetorAberto] = useState(true); //
+    const [mensagemSetor, setMensagemSetor] = useState('');
+
+    // Estados de Configuração
     const [unidades, setUnidades] = useState(1);
     const [folhas, setFolhas] = useState(100);
     const [arquivo, setArquivo] = useState(null);
     const [isDragging, setIsDragging] = useState(false);
     const [total, setTotal] = useState(20.00);
 
-    // 💰 Lógica de Cálculo
+    // --- BUSCA PREÇOS E STATUS AO CARREGAR ---
     useEffect(() => {
-        const precoBaseEncadernacao = 5.00;
-        const precoPorFolha = 0.15;
+        // Busca serviços (ID 3 e 4 para encadernação)[cite: 8]
+        fetch('http://localhost:8080/api/admin/servicos')
+            .then(res => res.json())
+            .then(data => setServicos(data))
+            .catch(err => console.error("Erro ao buscar preços:", err));
+
+        // Busca status do setor[cite: 9]
+        fetch('http://localhost:8080/api/admin/status-setor')
+            .then(res => res.json())
+            .then(data => {
+                setSetorAberto(data.setorAberto);
+                setMensagemSetor(data.mensagemAviso);
+            })
+            .catch(err => console.error("Erro ao buscar status do setor:", err));
+    }, []);
+
+    // 💰 Lógica de Cálculo Dinâmica Atualizada
+    useEffect(() => {
+        // Valores padrão (fallback) caso o banco demore[cite: 13]
+        let precoBaseEncadernacao = 5.00;
+        let precoPorFolha = 0.15;
+
+        // Se o banco carregou, busca os valores oficiais[cite: 11, 12]
+        if (servicos.length > 0) {
+            const servicoBase = servicos.find(s => (s.id_servico || s.idServico) === 3);
+            const servicoFolha = servicos.find(s => (s.id_servico || s.idServico) === 4);
+            
+            if (servicoBase) precoBaseEncadernacao = servicoBase.preco_unitario || servicoBase.precoUnitario;
+            if (servicoFolha) precoPorFolha = servicoFolha.preco_unitario || servicoFolha.precoUnitario;
+        }
+
         const resultado = (precoBaseEncadernacao + (folhas * precoPorFolha)) * unidades;
         setTotal(resultado);
-    }, [unidades, folhas]);
+    }, [unidades, folhas, servicos]);
 
-    // 👉 FUNÇÃO DE ROTEAMENTO ADICIONADA
     const avancarParaPagamento = () => {
         const idLogado = parseInt(localStorage.getItem('usuarioId'));
         const dadosParaEnvio = {      
             idUsuario: idLogado,
-           
             nomeArquivo: arquivo ? arquivo.name : "Encadernação Manual",
             totalPaginas: folhas,
             tamanhoMb: arquivo ? parseFloat((arquivo.size / (1024 * 1024)).toFixed(2)) : 0,
             quantidade: unidades,
             valorTotal: total,
             tipoServico: "ENCADERNACAO",
-            // Campos padrão para compatibilidade com o DTO do Java
             tamanhoPapel: "A4",
             orientacao: "RETRATO",
             frenteVerso: false,
             tipoCor: "PRETO_BRANCO"
         };
-
-        // Navega enviando o estado para a tela de pagamento específica
         navigate('/pagamento-encadernacao', { state: dadosParaEnvio });
     };
 
     const alterarUnidades = (valor) => setUnidades(prev => Math.max(1, prev + valor));
     const alterarFolhas = (valor) => setFolhas(prev => Math.max(1, prev + valor));
 
-    // Handlers de Drag and Drop
-    const handleDragOver = (e) => {
-        e.preventDefault();
-        setIsDragging(true);
-    };
-
-    const handleDragLeave = () => {
-        setIsDragging(false);
-    };
-
+    const handleDragOver = (e) => { e.preventDefault(); setIsDragging(true); };
+    const handleDragLeave = () => setIsDragging(false);
     const handleDrop = (e) => {
         e.preventDefault();
         setIsDragging(false);
@@ -84,11 +105,22 @@ export default function ConfiguracaoEncadernacao() {
                     <span className="subtitulo-principal">organize seu pedido</span>
                 </div>
                 <button className="btn-save-header">
-                    <Notebook size={35} strokeWidth={1.5} /> {/* */}
+                    <Notebook size={35} strokeWidth={1.5} />
                 </button>
             </header>
 
             <main className="content-encadernacao">
+                {/* AVISO DE SETOR FECHADO[cite: 9] */}
+                {!setorAberto && (
+                    <div className="aviso-setor-fechado" style={{
+                        backgroundColor: '#ffebee', color: '#c62828', padding: '12px',
+                        borderRadius: '8px', marginBottom: '15px', border: '1px solid #ef9a9a',
+                        fontWeight: 'bold', textAlign: 'center', fontSize: '14px'
+                    }}>
+                        ⚠️ {mensagemSetor || "O setor está fechado para encadernações."}
+                    </div>
+                )}
+
                 <section className="secao-controle">
                     <h2 className="label-secao">Unidades a encadernar</h2>
                     <div className="stepper-container">
@@ -138,20 +170,13 @@ export default function ConfiguracaoEncadernacao() {
                                         e.stopPropagation();
                                         setArquivo(null);
                                     }}
-                                    title="Remover arquivo"
                                 >
                                     <X size={16} strokeWidth={2.5} />
                                 </button>
                             </div>
                         )}
 
-                        <input
-                            type="file"
-                            ref={fileInputRef}
-                            style={{ display: 'none' }}
-                            onChange={handleFileChange}
-                            accept=".pdf,.doc,.docx"
-                        />
+                        <input type="file" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange} accept=".pdf,.doc,.docx" />
                     </div>
                 </section>
 
@@ -164,9 +189,12 @@ export default function ConfiguracaoEncadernacao() {
                     </div>
                 </div>
 
-                {/* 👉 BOTÃO ATUALIZADO COM ONCLICK */}
-                <button className="btn-continuar-encadernacao" onClick={avancarParaPagamento}>
-                    continuar
+                <button 
+                    className="btn-continuar-encadernacao" 
+                    onClick={avancarParaPagamento}
+                    disabled={!setorAberto} // Desabilita se estiver fechado[cite: 9]
+                >
+                    {setorAberto ? "continuar" : "indisponível"}
                 </button>
             </main>
         </div>

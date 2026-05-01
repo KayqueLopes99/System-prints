@@ -10,7 +10,7 @@ import lombok.Getter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
+
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -20,43 +20,44 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter 
+@Getter
 @Setter
 
-@JsonTypeInfo(
-  use = JsonTypeInfo.Id.NAME, 
-  include = JsonTypeInfo.As.EXISTING_PROPERTY, 
-  property = "tipo_usuario", 
-  visible = true
-)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "tipo_usuario", visible = true)
 @JsonSubTypes({
-  @JsonSubTypes.Type(value = Estudante.class, name = "ESTUDANTE"),
-  @JsonSubTypes.Type(value = Administrador.class, name = "ADMINISTRADOR")
+    @JsonSubTypes.Type(value = Estudante.class, name = "ESTUDANTE"),
+    @JsonSubTypes.Type(value = Administrador.class, name = "ADMINISTRADOR")
 })
-
 
 public class Usuario {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_usuario")
-    private int idUsuario;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id_usuario")
+  private int idUsuario;
 
-    @Column(name = "nome_completo", nullable = false)
-    private String nomeCompleto;
+  @Column(name = "nome_completo", nullable = false)
+  private String nomeCompleto;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+  @Column(nullable = false, unique = true)
+  private String email;
 
-    @Column(name = "senha", nullable = false)
-    private String senha;
+  @Column(name = "senha", nullable = false)
+  private String senha;
 
-    @Column(name = "preferencias_notificacao", nullable = false, columnDefinition = "boolean default true")
-    private Boolean preferenciasNotificacao = true;
+  @Column(name = "preferencias_notificacao", nullable = false, columnDefinition = "boolean default true")
+  private Boolean preferenciasNotificacao = true;
 
-    @Column(name = "codigo_recuperacao")
-    private String codigoRecuperacao;
+  @Column(name = "codigo_recuperacao")
+  private String codigoRecuperacao;
 
-    @Column(name = "data_expiracao")
-    private LocalDateTime dataExpiracao;
+  @Column(name = "data_expiracao")
+  private LocalDateTime dataExpiracao;
+
+  @Transient
+  @com.fasterxml.jackson.annotation.JsonProperty("tipo_usuario")
+  public String getTipoUsuario() {
+    return this instanceof Administrador ? "ADMINISTRADOR" : "ESTUDANTE";
+  }
+
 }

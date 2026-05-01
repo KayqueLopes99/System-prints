@@ -47,7 +47,7 @@ export default function NovoPedidoInicio() {
                         </div>
                         <div className="info-servico">
                             <h3>Encadernação</h3>
-                            <span className="sub-info">Para materiais impressos</span>
+                            <span className="sub-info">Para materiais impressos ou cadernos</span>
                         </div>
                         <input
                             type="checkbox"
