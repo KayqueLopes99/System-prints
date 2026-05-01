@@ -94,6 +94,12 @@ public class PedidoService {
 
     @Transactional
     public Pedido confirmarPedido(PedidoRequestDTO dto) {
+
+        // 1. VALIDAÇÃO DE SEGURANÇA: Limite de 1.000 páginas
+    if (dto.getTotalPaginas() > 120) {
+        throw new RuntimeException("O limite de 1.000 páginas foi excedido. Por favor, divida seu arquivo.");
+    }
+
         // 1. Buscar usuário
         Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));

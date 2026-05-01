@@ -5,8 +5,17 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import './PedidoConfiguracao.css';
+import * as pdfjsLib from 'pdfjs-dist';
+
+// Forma correta de linkar o worker no Vite para evitar erro 404/500
+pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+    'pdfjs-dist/build/pdf.worker.mjs',
+    import.meta.url
+).toString();
 
 export default function PedidoConfiguracao() {
+
+
     const navigate = useNavigate();
 
     // Estados do Arquivo
@@ -23,6 +32,8 @@ export default function PedidoConfiguracao() {
     const [orientacao, setOrientacao] = useState('RETRATO');
     const [frenteVerso, setFrenteVerso] = useState(false);
     const [quantidade, setQuantidade] = useState(1);
+    // Dentro do componente PedidoConfiguracao
+    const [erroAviso, setErroAviso] = useState(''); // 👉 Novo estado para o erro
 
     const [valorTotal, setValorTotal] = useState(0.00);
     const sugestoesFormato = ['A4', 'A3'];
@@ -35,24 +46,39 @@ export default function PedidoConfiguracao() {
         setValorTotal(calculo);
     }, [tipoCor, quantidade, paginasAImprimir, frenteVerso]);
 
-    const processarArquivo = (file) => {
+    const processarArquivo = async (file) => {
         if (!file) return;
+        setErroAviso('');
 
         const isFilePdf = file.type === 'application/pdf';
         setIsPdf(isFilePdf);
 
+        if (isFilePdf) {
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+
+                if (pdf.numPages > 120) {
+                    setErroAviso(`O arquivo excede o limite de 120 páginas! (${pdf.numPages} páginas)`);
+                    removerArquivo();
+                    return;
+                }
+                setPaginasAImprimir(pdf.numPages);
+            } catch (error) {
+                setErroAviso("Erro ao ler o arquivo PDF. Tente novamente.");
+                console.error(error);
+                return; // Para a execução se der erro no PDF
+            }
+        }
+
+        // 👉 AS LINHAS QUE FALTAVAM AQUI:
         setArquivo({
             nome: file.name,
             tamanhoMb: (file.size / (1024 * 1024)).toFixed(2)
         });
 
-        // Gera a URL para o Iframe renderizar o PDF
         setArquivoUrl(URL.createObjectURL(file));
-
-        // Reseta as páginas para 1 sempre que um arquivo novo entra
-        setPaginasAImprimir(1);
     };
-
     const handleFileUpload = (event) => {
         processarArquivo(event.target.files[0]);
     };
@@ -203,8 +229,20 @@ export default function PedidoConfiguracao() {
                                     value={paginasAImprimir}
                                     onChange={handleMudancaPaginas}
                                     onBlur={handleBlurPaginas}
+                                    readOnly={isPdf}
                                     className="input-paginas"
-                                    style={{ borderColor: '#1d448b', borderWidth: '2px' }}
+                                    style={{
+                                        borderColor: '#1d448b',
+                                        borderWidth: '2px',
+                                        // 👉 Lógica de cor ajustada:
+                                        // Se for PDF (automático) -> Cinza (#f0f0f0)
+                                        // Se for DOC/DOCX (manual) -> Azul clarinho (#f0f7ff) para destacar[cite: 15, 16]
+                                        backgroundColor: isPdf ? '#f0f0f0' : '#f0f7ff',
+
+                                        color: '#000',        // Garante que o número fique sempre preto
+                                        fontWeight: 'bold',   // Deixa o número em negrito
+                                        cursor: isPdf ? 'not-allowed' : 'text' // Mostra ícone de "bloqueado" se for PDF
+                                    }}
                                 />
                             </div>
 
