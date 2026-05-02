@@ -3,6 +3,7 @@ package com.ufersa.backend_impressoes.service;
 import com.ufersa.backend_impressoes.dto.EstatisticasPedidoDTO;
 import com.ufersa.backend_impressoes.dto.PedidoCardDTO;
 import com.ufersa.backend_impressoes.dto.PedidoRequestDTO;
+import com.ufersa.backend_impressoes.dto.RelatorioDTO;
 import com.ufersa.backend_impressoes.dto.StatusFilaDTO;
 import com.ufersa.backend_impressoes.model.ItemPedido;
 import com.ufersa.backend_impressoes.model.Pedido;
@@ -25,6 +26,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.transaction.annotation.Transactional;
@@ -381,4 +383,51 @@ public class PedidoService {
 
         return stats;
     }
+
+public RelatorioDTO gerarRelatorioCompleto() {
+    RelatorioDTO relatorio = new RelatorioDTO();
+
+    // 1. RECEITA TOTAL (Mês atual)
+    Double receita = pedidoRepository.somarReceitaNoMesAtual();
+    relatorio.setReceitaTotalMes(receita != null ? receita : 0.0);
+
+    // 2. TOTAL DE USUÁRIOS (Todos os cadastrados no sistema)
+    // Se quiser apenas os que pediram este mês, use contarUsuariosDistintosNoMes()
+    relatorio.setUsuariosAtivosMes(usuarioRepository.count());
+
+    // 3. TOTAL DE IMPRESSÕES (Mês atual)
+    Long totalImpressoes = pedidoRepository.contarItensPorCategoriaNoMes(
+        com.ufersa.backend_impressoes.model.enuns.CategoriaServico.IMPRESSAO
+    );
+    relatorio.setTotalImpressoesMes(totalImpressoes != null ? totalImpressoes : 0);
+
+    // 4. TICKET MÉDIO (Corrigido: Receita Mês / Qtd Pedidos Mês)
+    long totalPedidosMes = pedidoRepository.countPedidosNoMes();
+    relatorio.setTicketMedio(totalPedidosMes > 0 ? relatorio.getReceitaTotalMes() / totalPedidosMes : 0);
+
+
+    // --- 2. GRÁFICO DE PIZZA (Distribuição por Tipo de Serviço) ---
+    List<Object[]> distribuicaoRaw = pedidoRepository.buscarDistribuicaoPorServico();
+    Map<String, Double> pizzaData = new HashMap<>();
+    for (Object[] row : distribuicaoRaw) {
+        // row[0] é o Enum CategoriaServico, row[1] é a Soma (Long)
+        pizzaData.put(row[0].toString(), ((Long) row[1]).doubleValue());
+    }
+    relatorio.setDistribuicaoServicos(pizzaData);
+
+
+    // --- 3. GRÁFICO DE LINHA (Evolução Mensal) ---
+    List<Object[]> evolucaoRaw = pedidoRepository.buscarEvolucaoReceitaMensal();
+    Map<String, Double> linhaData = new LinkedHashMap<>(); // LinkedHashMap mantém a ordem dos meses
+    String[] mesesNomes = {"Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"};
+    
+    for (Object[] row : evolucaoRaw) {
+        int mesNumero = (int) row[0]; // Retorna 1 para Janeiro, etc.
+        Double valor = (Double) row[1];
+        linhaData.put(mesesNomes[mesNumero - 1], valor);
+    }
+    relatorio.setEvolucaoReceitaMensal(linhaData);
+
+    return relatorio;
+}
 }

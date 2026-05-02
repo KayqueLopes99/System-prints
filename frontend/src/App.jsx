@@ -20,6 +20,7 @@ import Notificacoes from './pages/Notificacoes/Notificacoes';
 import TelaAdmin from './pages/TelaAdmin/TelaAdmin';
 import ConfiguracoesAdmin from './pages/ConfiguracoesAdmin/ConfiguracoesAdmin';
 import GerenciarUsuarios from './pages/GerenciarUsuarios/GerenciarUsuarios';
+import Relatorios from './pages/Relatorios/Relatorios';
 
 // 👇 NOVO: Importando a tela de Configuração do Pedido!
 import PedidoConfiguracao from './pages/PedidoConfiguracao/PedidoConfiguracao'; 
@@ -83,6 +84,9 @@ export default function App() {
 
         {/* Rota para a tela de Gerenciamento de Usuários */}
         <Route path="/admin/gerenciar-usuarios" element={<GerenciarUsuarios />} />
+
+        {/* Rota para a tela de Relatórios */}
+        <Route path="/admin/relatorios" element={<Relatorios />} />
       </Routes>
     </Router>
   );

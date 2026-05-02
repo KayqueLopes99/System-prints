@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import {
     LayoutDashboard, ListOrdered, Users, Settings,
     BarChart3, LogOut, Clock, Printer, CheckCircle, XCircle,
-    Bell, HelpCircle, Power, User
+    Bell, Power
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'; 
 import './TelaAdmin.css';
 
 export default function TelaAdmin() {
@@ -12,9 +13,14 @@ export default function TelaAdmin() {
 
     const [dataAtual, setDataAtual] = useState(new Date());
     const [setorAberto, setSetorAberto] = useState(true);
-    const [ocupacao, setOcupacao] = useState('Moderada');
 
-    // Estados para os cards de estatísticas reais
+    // 👉 LÓGICA DO ESTUDANTE: Informações da fila global[cite: 15]
+    const [infoFila, setInfoFila] = useState({
+        tempo: 'Calculando...',
+        nivel: 'Carregando...',
+        quantidade: 0
+    });
+
     const [stats, setStats] = useState({
         pendentes: 0,
         processando: 0,
@@ -28,50 +34,54 @@ export default function TelaAdmin() {
     }, []);
 
     useEffect(() => {
-        // Status do Setor[cite: 9]
-        fetch('http://localhost:8080/api/admin/status-setor')
-            .then(res => res.json())
-            .then(data => {
-                setSetorAberto(data.setorAberto);
-            })
-            .catch(err => console.error("Erro ao carregar status:", err));
+        // 1. Status do Setor[cite: 9, 17]
+        axios.get('http://localhost:8080/api/admin/status-setor')
+            .then(res => setSetorAberto(res.data.setorAberto))
+            .catch(err => console.error("Erro status:", err));
 
-        // Busca estatísticas reais do banco
-        fetch('http://localhost:8080/api/admin/estatisticas-gerais')
-            .then(res => res.json())
-            .then(data => setStats(data))
-            .catch(err => console.error("Erro ao carregar estatísticas:", err));
+        // 2. Estatísticas Gerais[cite: 10, 17]
+        axios.get('http://localhost:8080/api/admin/estatisticas-gerais')
+            .then(res => setStats(res.data))
+            .catch(err => console.error("Erro estatísticas:", err));
+
+        // 3. 👉 INJEÇÃO DA FILA (ESTUDANTE)[cite: 15]
+        axios.get(`http://localhost:8080/api/pedidos/fila/status-geral`)
+            .then(res => {
+                const nivelTraduzido = res.data.nivelOcupacao === 'BAIXA' ? 'Fila Baixa' :
+                    res.data.nivelOcupacao === 'MODERADA' ? 'Fila Moderada' : 'Fila Cheia';
+
+                setInfoFila({
+                    tempo: res.data.tempoEstimado,
+                    nivel: nivelTraduzido,
+                    quantidade: res.data.quantidadePessoas
+                });
+            })
+            .catch(err => console.error("Erro ao buscar status da fila:", err));
     }, []);
 
     const toggleSetor = () => {
         const novoStatus = !setorAberto;
-        const novaMensagem = novoStatus ? "Funcionamento normal." : "Setor fechado.";
-
-        fetch(`http://localhost:8080/api/admin/status-setor?status=${novoStatus}&mensagem=${novaMensagem}`, {
-            method: 'PUT'
-        }).then(() => {
-            setSetorAberto(novoStatus);
-        });
+        axios.put(`http://localhost:8080/api/admin/status-setor?status=${novoStatus}&mensagem=${novoStatus ? "Aberto" : "Fechado"}`)
+            .then(() => setSetorAberto(novoStatus));
     };
 
     const formatarData = (data) => {
         const opcoes = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-        const dataStr = data.toLocaleDateString('pt-BR', opcoes);
-        const horaStr = data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-        return `${dataStr} - ${horaStr}`;
+        return `${data.toLocaleDateString('pt-BR', opcoes)} - ${data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
     };
 
     return (
         <div className="admin-container">
             <aside className="admin-sidebar">
                 <div className="sidebar-logo">
-                    {/* Substituído o bloco branco pelo ícone de Usuário[cite: 17] */}
                     <div className="logo-icon-circle">
                         <Settings size={24} color="#1a3a6d" />
                     </div>
                     <div className="logo-text">
                         <span className="ufersa-txt">UFERSA</span>
-                        <span className="admin-txt">Administrador</span>
+                        
+                        <span className="admin-txt">Administrador</span> 
+                        
                     </div>
                 </div>
 
@@ -100,12 +110,10 @@ export default function TelaAdmin() {
 
             <main className="admin-main">
                 <header className="admin-header">
-                    {/* Alinhamento corrigido: Título e Data lado a lado */}
                     <div className="header-left">
-                        <div className="title-row">
-                            <h1>Painel Administrativo</h1>
-                            <p className="data-header"><Clock size={16} /> {formatarData(dataAtual)}</p>
-                        </div>
+                        {/* Data agora posicionada abaixo do título[cite: 17] */}
+                        <h1>Painel Administrativo</h1>
+                        <p className="data-header"><Clock size={16} /> {formatarData(dataAtual)}</p>
                     </div>
 
                     <div className="header-right">
@@ -117,7 +125,10 @@ export default function TelaAdmin() {
                         </div>
                         <div className="status-monitor">
                             <span>Ocupação:</span>
-                            <span className="badge-ocupacao">{ocupacao}</span>
+                            {/* Badge dinâmico com a lógica traduzida[cite: 15, 17] */}
+                            <span className={`badge-ocupacao ${infoFila.nivel.replace(' ', '-').toLowerCase()}`}>
+                                {infoFila.nivel} ({infoFila.quantidade} pedidos)
+                            </span>
                         </div>
                         <div className="header-actions">
                             <button className="icon-btn"><Bell size={20} /></button>
@@ -158,7 +169,6 @@ export default function TelaAdmin() {
                         </div>
                     </div>
                 </section>
-                <div className="help-fab"><HelpCircle size={24} /></div>
             </main>
         </div>
     );

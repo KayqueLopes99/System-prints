@@ -65,23 +65,22 @@ class "Administrador" as admin {
   --
   ==
   ' Gestão de Pessoas e Acessos
-  + cadastrarAdministradorInterno()
-  + gerenciarUsuarios()
+  + cadastrarAdministradorInterno() // concluido
+  + gerenciarUsuarios() // concluido
   
   ' Gestão Operacional da Fila (Métodos do PedidoService)
-  + listarFilaGlobalAdmin() // concluido
-  + chamarProximoPedido() // concluido
-  + concluirImpressao(idPedido: int) // concluido
-  + obterDetalhesPedido(idPedido: int) // concluido
-  + obterNivelOcupacao() // concluido
-  + obterStatusFilaGeral() // concluido
+  + listarFilaGlobalAdmin() 
+  + chamarProximoPedido() 
+  + concluirImpressao(idPedido: int) 
+  + obterDetalhesPedido(idPedido: int) 
+  + obterNivelOcupacao() 
+  + obterStatusFilaGeral()
   
   ' Gestão de Configurações e Preços
-  + verificarStatusSetor()
-  + alterarStatusSetor(status: boolean, mensagem: String)
-  + gerenciarPreços(idServico: int, novoPreco: double) 
-  + listarServicos()
-  + alterarDisponibilidadeServico(idServico: int, disponivel: boolean)
+  + verificarStatusSetor() // concluido
+  + alterarStatusSetor(status: boolean, mensagem: String) // concluido
+  + gerenciarPreços(idServico: int, novoPreco: double) // concluido
+  + alterarDisponibilidadeServico(idServico: int, disponivel: boolean) // concluido
   
   ' Gestão de Horários // concluido
   + gerenciarHorarios() 
@@ -92,7 +91,6 @@ class "Administrador" as admin {
   ' Comunicação e Inteligência
   + visualizarRelatorios() 
   + cadastarNotificacao(titulo, mensagem, idUsuario) 
-  + registrarPagamento(idPedido, metodo)
   + gerenciarSolicitacoes() 
 }
 

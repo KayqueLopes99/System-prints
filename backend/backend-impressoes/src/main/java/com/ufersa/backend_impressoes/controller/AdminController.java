@@ -1,5 +1,6 @@
 package com.ufersa.backend_impressoes.controller;
 
+import com.ufersa.backend_impressoes.dto.RelatorioDTO;
 import com.ufersa.backend_impressoes.model.Administrador;
 import com.ufersa.backend_impressoes.model.ConfiguracaoSistema;
 import com.ufersa.backend_impressoes.model.Servico;
@@ -13,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 import java.util.List;
 import com.ufersa.backend_impressoes.service.UsuarioService;
-
-
 
 @RestController
 @RequestMapping("/api/admin")
@@ -87,5 +86,10 @@ public class AdminController {
                 dados.get("senha"),
                 dados.get("cargo"));
         return ResponseEntity.ok(novoAdmin);
+    }
+
+    @GetMapping("/relatorios") // 👈 Verifique se o caminho está idêntico ao do React
+    public ResponseEntity<RelatorioDTO> visualizarRelatorios() {
+        return ResponseEntity.ok(pedidoService.gerarRelatorioCompleto());
     }
 }

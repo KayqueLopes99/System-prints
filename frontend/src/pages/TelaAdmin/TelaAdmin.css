@@ -1,3 +1,4 @@
+/* Layout Principal[cite: 14] */
 .admin-container {
     display: flex;
     min-height: 100vh;
@@ -5,7 +6,7 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Sidebar Styling */
+/* Sidebar Styling[cite: 14] */
 .admin-sidebar {
     width: 260px;
     background-color: #1a3a6d; /* Azul UFERSA */
@@ -21,16 +22,14 @@
     gap: 12px;
 }
 
-.logo-icon {
-    width: 40px;
-    height: 40px;
+.logo-icon-circle {
+    width: 45px;
+    height: 45px;
     background-color: white;
-    border-radius: 8px;
-}
-
-.logo-text {
+    border-radius: 50%;
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .ufersa-txt { font-weight: bold; font-size: 18px; }
@@ -61,10 +60,10 @@
     text-align: center;
 }
 
-/* Content Area */
+/* Área de Conteúdo Central */
 .admin-main {
     flex-grow: 1;
-    padding: 30px;
+    padding: 60px 40px 40px; /* Aumentado para descer o conteúdo e dar mais respiro nas laterais */
     position: relative;
 }
 
@@ -72,12 +71,26 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 40px;
+    margin-bottom: 60px; /* Espaço maior entre título e cards[cite: 16] */
 }
 
-.header-left h1 { font-size: 24px; color: #333; margin-bottom: 5px; }
-.header-left p { display: flex; align-items: center; gap: 5px; font-size: 14px; color: #777; }
+.header-left {
+    display: flex;
+    flex-direction: column; /* Título em cima, data embaixo[cite: 16] */
+    gap: 8px;
+}
 
+.header-left h1 { font-size: 28px; color: #333; margin: 0; }
+
+.data-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px; /* Aumentado levemente para legibilidade[cite: 16] */
+    color: #777;
+}
+
+/* Header Right - Monitores[cite: 14] */
 .header-right {
     display: flex;
     align-items: center;
@@ -92,31 +105,34 @@
     color: #555;
 }
 
-/* Botão de Status Dinâmico */
 .btn-status {
-    padding: 6px 15px;
+    padding: 8px 18px;
     border-radius: 20px;
     border: none;
     color: white;
     display: flex;
     align-items: center;
     gap: 8px;
-    cursor: pointer;
     font-weight: 600;
-    transition: all 0.3s;
 }
 
 .btn-status.aberto { background-color: #2e7d32; }
 .btn-status.fechado { background-color: #d32f2f; }
 
+/* Badges de Ocupação Dinâmicos[cite: 11] */
 .badge-ocupacao {
-    background-color: #1a3a6d;
     color: white;
-    padding: 6px 15px;
-    border-radius: 4px;
+    padding: 8px 18px;
+    border-radius: 6px;
     font-weight: 600;
+    font-size: 14px;
 }
 
+.badge-ocupacao.fila-baixa { background-color: #2e7d32; }
+.badge-ocupacao.fila-moderada { background-color: #fbc02d; color: #333; }
+.badge-ocupacao.fila-cheia { background-color: #1a3a6d; }
+
+/* Botões de Ação[cite: 14] */
 .header-actions {
     display: flex;
     align-items: center;
@@ -127,35 +143,41 @@
     background-color: #8b0000;
     color: white;
     border: none;
-    padding: 8px 15px;
-    border-radius: 6px;
+    padding: 10px 20px;
+    border-radius: 8px;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 8px;
+    font-weight: 600;
 }
 
-/* Stats Cards */
+/* Cards de Estatísticas Ampliados[cite: 16] */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    gap: 25px; /* Mais espaço entre os cards[cite: 16] */
 }
 
 .stat-card {
     background: white;
-    padding: 25px;
-    border-radius: 12px;
+    padding: 35px 25px; /* Aumentado para dar volume ao card[cite: 16] */
+    border-radius: 15px;
     display: flex;
     align-items: center;
-    gap: 20px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    gap: 25px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.06); /* Sombra mais suave e moderna[cite: 16] */
+    transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px); /* Efeito flutuante ao passar o mouse[cite: 16] */
 }
 
 .stat-icon {
-    width: 50px;
-    height: 50px;
-    border-radius: 10px;
+    width: 65px; /* Ícones maiores para destaque[cite: 16] */
+    height: 65px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -166,30 +188,45 @@
 .green { background-color: #e8f5e9; color: #2e7d32; }
 .red { background-color: #ffebee; color: #d32f2f; }
 
-.stat-value { font-size: 28px; font-weight: bold; display: block; }
-.stat-label { font-size: 14px; color: #777; }
-
-.help-fab {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    background: #333;
-    color: white;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+.stat-value { 
+    font-size: 34px; /* Números bem visíveis[cite: 16] */
+    font-weight: bold; 
+    display: block; 
+    color: #333;
+    line-height: 1.1;
 }
 
-.logo-icon-circle {
-    width: 45px;
-    height: 45px;
-    background-color: white; /* Cor do fundo do círculo */
-    border-radius: 50%;
+.stat-label { 
+    font-size: 16px; /* Texto descritivo maior[cite: 16] */
+    color: #666; 
+}
+
+/* Container que segura o Círculo e o Texto */
+.sidebar-logo {
+    padding: 30px 20px;
     display: flex;
-    align-items: center; /* Centraliza verticalmente */
-    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Alinha o texto exatamente no meio do círculo */
+    gap: 15px; /* Espaço maior entre o círculo e o texto */
+}
+
+/* Bloco que segura as duas linhas de texto[cite: 16] */
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Garante que o conjunto UFERSA + Admin fique centralizado[cite: 16] */
+    line-height: 1.1; /* Controla a proximidade entre as duas linhas[cite: 16] */
+}
+
+.ufersa-txt {
+    font-weight: bold;
+    font-size: 19px; /* Aumentado para dar mais presença[cite: 16] */
+    letter-spacing: 0.5px;
+    color: white;
+}
+
+.admin-txt {
+    font-size: 11px;
+    opacity: 0.7; /* Deixa um pouco mais discreto, parecendo um sub-título[cite: 16] */
+    text-transform: uppercase; /* Dá um ar mais profissional ao cargo[cite: 16] */
+    margin-top: 2px; /* Pequeno ajuste para não "colar" na UFERSA[cite: 16] */
 }
