@@ -92,16 +92,25 @@ public class PedidoService {
     }
 
     // 3. Listar Histórico Completo (Aba "Todos")
-    public List<Pedido> listarPedidosHistorico(int idUsuario) {
+    public List<PedidoCardDTO> listarPedidosHistorico(int idUsuario) {
         List<StatusPedido> statusHistorico = Arrays.asList(
                 StatusPedido.CONCLUIDO,
                 StatusPedido.CANCELADO);
-        return pedidoRepository.findByUsuario_IdUsuarioAndStatusFilaInOrderByDataHoraDesc(idUsuario, statusHistorico);
+
+        // Altere para mapear para o DTO[cite: 15]
+        return pedidoRepository.findByUsuario_IdUsuarioAndStatusFilaInOrderByDataHoraDesc(idUsuario, statusHistorico)
+                .stream()
+                .map(PedidoCardDTO::new)
+                .collect(Collectors.toList());
     }
 
     // 4. Listar por Status Específico (Abas "Concluídos" ou "Cancelados")
-    public List<Pedido> listarPedidosPorStatus(int idUsuario, StatusPedido status) {
-        return pedidoRepository.findByUsuario_IdUsuarioAndStatusFilaOrderByDataHoraDesc(idUsuario, status);
+    public List<PedidoCardDTO> listarPedidosPorStatus(int idUsuario, StatusPedido status) {
+        // Altere para mapear para o DTO[cite: 15]
+        return pedidoRepository.findByUsuario_IdUsuarioAndStatusFilaOrderByDataHoraDesc(idUsuario, status)
+                .stream()
+                .map(PedidoCardDTO::new)
+                .collect(Collectors.toList());
     }
 
     @Transactional

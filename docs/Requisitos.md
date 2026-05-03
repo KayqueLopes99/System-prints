@@ -28,6 +28,5 @@
 * **RNF03 - Disponibilidade Multiplataforma:** O sistema deve funcionar via web (navegador) para ser acessado de qualquer dispositivo pessoal (celulares e computadores).
 * **RNF04 - Segurança e Privacidade de Dados:** O sistema deve criptografar senhas (hash) e proteger os documentos enviados e os dados pessoais dos alunos, seguindo as diretrizes da LGPD.
 * **RNF05 - Desempenho e Escalabilidade:** O sistema deve suportar múltiplos uploads de arquivos e usuários simultâneos sem apresentar lentidão, processando arquivos de até um tamanho máximo predefinido (ex: 50MB).
-* **RNF06 - Acessibilidade e Conforto Visual:** O sistema deve oferecer suporte a temas visuais (como o "Modo Escuro") para melhorar a experiência e o conforto do usuário durante o uso.
 
 ---

@@ -29,11 +29,12 @@ export default function PagamentoEncadernacao() {
 
         setCarregando(true);
 
+        // 1. Prepara o objeto de dados (JSON) compatível com o DTO do Back-end[cite: 11]
         const payload = {
-            idUsuario: dadosPedido.idUsuario,
-            nomeArquivo: dadosPedido.nomeArquivo,
+            idUsuario: parseInt(dadosPedido.idUsuario),
+            nomeArquivo: dadosPedido.nomeArquivo || "Material Físico",
             totalPaginas: dadosPedido.totalPaginas,
-            tamanhoMb: dadosPedido.tamanhoMb,
+            tamanhoMb: dadosPedido.tamanhoMb || 0,
             quantidade: dadosPedido.quantidade,
             tamanhoPapel: "A4",
             orientacao: "RETRATO",
@@ -43,28 +44,41 @@ export default function PagamentoEncadernacao() {
             metodoPagamento: metodoSelecionado
         };
 
+        // 2. Prepara o FormData para o envio Multipart (Igual ao ResumoPagamento)
+        const formData = new FormData();
+
+        // Adiciona o JSON como um Blob (Essencial para o Spring reconhecer o @RequestPart)
+        formData.append("pedido", new Blob([JSON.stringify(payload)], {
+            type: 'application/json'
+        }));
+
+        // Adiciona o arquivo físico que veio da tela anterior[cite: 25]
+        // Se não houver arquivo físico (ex: encadernação de material já impresso), envia um blob vazio para não quebrar o Controller
+        formData.append("file", dadosPedido.arquivoBruto || new Blob([], { type: 'application/pdf' }));
+
         try {
             const response = await fetch("http://localhost:8080/api/pedidos/criar", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
+                // IMPORTANTE: Não definir headers manualmente aqui. O FormData faz isso sozinho[cite: 25].
+                body: formData
             });
 
             if (response.ok) {
                 setModalSucesso(true);
             } else {
-                alert("Erro ao processar o pagamento da encadernação.");
+                const erroTexto = await response.text();
+                alert(`Erro no servidor: ${erroTexto}`);
             }
         } catch (error) {
             console.error("Erro na requisição:", error);
-            alert("Erro de conexão com o servidor.");
+            alert("Não foi possível conectar ao servidor. Verifique o CORS.");
         } finally {
             setCarregando(false);
         }
     };
 
     return (
-        <div className="resumo-container"> {/* Alterado para resumo-container para herdar o estilo global */}
+        <div className="resumo-container">
             <header className="config-header">
                 <button className="btn-voltar-topo" onClick={() => navigate(-1)}>
                     <ChevronLeft size={24} />
@@ -104,7 +118,6 @@ export default function PagamentoEncadernacao() {
 
                 <h2 className="titulo-pagamento">Como deseja pagar no balcão?</h2>
 
-                {/* 👉 BOTÕES DE PAGAMENTO: Agora usam as mesmas classes do ResumoPagamento */}
                 <div className="grade-pagamento">
                     <button 
                         className={`btn-metodo ${metodoSelecionado === 'PIX' ? 'selecionado' : ''}`}

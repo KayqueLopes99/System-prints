@@ -49,15 +49,14 @@ public class PedidoController {
         return ResponseEntity.ok(pedidos);
     }
 
-    // Rota para aba "Histórico" (Todos): GET /api/pedidos/historico/1
     @GetMapping("/historico/{idUsuario}")
-    public ResponseEntity<List<Pedido>> getHistoricoTodos(@PathVariable int idUsuario) {
+    public ResponseEntity<List<PedidoCardDTO>> getHistoricoTodos(@PathVariable int idUsuario) {
         return ResponseEntity.ok(pedidoService.listarPedidosHistorico(idUsuario));
     }
 
-    // Rota para abas específicas: GET /api/pedidos/usuario/1/status/CONCLUIDO
+    // Rota para abas específicas
     @GetMapping("/usuario/{idUsuario}/status/{status}")
-    public ResponseEntity<List<Pedido>> getPedidosPorStatus(
+    public ResponseEntity<List<PedidoCardDTO>> getPedidosPorStatus(
             @PathVariable int idUsuario,
             @PathVariable StatusPedido status) {
         return ResponseEntity.ok(pedidoService.listarPedidosPorStatus(idUsuario, status));

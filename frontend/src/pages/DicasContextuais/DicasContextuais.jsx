@@ -31,7 +31,7 @@ export default function DicasContextuais() {
 
             <header className="header-dicas">
                 <button className="btn-voltar" onClick={() => navigate(-1)}>
-                    <ArrowLeft size={24} color="#1d448b" />
+                    <ArrowLeft size={24} color="#1d448b" /> Voltar
                 </button>
                 <h1>Dicas e Orientações</h1>
                 <HelpCircle size={24} color="#1d448b" />
