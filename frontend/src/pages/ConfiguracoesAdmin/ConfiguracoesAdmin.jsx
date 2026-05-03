@@ -115,7 +115,7 @@ export default function ConfiguracoesAdmin() {
                     <div className="nav-item" onClick={() => navigate('/admin')}>
                         <LayoutDashboard size={20} /> <span>Dashboard</span>
                     </div>
-                    <div className="nav-item" onClick={() => navigate('/admin/pedidos')}>
+                    <div className="nav-item" onClick={() => navigate('/admin/fila-pedidos')}>
                         <ListOrdered size={20} /> <span>Fila de Pedidos</span>
                     </div>
                     <div className="nav-item" onClick={() => navigate('/admin/gerenciar-usuarios')}>

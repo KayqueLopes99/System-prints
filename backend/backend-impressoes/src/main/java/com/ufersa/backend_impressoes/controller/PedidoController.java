@@ -22,7 +22,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/pedidos")
-@CrossOrigin(origins = "*") // Permite o React acessar sem erro de CORS
+@CrossOrigin(origins = "*")
 public class PedidoController {
 
     @Autowired
@@ -31,8 +31,9 @@ public class PedidoController {
     @Autowired
     private PedidoRepository pedidoRepository;
 
-    @Autowired
-    private PedidoService service; // Injetando o service para usar no endpoint do admin
+    // @Autowired
+    // private PedidoService service; // Injetando o service para usar no endpoint
+    // do admin
 
     // Rota para os cards: GET /api/pedidos/estatisticas/1
     @GetMapping("/estatisticas/{idUsuario}")
@@ -109,16 +110,9 @@ public class PedidoController {
 
     // --- ROTAS DO ADMINISTRADOR ---
 
-    @GetMapping("/admin/fila")
-    public ResponseEntity<List<PedidoAdminDTO>> listarFilaParaAdmin() {
-        // Retorna a lista processada pelo Service[cite: 2, 17]
-        List<PedidoAdminDTO> fila = service.listarFilaGlobalAdmin();
-        return ResponseEntity.ok(fila);
-    }
-
-    @PutMapping("/admin/chamar-proximo")
-    public ResponseEntity<PedidoCardDTO> chamarProximo() {
-        return ResponseEntity.ok(pedidoService.chamarProximoPedido());
+    @GetMapping("/admin/proximo")
+    public ResponseEntity<PedidoCardDTO> verProximo() {
+        return ResponseEntity.ok(pedidoService.verProximoDaFila());
     }
 
     @PutMapping("/{id}/concluir")
@@ -131,5 +125,25 @@ public class PedidoController {
     @GetMapping("/fila/status-geral")
     public ResponseEntity<StatusFilaDTO> getStatusFilaGeral() {
         return ResponseEntity.ok(pedidoService.obterStatusFilaGeral());
+    }
+
+    //     @GetMapping("/admin/fila")
+    // public ResponseEntity<List<PedidoAdminDTO>> listarFilaParaAdmin() {
+    //     // Retorna a lista processada pelo Service[cite: 2, 17]
+    //     List<PedidoAdminDTO> fila = pedidoService.listarFilaGlobalAdmin();
+    //     return ResponseEntity.ok(fila);
+    // }
+
+
+    // No seu PedidoController[cite: 18]
+    // Unificado: Agora aceita os parâmetros da barra de busca e do select
+    @GetMapping("/admin/fila")
+    public ResponseEntity<List<PedidoAdminDTO>> listarFilaParaAdmin(
+            @RequestParam(required = false) String termo,
+            @RequestParam(required = false) String status) {
+
+        // Chama a lógica de busca dinâmica do Service
+        List<PedidoAdminDTO> fila = pedidoService.buscarFilaAdminFiltrada(termo, status);
+        return ResponseEntity.ok(fila);
     }
 }

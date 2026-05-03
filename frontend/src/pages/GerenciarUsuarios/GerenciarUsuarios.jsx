@@ -90,7 +90,7 @@ export default function GerenciarUsuarios() {
                 </div>
                 <nav className="sidebar-nav">
                     <div className="nav-item" onClick={() => navigate('/admin')}><LayoutDashboard size={20} /> <span>Dashboard</span></div>
-                    <div className="nav-item" onClick={() => navigate('/admin/pedidos')}><ListOrdered size={20} /> <span>Fila de Pedidos</span></div>
+                    <div className="nav-item" onClick={() => navigate('/admin/fila-pedidos')}><ListOrdered size={20} /> <span>Fila de Pedidos</span></div>
                     <div className="nav-item active"><Users size={20} /> <span>Gerenciar Usuários</span></div>
                     <div className="nav-item" onClick={() => navigate('/admin/configuracoes')}><Settings size={20} /> <span>Configurações</span></div>
                     <div className="nav-item" onClick={() => navigate('/admin/relatorios')}><BarChart3 size={20} /> <span>Relatórios</span></div>

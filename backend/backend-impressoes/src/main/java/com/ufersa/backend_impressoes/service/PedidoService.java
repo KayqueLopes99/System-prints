@@ -51,24 +51,11 @@ public class PedidoService {
     @Autowired
     private NotificacaoService notificacaoService;
 
-    // Constantes de preço (Poderiam vir do banco futuramente)
-    // private final double PRECO_PB = 0.15;
-    // private final double PRECO_COLORIDO = 1.00;
-
-    // // Novas constantes para Encadernação
-    // private final double PRECO_BASE_ENCADERNACAO = 5.00; // Valor da capa +
-    // espiral
-    // private final double PRECO_FOLHA_ENCADERNACAO = 0.15; // R$ 1,50 / 10 folhas
-
-    // --- REMOVA AS CONSTANTES ANTIGAS ---
-    // private final double PRECO_PB = 0.15; ... (apague todas)
-
-    // --- ADICIONE ESTAS INJEÇÕES ---
     @Autowired
-    private ServicoRepository servicoRepository; // Para buscar os preços ID 1, 2, 3 e 4
+    private ServicoRepository servicoRepository;
 
     @Autowired
-    private ConfiguracaoService configuracaoService; // Para verificar se o setor está aberto
+    private ConfiguracaoService configuracaoService;
 
     // --- ADICIONE ESTE MÉTODO AUXILIAR NO FINAL DA CLASSE ---
     private Double buscarPrecoPorId(Integer id) {
@@ -92,8 +79,6 @@ public class PedidoService {
     public List<PedidoCardDTO> listarPedidosAtivos(int idUsuario) {
         List<StatusPedido> statusAtivos = Arrays.asList(
                 StatusPedido.PENDENTE,
-                StatusPedido.NA_FILA,
-                StatusPedido.IMPRIMINDO,
                 StatusPedido.PRONTO);
 
         // Busca no banco
@@ -238,21 +223,20 @@ public class PedidoService {
 
     // 2. Listar Fila Global (Visão do Admin)
     public List<PedidoCardDTO> listarFilaGlobalAdminPedido() {
-        List<StatusPedido> statusAtivos = Arrays.asList(StatusPedido.PENDENTE, StatusPedido.NA_FILA,
-                StatusPedido.IMPRIMINDO);
+        List<StatusPedido> statusAtivos = Arrays.asList(StatusPedido.PENDENTE);
         return pedidoRepository.findByStatusFilaInOrderByDataHoraAsc(statusAtivos)
                 .stream().map(PedidoCardDTO::new).collect(Collectors.toList());
     }
 
     // 3. Chamar o próximo da fila (Admin)[cite: 17]
-    @Transactional
-    public PedidoCardDTO chamarProximoPedido() {
-        List<StatusPedido> statusAguardando = Arrays.asList(StatusPedido.PENDENTE, StatusPedido.NA_FILA);
-        Pedido proximo = pedidoRepository.findFirstByStatusFilaInOrderByDataHoraAsc(statusAguardando)
+    // Versão apenas para consulta (sem mudar status)
+    public PedidoCardDTO verProximoDaFila() {
+        // Busca o primeiro que estiver PENDENTE, seguindo a ordem de chegada
+        Pedido proximo = pedidoRepository.findFirstByStatusFilaInOrderByDataHoraAsc(
+                Arrays.asList(StatusPedido.PENDENTE))
                 .orElseThrow(() -> new RuntimeException("Não há pedidos aguardando na fila."));
 
-        proximo.setStatusFila(StatusPedido.IMPRIMINDO);
-        return new PedidoCardDTO(pedidoRepository.save(proximo));
+        return new PedidoCardDTO(proximo);
     }
 
     // 4. Concluir Impressão (Admin)[cite: 17]
@@ -272,20 +256,12 @@ public class PedidoService {
     }
 
     public NivelOcupacao obterNivelOcupacao() {
-        List<StatusPedido> statusAtivos = Arrays.asList(
-                StatusPedido.PENDENTE,
-                StatusPedido.NA_FILA,
-                StatusPedido.IMPRIMINDO);
-
-        long totalPedidos = pedidoRepository.countByStatusFilaIn(statusAtivos);
-
-        if (totalPedidos <= 4) {
+        long totalPedidos = pedidoRepository.countByStatusFila(StatusPedido.PENDENTE);
+        if (totalPedidos <= 4)
             return NivelOcupacao.BAIXA;
-        } else if (totalPedidos <= 7) {
+        if (totalPedidos <= 7)
             return NivelOcupacao.MODERADA;
-        } else {
-            return NivelOcupacao.CHEIA;
-        }
+        return NivelOcupacao.CHEIA;
     }
 
     // 2. Status da Fila Geral (Badge de Ocupação) atualizado
@@ -321,12 +297,6 @@ public class PedidoService {
             case PENDENTE:
                 titulo = "Pedido Recebido";
                 mensagem = "Seu pedido #" + pedido.getIdPedido() + " foi recebido e está aguardando análise.";
-                break;
-            case IMPRIMINDO:
-                titulo = "Pedido em Impressão";
-                mensagem = "O serviço de " + (pedido
-                        .getNomeArquivoOriginal() != null ? "impressão" : "encadernação")
-                        + " #" + pedido.getIdPedido() + " começou!";
                 break;
             case PRONTO:
                 titulo = "Pedido Pronto!";
@@ -415,15 +385,41 @@ public class PedidoService {
     }
 
     public List<PedidoAdminDTO> listarFilaGlobalAdmin() {
-    // Busca apenas os status que fazem parte da fila de trabalho do admin
-    List<StatusPedido> statusAtivos = Arrays.asList(
-        StatusPedido.PENDENTE, 
-        StatusPedido.PRONTO
-    );
+        // Busca apenas os status que fazem parte da fila de trabalho do admin
+        List<StatusPedido> statusAtivos = Arrays.asList(
+                StatusPedido.PENDENTE,
+                StatusPedido.PRONTO);
 
-    return pedidoRepository.findByStatusFilaInOrderByDataHoraAsc(statusAtivos)
-            .stream()
-            .map(PedidoAdminDTO::new) // Utiliza o construtor da DTO para mapear os dados[cite: 2]
-            .collect(Collectors.toList());
-}
+        return pedidoRepository.findByStatusFilaInOrderByDataHoraAsc(statusAtivos)
+                .stream()
+                .map(PedidoAdminDTO::new) // Utiliza o construtor da DTO para mapear os dados[cite: 2]
+                .collect(Collectors.toList());
+    }
+
+    public List<PedidoAdminDTO> buscarFilaAdminFiltrada(String termo, String statusStr) {
+        StatusPedido status = null;
+
+        if (statusStr != null && !statusStr.equalsIgnoreCase("TODOS")) {
+            try {
+                status = StatusPedido.valueOf(statusStr.toUpperCase());
+            } catch (Exception e) {
+                status = null;
+            }
+        }
+
+        // Se for a tela do estudante (termo e status nulos), filtramos apenas os
+        // ativos[cite: 15, 19]
+        if (termo == null && status == null) {
+            return pedidoRepository.findByStatusFilaInOrderByDataHoraAsc(
+                    Arrays.asList(StatusPedido.PENDENTE, StatusPedido.PRONTO))
+                    .stream()
+                    .map(PedidoAdminDTO::new)
+                    .collect(Collectors.toList());
+        }
+
+        return pedidoRepository.buscarFilaComFiltros(termo, status)
+                .stream()
+                .map(PedidoAdminDTO::new)
+                .collect(Collectors.toList());
+    }
 }

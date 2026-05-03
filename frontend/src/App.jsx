@@ -22,8 +22,7 @@ import ConfiguracoesAdmin from './pages/ConfiguracoesAdmin/ConfiguracoesAdmin';
 import GerenciarUsuarios from './pages/GerenciarUsuarios/GerenciarUsuarios';
 import Relatorios from './pages/Relatorios/Relatorios';
 import NotificacaoGeral from './pages/NotificacaoGeral/NotificacaoGeral';
-
-// 👇 NOVO: Importando a tela de Configuração do Pedido!
+import FilaPedidos  from './pages/FilaPedidos/filaPedidos';
 import PedidoConfiguracao from './pages/PedidoConfiguracao/PedidoConfiguracao'; 
 
 export default function App() {
@@ -91,6 +90,9 @@ export default function App() {
 
         {/* Rota para a tela de Notificação Geral */}
         <Route path="/admin/notificar" element={<NotificacaoGeral />} />
+
+        {/* Rota para a tela de Fila de Pedidos */}
+        <Route path="/admin/fila-pedidos" element={<FilaPedidos />} />
       </Routes>
     </Router>
   );

@@ -81,13 +81,13 @@ export default function TelaAdmin() {
                 <div className="sidebar-logo">
                     <div className="logo-icon-circle"><Settings size={24} color="#1a3a6d" /></div>
                     <div className="logo-text">
-                        <span className="ufersa-txt">UFERSA</span>
+                        <span className="ufersa-txt">Xerox</span>
                         <span className="admin-txt">Administrador</span>
                     </div>
                 </div>
                 <nav className="sidebar-nav">
                     <div className="nav-item active" onClick={() => navigate('/admin')}><LayoutDashboard size={20} /> <span>Dashboard</span></div>
-                    <div className="nav-item" onClick={() => navigate('/admin/pedidos')}><ListOrdered size={20} /> <span>Fila de Pedidos</span></div>
+                    <div className="nav-item" onClick={() => navigate('/admin/fila-pedidos')}><ListOrdered size={20} /> <span>Fila de Pedidos</span></div>
                     <div className="nav-item" onClick={() => navigate('/admin/gerenciar-usuarios')}><Users size={20} /> <span>Gerenciar Usuários</span></div>
                     <div className="nav-item" onClick={() => navigate('/admin/configuracoes')}>
                         <Settings size={20} /> <span>Configurações</span>
