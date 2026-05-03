@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-// Importando as telas
 import Login from './pages/Login/Login';
 import Cadastro from './pages/Cadastro/Cadastro';
 import RecuperarSenha from './pages/RecuperarSenha/RecuperarSenha';
@@ -43,7 +42,7 @@ export default function App() {
         {/* Rota da Tela Principal do Estudante */}
         <Route path="/estudante" element={<TelaEstudante />} />
 
-        {/* ROTA DO PERFIL */}
+        {/* Rota de perfil */}
         <Route path="/perfil" element={<Perfil />} />
 
         {/* Rota da Tela de Meus Pedidos */}
@@ -52,7 +51,7 @@ export default function App() {
         {/* Rota para a tela inicial de escolher o serviço */}
         <Route path="/novo-pedido" element={<NovoPedidoInicio />} />
 
-        {/* 👇 NOVA ROTA: Rota da Tela de Configuração e Upload */}
+        {/* Rota da Tela de Configuração e Upload */}
         <Route path="/configuracao-pedido" element={<PedidoConfiguracao />} />
 
         {/* Rota para a tela de Resumo e Pagamento */}

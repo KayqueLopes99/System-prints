@@ -6,24 +6,21 @@ import './TelaEstudante.css';
 export default function TelaEstudante() {
   const [horarios, setHorarios] = useState([]);
   const [setorAberto, setSetorAberto] = useState(true); 
-  const [naoLidas, setNaoLidas] = useState(0); // 👉 Estado para contar notificações não lidas[cite: 17]
+  const [naoLidas, setNaoLidas] = useState(0);
   const navigate = useNavigate();
   const idUsuario = localStorage.getItem('usuarioId') || 1;
 
   useEffect(() => {
-    // 1. Busca os horários de funcionamento[cite: 19]
     fetch('http://localhost:8080/api/horarios')
       .then(response => response.json())
       .then(data => setHorarios(data))
       .catch(error => console.error("Erro ao buscar horários:", error));
 
-    // 2. Busca o status dinâmico do setor (Aberto/Fechado)[cite: 19]
     fetch('http://localhost:8080/api/admin/status-setor')
       .then(res => res.json())
       .then(data => setSetorAberto(data.setorAberto))
       .catch(err => console.error("Erro ao buscar status do setor:", err));
 
-    // 3. Busca o total de notificações não lidas[cite: 7, 17]
     fetch(`http://localhost:8080/api/notificacoes/usuario/${idUsuario}/nao-lidas`)
       .then(res => res.json())
       .then(count => setNaoLidas(count))
@@ -47,7 +44,7 @@ export default function TelaEstudante() {
           style={{ cursor: 'pointer' }}
         />
         
-        {/* 👉 Sino com Badge de Notificação[cite: 17] */}
+        
         <div className="container-sino" onClick={() => navigate('/notificacoes')} style={{ cursor: 'pointer' }}>
           {naoLidas > 0 ? (
             <>

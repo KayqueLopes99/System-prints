@@ -30,33 +30,32 @@ public class AdminController {
     @Autowired
     private UsuarioService usuarioService;
 
-    // --- GESTÃO DE CONFIGURAÇÃO DO SISTEMA ---
 
-    @GetMapping("/status-setor") // + verificarStatusSetor()
+    @GetMapping("/status-setor") 
     public ConfiguracaoSistema verificarStatusSetor() {
         return configuracaoService.obterConfiguracao();
     }
 
-    @PutMapping("/status-setor") // + alterarStatusSetor()
+    @PutMapping("/status-setor") 
     public void alterarStatusSetor(@RequestParam boolean status, @RequestParam String mensagem) {
         configuracaoService.alterarStatus(status, mensagem);
     }
 
-    // --- GESTÃO DE SERVIÇOS E PREÇOS ---
+    
 
-    @GetMapping("/servicos") // + listarServicos()[cite: 9]
+    @GetMapping("/servicos") 
     public List<Servico> listarServicos() {
-        return servicoService.listarServicos(); //
+        return servicoService.listarServicos(); 
     }
 
-    @PatchMapping("/servicos/{id}/preco") // + gerenciarPreços()[cite: 9]
+    @PatchMapping("/servicos/{id}/preco") 
     public Servico gerenciarPrecos(@PathVariable Integer id, @RequestParam Double novoPreco) {
-        return servicoService.gerenciarPrecos(id, novoPreco); // [cite: 10]
+        return servicoService.gerenciarPrecos(id, novoPreco); 
     }
 
-    @PatchMapping("/servicos/{id}/disponibilidade") // + alterarDisponibilidadeServico()[cite: 9]
+    @PatchMapping("/servicos/{id}/disponibilidade") 
     public void alterarDisponibilidadeServico(@PathVariable Integer id, @RequestParam boolean disponivel) {
-        servicoService.alterarDisponibilidade(id, disponivel); // [cite: 10]
+        servicoService.alterarDisponibilidade(id, disponivel); 
     }
 
     @Autowired
@@ -75,11 +74,10 @@ public class AdminController {
         return usuarioService.listarTodos();
     }
 
-    // POST - Para cadastrar o Administrador Interno
+    
     @PostMapping("/usuarios/admin")
     public ResponseEntity<Administrador> cadastrarAdmin(@RequestBody Map<String, String> dados) {
-        // Aqui usamos o service para garantir que o tipo seja ADMINISTRADOR[cite: 12,
-        // 13]
+        
         Administrador novoAdmin = usuarioService.cadastrarAdministradorInterno(
                 dados.get("nome"),
                 dados.get("email"),
@@ -88,7 +86,7 @@ public class AdminController {
         return ResponseEntity.ok(novoAdmin);
     }
 
-    @GetMapping("/relatorios") // 👈 Verifique se o caminho está idêntico ao do React
+    @GetMapping("/relatorios")
     public ResponseEntity<RelatorioDTO> visualizarRelatorios() {
         return ResponseEntity.ok(pedidoService.gerarRelatorioCompleto());
     }

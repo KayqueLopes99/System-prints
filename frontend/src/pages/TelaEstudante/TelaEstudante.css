@@ -1,4 +1,3 @@
-/* Fundo geral da tela[cite: 18] */
 .app-container {
   background-color: #f8f7f2;
   min-height: 100vh;
@@ -28,7 +27,6 @@
   font-weight: bold;
 }
 
-/* Estilo para quando estiver aberto (Verde)[cite: 18] */
 .botao-aberto {
   background-color: #4ade80;
   color: white;
@@ -40,7 +38,6 @@
   display: inline-block;
 }
 
-/* Estilo para quando estiver fechado (Vermelho)[cite: 18] */
 .botao-fechado {
   background-color: #f87171;
   color: white;
@@ -59,7 +56,7 @@
   font-weight: bold;
 }
 
-/* --- TABELA E CONTAINER PADRÃO[cite: 18] --- */
+
 .tabela-container {
   width: 100%;
   border-radius: 12px;
@@ -95,7 +92,7 @@
   color: #a32a2a;
 }
 
-/* --- ESTILOS DO CARD DE INFO[cite: 18] --- */
+
 .info-topo-azul {
   background-color: #1d448b;
   color: white;
@@ -135,7 +132,6 @@
   font-size: 0.95rem;
 }
 
-/* NAVEGAÇÃO INFERIOR[cite: 18] */
 .navegacao-inferior {
   position: fixed;
   bottom: 0;
@@ -162,7 +158,7 @@
   color: #1d448b;
 }
 
-/* 👉 NOVOS ESTILOS PARA NOTIFICAÇÕES[cite: 16] */
+
 .container-sino {
   position: relative;
   display: flex;
@@ -174,7 +170,6 @@
   top: -5px;
   right: -5px;
   background-color: #ef4444;
-  /* Vermelho */
   color: white;
   font-size: 10px;
   font-weight: bold;

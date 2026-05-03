@@ -10,10 +10,10 @@ import com.ufersa.backend_impressoes.model.Estudante;
 
 import java.util.Map;
 import com.ufersa.backend_impressoes.dto.UsuarioAtualizacaoDTO;
-@RestController // 👉 ADICIONE ISSO
-@RequestMapping("/api/usuarios") // 👉 ADICIONE ISSO
+@RestController 
+@RequestMapping("/api/usuarios") 
 @CrossOrigin(origins = "*")
-// Permite que o seu React converse com o Java
+
 public class UsuarioController {
 
     @Autowired
@@ -22,7 +22,6 @@ public class UsuarioController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> dadosLogin) {
         try {
-            // No React você envia como "email", mas aqui tratamos como "login"
             String login = dadosLogin.get("email"); 
             String senha = dadosLogin.get("senha");
             
@@ -39,10 +38,8 @@ public class UsuarioController {
         try {
             String email = dados.get("email");
 
-            // Chama o Service que agora envia o e-mail de verdade!
             usuarioService.recuperarSenha(email);
 
-            // Mensagem atualizada para o Front-end
             return ResponseEntity.ok("E-mail de recuperação enviado com sucesso! Verifique sua caixa de entrada.");
 
         } catch (RuntimeException e) {

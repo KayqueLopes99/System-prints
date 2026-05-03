@@ -32,7 +32,6 @@ public class NotificacaoController {
         return ResponseEntity.ok().build();
     }
 
-    // Endpoint para enviar aviso a todos os usuários do sistema
     @PostMapping("/geral")
     public ResponseEntity<Void> criarNotificacaoGeral(@RequestBody NotificacaoGeralDTO dto) {
         service.cadastrarNotificacaoGeral(dto.getTitulo(), dto.getMensagem());

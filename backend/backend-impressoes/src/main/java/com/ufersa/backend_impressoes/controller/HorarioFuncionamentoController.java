@@ -14,25 +14,21 @@ public class HorarioFuncionamentoController {
     @Autowired
     private HorarioFuncionamentoService service;
 
-    // GET - Listar todos[cite: 10]
     @GetMapping
     public List<HorarioFuncionamento> obterQuadroHorarios() {
         return service.listarTodos();
     }
 
-    // POST - Cadastrar novo horário[cite: 9]
     @PostMapping
     public HorarioFuncionamento cadastrarHorario(@RequestBody HorarioFuncionamento horario) {
         return service.salvar(horario);
     }
 
-    // PUT - Atualizar horário existente[cite: 9]
     @PutMapping("/{id}")
     public HorarioFuncionamento atualizarHorario(@PathVariable Integer id, @RequestBody HorarioFuncionamento horario) {
         return service.atualizar(id, horario);
     }
 
-    // DELETE - Remover um horário[cite: 9]
     @DeleteMapping("/{id}")
     public void removerHorario(@PathVariable Integer id) {
         service.excluir(id);
