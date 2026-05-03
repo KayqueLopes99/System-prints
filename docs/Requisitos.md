@@ -1,32 +1,34 @@
 
-### 1. Requisitos Funcionais (RF)
-*Ações e funcionalidades que o sistema deve executar para os usuários.*
+# Documento de Requisitos - Sistema de Gestão de Impressões (KLIJ)
 
-* **RF01 - Cadastro de Usuários:** O sistema deve permitir a criação de contas para estudantes, professores e atendentes, coletando dados como nome, matrícula, e-mail e curso.
-* **RF02 - Autenticação e Recuperação (Login/Logout):** O sistema deve autenticar usuários utilizando credenciais acadêmicas e oferecer a opção de redefinição de senha via e-mail.
-* **RF03 - Gestão de Perfil e Preferências:** O sistema deve permitir que o usuário visualize e atualize suas informações de contato e ajuste configurações do sistema (ex: ativar notificações).
-* **RF04 - Controle de Acesso:** O sistema deve ter interfaces diferentes baseadas no perfil do usuário (visão do cliente vs. painel da atendente).
-* **RF05 - Envio Remoto de Arquivos:** O sistema deve permitir o upload de arquivos (PDF, DOCX, etc.) de forma remota, exibindo o tamanho do arquivo e a quantidade de páginas identificadas.
-* **RF06 - Configuração de Impressão e Serviços:** O sistema deve permitir que o estudante selecione parâmetros precisos (frente e verso, orientação, tipo de cor, tamanho do papel) diretamente na plataforma.
-* **RF07 - Catálogo Expandido de Serviços:** O sistema deve exibir os serviços oferecidos (impressão, encadernação, plotagem, digitalização) e seus respectivos custos unitários.
-* **RF08 - Acompanhamento de Status:** O sistema deve mostrar em que etapa o pedido está (ex: pendente, na fila, imprimindo, pronto, cancelado).
-* **RF09 - Estimativa de Fila e Tempo:** O sistema deve informar ao estudante a sua posição atual na fila e uma estimativa de tempo para a conclusão do serviço.
-* **RF10 - Cancelamento de Pedido:** O sistema deve permitir que o usuário cancele um pedido caso este ainda esteja com o status "Pendente" ou "Na Fila".
-* **RF11 - Central de Notificações:** O sistema deve possuir uma aba para armazenar o histórico de alertas e notificar o usuário quando o material estiver pronto para retirada.
-* **RF12 - Gestão de Fila (Painel da Atendente):** O sistema deve organizar as solicitações recebidas em uma fila virtual sequencial para a administração do setor.
-* **RF13 - Gestão de Pagamentos:** O sistema deve registrar o método de pagamento escolhido (ex: PIX, Dinheiro) e o status da cobrança de cada pedido.
-* **RF14 - Dashboard de Estatísticas do Usuário:** O sistema deve apresentar um resumo do histórico do aluno, exibindo o total de pedidos realizados, páginas impressas e o valor total já gasto no setor.
-* **RF15 - Exibição de Horários e Status do Setor:** O sistema deve exibir um quadro com os horários de funcionamento e indicar em tempo real se o setor está "Aberto" ou "Fechado".
+### 1. Requisitos Funcionais (RF)
+*Funcionalidades reais implementadas no sistema.*
+
+*   **RF01 - Cadastro e Perfis de Usuário:** O sistema permite a criação de contas para **Estudantes** (com matrícula e curso) e **Administradores** (com cargo/setor)[cite: 13].
+*   **RF02 - Autenticação Segura:** O sistema autentica usuários via e-mail e senha, gerenciando sessões distintas para a visão do cliente e o painel administrativo[cite: 13].
+*   **RF03 - Recuperação de Senha:** O sistema oferece fluxo de redefinição de senha utilizando códigos de verificação e expiração por tempo[cite: 13].
+*   **RF04 - Gestão de Perfil:** O usuário pode visualizar seus dados e atualizar preferências, como o recebimento de notificações[cite: 13].
+*   **RF05 - Upload de Arquivos PDF:** O sistema permite o envio de arquivos no formato **PDF**, armazenando os dados brutos (`BYTEA`) diretamente no banco de dados para segurança e integridade.
+*   **RF06 - Configuração Personalizada:** O estudante define parâmetros de impressão como: quantidade de cópias, tamanho do papel (A4), orientação (Retrato/Paisagem), cor (P&B/Colorido) e frente e verso[cite: 13].
+*   **RF07 - Catálogo de Serviços e Preços:** O sistema gerencia dois serviços principais: **Impressão** (P&B e Colorida) e **Encadernação** (valor base + adicional por folha)[cite: 13].
+*   **RF08 - Monitoramento de Status da Fila:** O sistema exibe o progresso do pedido através dos status: **PENDENTE, PRONTO, CONCLUIDO e CANCELADO**[cite: 13].
+*   **RF09 - Estimativa de Tempo e Ocupação:** O sistema calcula e informa a posição na fila, o número de pessoas aguardando e o tempo estimado para retirada[cite: 13].
+*   **RF10 - Regra de Cancelamento:** O estudante pode cancelar um pedido de forma autônoma apenas dentro do prazo de **5 minutos** após a criação, desde que ainda não tenha sido processado.
+*   **RF11 - Central de Notificações:** O sistema armazena alertas e notifica o usuário em tempo real quando o administrador altera o status para "Pronto para Retirada"[cite: 13].
+*   **RF12 - Gestão Administrativa da Fila:** O painel do administrador permite visualizar a fila global, filtrar pedidos por nome/ID e baixar o arquivo original para impressão[cite: 13].
+*   **RF13 - Métodos de Pagamento:** O sistema registra a intenção de pagamento nos métodos: **PIX, Dinheiro ou Cartão**, para validação no balcão[cite: 13].
+*   **RF14 - Histórico e Estatísticas do Estudante:** O aluno possui um dashboard com o total de pedidos realizados, páginas acumuladas e valor total gasto no setor[cite: 13].
+*   **RF15 - Status do Setor e Horários:** O sistema exibe se o setor está "Aberto" ou "Fechado" e apresenta o quadro completo de horários de funcionamento por turno (Manhã, Tarde e Noite)[cite: 13].
+*   **RF16 - Relatórios e Inteligência (Admin):** O administrador pode gerar relatórios de faturamento mensal e visualizar estatísticas de uso do setor[cite: 12, 13].
 
 ---
 
 ### 2. Requisitos Não Funcionais (RNF)
-*Critérios de qualidade, segurança e performance do sistema.*
+*Qualidade, performance e restrições técnicas.*
 
-* **RNF01 - Usabilidade e Prevenção de Erros:** A interface deve ser altamente intuitiva e fornecer avisos/confirmações antes do envio do pedido, reduzindo a chance de o aluno errar a configuração da impressão.
-* **RNF02 - Feedback em Tempo Real:** O sistema deve informar instantaneamente o sucesso ou falha de ações (ex: upload concluído, senha incorreta).
-* **RNF03 - Disponibilidade Multiplataforma:** O sistema deve funcionar via web (navegador) para ser acessado de qualquer dispositivo pessoal (celulares e computadores).
-* **RNF04 - Segurança e Privacidade de Dados:** O sistema deve criptografar senhas (hash) e proteger os documentos enviados e os dados pessoais dos alunos, seguindo as diretrizes da LGPD.
-* **RNF05 - Desempenho e Escalabilidade:** O sistema deve suportar múltiplos uploads de arquivos e usuários simultâneos sem apresentar lentidão, processando arquivos de até um tamanho máximo predefinido (ex: 50MB).
+*   **RNF01 - Armazenamento Binário:** Documentos enviados não são salvos em pastas locais, mas como objetos binários (`BYTEA`) no PostgreSQL para garantir que o Admin sempre tenha acesso ao arquivo original[cite: 13].
+*   **RNF02 - Consistência de Dados (Enums):** O sistema utiliza tipos enumerados (Enums) tanto no Java quanto no Banco de Dados para garantir que nenhum pedido assuma um status inválido[cite: 13].
+*   **RNF03 - Responsividade Mobile-First:** A interface React foi projetada para funcionar perfeitamente em dispositivos móveis, facilitando o envio de arquivos por estudantes em deslocamento[cite: 13].
+*   **RNF04 - Segurança de Acesso:** O sistema protege rotas sensíveis, impedindo que um estudante acesse o painel administrativo ou visualize arquivos de outros usuários[cite: 13].
+*   **RNF05 - Comunicação Multipart:** O envio de pedidos utiliza o protocolo `multipart/form-data`, permitindo o envio simultâneo de metadados (JSON) e arquivos físicos (Blob).
 
----

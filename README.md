@@ -1,47 +1,63 @@
-#  Sistema de Gerenciamento de Impressões (Full-Stack)
+# Sistema de Gerenciamento de Impressões 
 
-Este é o projeto completo (Front-End e Back-End) do **Sistema de Gerenciamento e Administração de Impressões para Estudantes**, desenvolvido para facilitar a solicitação, acompanhamento e gerenciamento de serviços de impressão e encadernação universitária.
+Este é um sistema desenvolvido para facilitar a solicitação, acompanhamento e administração de serviços de impressão e encadernação universitária. O projeto integra uma interface moderna em React com um back-end em Spring Boot e armazenamento seguro de arquivos em PostgreSQL.
 
-## Funcionalidades (Em desenvolvimento):
+## Principais Funcionalidades
 
+O sistema cobre todo o fluxo operacional do setor de xerox:
 
+*   **Perfis de Acesso**: Interfaces distintas para **Estudantes** (solicitação e acompanhamento) e **Administradores** (gestão de fila e financeiro).
+*   **Upload e Configuração de PDF**: Envio remoto de arquivos com seleção de parâmetros como cor (P&B/Colorido), orientação, frente e verso e quantidade de cópias.
+*   **Cálculo Automático e Encadernação**: Cálculo de preço em tempo real, suportando serviços de encadernação com valor base e adicional por folha.
+*   **Gestão de Fila em Tempo Real**: Monitoramento de status (PENDENTE, PRONTO, CONCLUIDO, CANCELADO) e estimativa de tempo de espera.
+*   **Notificações Instantâneas**: Alertas automáticos para o aluno quando o pedido está pronto para retirada.
+*   **Dashboard Administrativo**: Painel para o gestor com relatórios de faturamento, ticket médio e estatísticas de uso do setor.
+*   **Segurança de Documentos**: Armazenamento binário de arquivos (`BYTEA`) no banco de dados, garantindo que o arquivo original nunca se perca.
 
 ## Tecnologias Utilizadas
-O projeto foi construído utilizando as seguintes tecnologias:
 
-* **React**.
-* **Java 21**
-* **Spring Boot 3.x**.
-* **PostgreSQL**.
+*   **Front-End**: React.js, Lucide React (ícones), Axios (integração).
+*   **Back-End**: Java 21, Spring Boot 3.x, Spring Data JPA.
+*   **Banco de Dados**: PostgreSQL com tipos enumerados (Enums).
 
-## Pré-requisitos
+## Bibliotecas Adicionais Necessárias
 
-Antes de rodar o projeto localmente, certifique-se de ter as seguintes ferramentas instaladas:
+Para o funcionamento correto da contagem de páginas e dos relatórios, instale as seguintes dependências na pasta do **Front-End**:
 
-* [Node.js](https://nodejs.org/) (Necessário para rodar o Front-End).
-* [Java Development Kit (JDK) 21+](https://adoptium.net/) (Necessário para rodar o Back-End).
-* [PostgreSQL](https://www.postgresql.org/download/) instalado e rodando na sua máquina.
-* Uma IDE de sua preferência (VS Code, IntelliJ IDEA).
+### 1. Processamento de PDF (pdf-lib)
+Utilizada para contar automaticamente as páginas do arquivo enviado pelo aluno.
+```bash
+npm install pdf-lib
+```
+
+### 2. Relatórios Administrativos (jsPDF)
+Utilizada para gerar os relatórios de faturamento e estatísticas no painel do administrador.
+```bash
+npm install jspdf jspdf-autotable
+```
 
 ## Configuração do Banco de Dados
 
-1. Abra o **pgAdmin** ou o terminal do seu PostgreSQL.
-2. Crie um banco de dados vazio com o nome exato de: `sistema_impressoes`.
-3. Navegue até a pasta do backend, abra o arquivo `src/main/resources/application.properties` e confirme se o usuário e senha correspondem aos do seu banco local:
+1.  Crie um banco de dados no PostgreSQL chamado: `sistema_impressoes`.
+2.  Execute o script SQL fornecido para criar as tabelas e tipos `ENUM`.
+3.  **Importante**: Certifique-se de que a coluna `dados_arquivo BYTEA` na tabela `pedido` foi criada, pois ela armazena o arquivo físico para o administrador baixar.
 
-```properties
-spring.datasource.username=seu_usuario
-spring.datasource.password=sua_senha
-```
-
-## Como executar o projeto
+## Como Executar o Projeto
 
 ### 1. Rodando o Back-End (Spring Boot)
-Abra um **novo** terminal, navegue até a pasta do frontend e execute os comandos:
-```bash
-npm install
-npm run dev
-```
-*(O site abrirá no seu navegador, geralmente no link `http://localhost:5173`)*
+1.  Configure suas credenciais em `src/main/resources/application.properties`.
+2.  Execute o projeto através da sua IDE ou comando Maven:
+    ```bash
+    ./mvnw spring-boot:run
+    ```
+    *(O servidor rodará em `http://localhost:8080`)*
+
+### 2. Rodando o Front-End (React)
+1.  Navegue até a pasta do frontend:
+    ```bash
+    npm install
+    npm run dev
+    ```
+    *(O site abrirá geralmente em `http://localhost:5173`)*
 
 ---

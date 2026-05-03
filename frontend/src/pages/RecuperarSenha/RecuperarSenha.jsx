@@ -73,7 +73,7 @@ export default function RecuperarSenha() {
       <div className="card-interface">
         
         <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start', marginBottom: '10px' }}>
-          <button className="btn-voltar" onClick={() => window.history.back()} title="Voltar">
+          <button className="btn-voltar" onClick={() => window.history.back()} title="Voltar"> Voltar
             <FiArrowLeft size={24} />
           </button>
         </div>

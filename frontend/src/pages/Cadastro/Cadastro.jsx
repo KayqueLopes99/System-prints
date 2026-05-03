@@ -165,7 +165,7 @@ export default function Cadastro() {
           <>
             <div className="cabecalho-simples">
               <button className="btn-voltar" onClick={() => window.history.back()} title="Voltar">
-                <FiArrowLeft size={24} />
+                <FiArrowLeft size={24} /> Voltar
               </button>
               <h2>Criar Conta</h2>
             </div>

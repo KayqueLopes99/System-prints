@@ -1,21 +1,26 @@
 @startuml diagram
-' Configurações visuais para deixar o diagrama mais limpo e profissional
+
 hide circle
 skinparam linetype ortho
 skinparam shadowing false
+
+
+skinparam classAttributeIconSize 0
+
 skinparam class {
     BackgroundColor White
-    ArrowColor #26d451
-    BorderColor #0b3203
+    ArrowColor #0e02fa
+    BorderColor #000000
+    AttributeFontColor #000000
+    MethodFontColor #0b3203
 }
 
-' --- Definição dos ENUMS ---
 enum CategoriaServico {
   IMPRESSAO
   ENCADERNACAO
 }
 
-enum StatusFila {
+enum StatusPedido {
   PENDENTE
   PRONTO
   CONCLUIDO
@@ -32,26 +37,26 @@ enum TipoCor {
   COLORIDO
 }
 
-enum MetodoPagamento {
+enum TipoPagamento {
   PIX
   DINHEIRO
   CARTAO
 }
 
-' --- Definição das Classes (Tabelas + Métodos) ---
-
+' --- Definição das Classes ---
 class "Usuario" as usuario {
   - id_usuario : int
   - nome_completo : String
   - email : String
   - senha : String
+  - preferencias_notificacao : boolean[cite: 11]
   ==
-  + autenticarUsuario() // concluido
-  + visualizarPerfil() // concluido
-  + atualizarPerfil() // concluido
-  + recuperarSenha() // concluido
-  + alterarSenha() // concluido
-  + cadastrarUsuario() // concluido
+  + autenticarUsuario() 
+  + visualizarPerfil() 
+  + atualizarPerfil() 
+  + recuperarSenha() 
+  + alterarSenha() 
+  + cadastrarUsuario() 
 }
 
 class "Estudante" as estudante {
@@ -64,101 +69,93 @@ class "Estudante" as estudante {
 class "Administrador" as admin {
   --
   ==
-  ' Gestão de Pessoas e Acessos
-  + cadastrarAdministradorInterno() // concluido
-  + gerenciarUsuarios() // concluido
-  
-  ' Gestão Operacional da Fila (Métodos do PedidoService)
+  + cadastrarAdministradorInterno() 
+  + gerenciarUsuarios() 
   + listarFilaGlobalAdmin() 
+  + buscarFilaAdminFiltrada(termo, status)
   + chamarProximoPedido() 
   + concluirImpressao(idPedido: int) 
+  + atualizarStatusPedido(idPedido, status)
   + obterDetalhesPedido(idPedido: int) 
   + obterNivelOcupacao() 
   + obterStatusFilaGeral()
-  
-  ' Gestão de Configurações e Preços
-  + verificarStatusSetor() // concluido
-  + alterarStatusSetor(status: boolean, mensagem: String) // concluido
-  + gerenciarPreços(idServico: int, novoPreco: double) // concluido
-  + alterarDisponibilidadeServico(idServico: int, disponivel: boolean) // concluido
-  
-  ' Gestão de Horários // concluido
+  + verificarStatusSetor() 
+  + alterarStatusSetor(status: boolean, mensagem: String) 
+  + gerenciarPreços(idServico: int, novoPreco: double) 
+  + alterarDisponibilidadeServico(idServico: int, disponivel: boolean) 
   + gerenciarHorarios() 
   + cadastrarHorario(dados)
   + atualizarHorario(id, dados)
   + obterQuadroHorariosCompleto()
-  
-  ' Comunicação e Inteligência
   + visualizarRelatorios() 
+  + gerarRelatorioCompleto()
+  + obterEstatisticasGerais()
   + cadastarNotificacao(titulo, mensagem, idUsuario) 
   + gerenciarSolicitacoes() 
 }
 
-class "Servico" as servico {
-  - id_servico : int <<PK>>
-  --
-  - categoria_servico : CategoriaServico
-  - preco_unitario : double
-  - disponivel : boolean
-  ==
-  + listarServicos() : List<Servico>
-}
-
 class "Pedido" as pedido {
-  - id_pedido : int <<PK>>
+  - id_pedido : int 
   --
-  - id_usuario : int <<FK>>
+  - id_usuario : int 
   - data_hora : Datetime
-  - status_fila : StatusFila
-  - arquivo_url : String
+  - status_fila : StatusPedido
+  - dados_arquivo : byte[]
   - nome_arquivo_original : String
   - tamanho_arquivo_mb : double
   - total_paginas_arquivo : int
   - valor_total : double
   ==
-  + confirmarPedido() // concluido
-  + cancelarPedido() // concluido
-
+  + confirmarPedido() 
+  + cancelarPedido() 
   + cancelarPedidoAdmin() 
-
-  + atualizarStatusPedido() // concluido
-
-  + obterPosicaoFila() // concluido
-  + estimarTempoFila() // concluido
-  + listarFilaDePedidos() // concluido
-
-  + obterEstatisticasUsuario() // concluido 
-  + listarPedidosAtivos() // concluido
-  + listarPedidosHistorico() // concluido
-  + listarPedidosPorStatus(status) // concluido
+  + atualizarStatusPedido() 
+  + obterPosicaoFila() 
+  + estimarTempoFila() 
+  + listarFilaDePedidos() 
+  + obterEstatisticasUsuario()  
+  + listarPedidosAtivos() 
+  + listarPedidosHistorico() 
+  + listarPedidosPorStatus(status) 
 }
 
 class "Item_Pedido" as item_pedido {
-  - id_item : int <<PK>>
+  - id_item : int 
   --
-  - id_pedido : int <<FK>>
-  - id_servico : int <<FK>>
+  - id_pedido : int 
+  - id_servico : int 
   - quantidade : int
   - tamanho_papel : String
   - orientacao : Orientacao
   - frente_verso : boolean
   - tipo_cor : TipoCor
+  - tipo_servico : CategoriaServico
   ==
 }
 
 class "Pagamento" as pagamento {
-  - id_pagamento : int <<PK>>
+  - id_pagamento : int 
   --
-  - id_pedido : int <<FK>>
-  - metodo : MetodoPagamento
+  - id_pedido : int 
+  - metodo : TipoPagamento
   ==
-  + registrarPagamento(idPedido, metodo) // concluido
+  + registrarPagamento(idPedido, metodo) 
+}
+
+class "Servico" as servico {
+  - id_servico : int 
+  --
+  - categoria_servico : CategoriaServico
+  - preco_unitario : double
+  - disponivel : boolean
+  ==
+  
 }
 
 class "Notificacao" as notificacao {
-  - id_notificacao : int <<PK>>
+  - id_notificacao : int 
   --
-  - id_usuario : int <<FK>>
+  - id_usuario : int 
   - titulo : String
   - mensagem : String
   - lida : boolean
@@ -168,39 +165,33 @@ class "Notificacao" as notificacao {
   + marcarComoLida() 
 }
 
+' ... Restante das classes e relacionamentos (Mantidos) ...
 class "Horario_Funcionamento" as horario {
-  - id_horario : int <<PK>>
+  - id_horario : int 
   --
   - dia_semana : String
   - manha : String
   - tarde : String
   - noite : String
-  ==
-
 }
 
 class "Configuracao_Sistema" as config {
-  - id_config : int <<PK>>
+  - id_config : int 
   --
   - setor_aberto : boolean
   - mensagem_aviso : String
   ==
   + enviarNotificacao(idUsuario, mensagem) : void
-  + obterQuadroHorariosCompleto() // concluido
+  + obterQuadroHorariosCompleto() 
 }
-
-' --- Definição dos Relacionamentos ---
 
 usuario <|-- estudante
 usuario <|-- admin
-
-
 usuario ||--o{ notificacao : "recebe"
 pedido ||--|{ item_pedido : "contém"
 servico ||--o{ item_pedido : "é adicionado em"
 pedido ||--o| pagamento : "possui"
 config ||--o{ horario : "possui"
-
 estudante "1   " -- "0..*  " pedido : "realiza"
 admin "1   " -- "0..*  " config : "gerencia"
 admin "1   " -- "0..*  " pedido : "gerencia"
