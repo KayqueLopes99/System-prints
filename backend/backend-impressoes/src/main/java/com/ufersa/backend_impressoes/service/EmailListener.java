@@ -14,7 +14,6 @@ public class EmailListener {
     @Autowired
     private JavaMailSender mailSender;
 
-    // Esse método roda automaticamente em segundo plano toda vez que algo cai na fila
     @RabbitListener(queues = RabbitMQConfig.FILA_EMAIL)
     public void escutarFilaDeEmail(EmailMensagemDTO mensagem) {
         try {
@@ -33,7 +32,6 @@ public class EmailListener {
 
         } catch (Exception e) {
             System.err.println("Erro ao tentar enviar o e-mail na fila: " + e.getMessage());
-            // Aqui poderíamos jogar para uma fila de "erros" (Dead Letter Queue) futuramente!
         }
     }
 }

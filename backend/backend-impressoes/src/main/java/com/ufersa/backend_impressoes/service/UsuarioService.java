@@ -26,7 +26,6 @@ public class UsuarioService {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    // 1. Autenticação (E-mail ou Matrícula)
     public Usuario autenticarUsuario(String login, String senhaDigitada) {
         Optional<Usuario> usuarioNoBanco = usuarioRepository.findByEmailOrMatricula(login);
 
@@ -36,7 +35,6 @@ public class UsuarioService {
         throw new RuntimeException("E-mail/Matrícula ou senha incorretos.");
     }
 
-    // 2. Recuperação de Senha via RabbitMQ
     public void recuperarSenha(String email) {
         Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(email);
 
@@ -56,7 +54,6 @@ public class UsuarioService {
         }
     }
 
-    // 3. Alteração de Senha (via link de e-mail)
     public void alterarSenha(String codigo, String novaSenha) {
         Optional<Usuario> usuarioOptional = usuarioRepository.findByCodigoRecuperacao(codigo);
 
@@ -76,7 +73,6 @@ public class UsuarioService {
         }
     }
 
-    // 4. Cadastro Inicial
     public Usuario cadastrarUsuario(Usuario novoUsuario) {
         if (usuarioRepository.findByEmail(novoUsuario.getEmail()).isPresent()) {
             throw new RuntimeException("Erro: Este e-mail já está em uso!");
@@ -84,13 +80,11 @@ public class UsuarioService {
         return usuarioRepository.save(novoUsuario);
     }
 
-    // 5. Visualizar Perfil
     public Usuario visualizarPerfil(int idUsuario) {
         return usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new RuntimeException("Utilizador não encontrado."));
     }
 
-    // 6. Atualizar Perfil (Lidando com Herança de Estudante)
     public Usuario atualizarPerfil(int idUsuario, UsuarioAtualizacaoDTO dto) {
         Usuario usuarioExistente = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new RuntimeException("Utilizador não encontrado."));
@@ -116,23 +110,21 @@ public class UsuarioService {
     }
 
 
-    // 1. Cadastrar Administrador Interno[cite: 19]
     public Administrador cadastrarAdministradorInterno(String nome, String email, String senha, String cargo) {
         Administrador admin = new Administrador();
         admin.setNomeCompleto(nome);
         admin.setEmail(email);
-        admin.setSenha(senha); // Lembre-se de criptografar a senha futuramente
+        admin.setSenha(senha); 
         admin.setCargoSetor(cargo);
         
         return usuarioRepository.save(admin);
     }
 
-    // 2. Listar todos os usuários
+
     public List<Usuario> listarTodos() {
         return usuarioRepository.findAll();
     }
 
-    // 3. Buscar usuários por nome
     public List<Usuario> buscarPorNome(String nome) {
         return usuarioRepository.findByNomeCompletoContainingIgnoreCase(nome);
     }

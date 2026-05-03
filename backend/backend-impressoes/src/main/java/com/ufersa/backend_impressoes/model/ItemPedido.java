@@ -6,7 +6,6 @@ import com.ufersa.backend_impressoes.model.enuns.Orientacao;
 import com.ufersa.backend_impressoes.model.enuns.TipoCor;
 import com.ufersa.backend_impressoes.model.enuns.CategoriaServico;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,8 +22,6 @@ public class ItemPedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_item")
     private int idItem;
-
-
 
     @ManyToOne
     @JoinColumn(name = "id_pedido", nullable = false)

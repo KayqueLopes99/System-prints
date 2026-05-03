@@ -8,12 +8,12 @@ import java.time.LocalDateTime;
 @Data
 public class PedidoAdminDTO {
     private int idPedido;
-    private int idUsuario; // Necessário para o findIndex (Sua Posição)
+    private int idUsuario; 
     private String nomeEstudante;
     private String nomeArquivo;
     private String tipoServico;
-    private Integer totalPaginasArquivo; // Necessário para as tags[cite: 15, 17]
-    private String detalhesImpressao; // Ex: "A4 • P&B"
+    private Integer totalPaginasArquivo; 
+    private String detalhesImpressao; 
     private LocalDateTime dataHora;
     private String status;
 
@@ -30,7 +30,6 @@ public class PedidoAdminDTO {
             ItemPedido item = p.getItens().get(0);
             this.tipoServico = item.getTipoServico().name();
             
-            // Formata detalhes como no PedidoCardDTO[cite: 17]
             String cor = (item.getTipoCor() != null && item.getTipoCor().name().equals("PRETO_BRANCO")) ? "P&B" : "Colorido";
             this.detalhesImpressao = item.getTamanhoPapel() + " • " + cor;
         } else {

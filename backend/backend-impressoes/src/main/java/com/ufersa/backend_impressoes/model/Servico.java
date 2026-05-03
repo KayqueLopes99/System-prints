@@ -15,11 +15,11 @@ public class Servico {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private CategoriaServico categoriaServico; // IMPRESSAO ou ENCADERNACAO
+    private CategoriaServico categoriaServico;
 
     @Column(name = "preco_unitario", nullable = false)
     private Double precoUnitario;
 
     @Column(nullable = false)
-    private Boolean disponivel = true; // Se o serviço está ativo no momento
+    private Boolean disponivel = true;
 }

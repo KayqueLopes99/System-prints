@@ -12,18 +12,14 @@ public class HorarioFuncionamentoService {
     @Autowired
     private HorarioFuncionamentoRepository repository;
 
-    // Listar todos (obterQuadroHorarios)[cite: 11]
     public List<HorarioFuncionamento> listarTodos() {
-        // Em vez de findAll(), use o método com OrderBy
         return repository.findAllByOrderByIdHorarioAsc();
     }
 
-    // Criar novo horário (cadastrarHorario)
     public HorarioFuncionamento salvar(HorarioFuncionamento horario) {
         return repository.save(horario);
     }
 
-    // Atualizar horário existente (atualizarHorario)[cite: 9]
     public HorarioFuncionamento atualizar(Integer id, HorarioFuncionamento dadosNovos) {
         return repository.findById(id).map(existente -> {
             existente.setDiaSemana(dadosNovos.getDiaSemana());
@@ -34,7 +30,6 @@ public class HorarioFuncionamentoService {
         }).orElseThrow(() -> new RuntimeException("Horário com ID " + id + " não encontrado."));
     }
 
-    // Remover horário (Parte do gerenciarHorarios)[cite: 9]
     public void excluir(Integer id) {
         if (!repository.existsById(id)) {
             throw new RuntimeException("Não é possível excluir: Horário não encontrado.");

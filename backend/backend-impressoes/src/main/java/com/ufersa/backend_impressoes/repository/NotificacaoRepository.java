@@ -8,9 +8,7 @@ import java.util.List;
 @Repository
 public interface NotificacaoRepository extends JpaRepository<Notificacao, Integer> {
     
-    // Lista as notificações do usuário da mais recente para a mais antiga
     List<Notificacao> findByUsuario_IdUsuarioOrderByDataHoraDesc(int idUsuario);
     
-    // Conta quantas notificações ainda não foram lidas
     long countByUsuario_IdUsuarioAndLidaFalse(int idUsuario);
 }

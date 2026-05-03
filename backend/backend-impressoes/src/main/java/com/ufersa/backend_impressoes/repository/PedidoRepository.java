@@ -14,7 +14,6 @@ import java.util.Optional;
 @Repository
 public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
 
-        // --- Buscas Padrão ---
         List<Pedido> findByUsuario_IdUsuarioAndStatusFilaInOrderByDataHoraDesc(int idUsuario,
                         List<StatusPedido> status);
 
@@ -32,7 +31,6 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
 
         long countByStatusFilaAndDataHoraAfter(StatusPedido status, LocalDateTime data);
 
-        // --- Consultas para Estatísticas de Usuário ---
         @Query("SELECT COUNT(p) FROM Pedido p WHERE p.usuario.idUsuario = :idUsuario AND p.statusFila <> com.ufersa.backend_impressoes.model.enuns.StatusPedido.CANCELADO")
         long contarPedidosPorUsuario(@Param("idUsuario") int idUsuario);
 
@@ -42,15 +40,12 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
         @Query("SELECT COALESCE(SUM(p.valorTotal), 0.0) FROM Pedido p WHERE p.usuario.idUsuario = :idUsuario AND p.statusFila <> com.ufersa.backend_impressoes.model.enuns.StatusPedido.CANCELADO")
         double somarGastoPorUsuario(@Param("idUsuario") int idUsuario);
 
-        // Contagem de pedidos na frente (agora apenas PENDENTES)[cite: 14]
         @Query("SELECT COUNT(p) FROM Pedido p WHERE p.statusFila = com.ufersa.backend_impressoes.model.enuns.StatusPedido.PENDENTE AND p.dataHora < :dataHora")
         int contarPedidosNaFrente(@Param("dataHora") LocalDateTime dataHora);
 
-        // Soma de páginas na frente (agora apenas PENDENTES)[cite: 14]
         @Query("SELECT COALESCE(SUM(p.totalPaginasArquivo), 0) FROM Pedido p WHERE p.statusFila = com.ufersa.backend_impressoes.model.enuns.StatusPedido.PENDENTE AND p.dataHora < :dataHora")
         long somarPaginasNaFrente(@Param("dataHora") LocalDateTime dataHora);
 
-        // --- Consultas para Relatórios Gerais (Admin) ---
 
         @Query("SELECT SUM(p.valorTotal) FROM Pedido p WHERE MONTH(p.dataHora) = MONTH(CURRENT_DATE) AND YEAR(p.dataHora) = YEAR(CURRENT_DATE) AND p.statusFila <> com.ufersa.backend_impressoes.model.enuns.StatusPedido.CANCELADO")
         Double somarReceitaNoMesAtual();
@@ -58,7 +53,6 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
         @Query("SELECT COUNT(DISTINCT p.usuario.idUsuario) FROM Pedido p WHERE MONTH(p.dataHora) = MONTH(CURRENT_DATE) AND YEAR(p.dataHora) = YEAR(CURRENT_DATE)")
         Long contarUsuariosDistintosNoMes();
 
-        // Removido o JOIN s.servico pois você usa o enum tipoServico diretamente
         @Query("SELECT SUM(i.quantidade) " +
                         "FROM ItemPedido i JOIN i.pedido p " +
                         "WHERE i.tipoServico = :categoria " +
@@ -81,11 +75,10 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
         @Query("SELECT COUNT(p) FROM Pedido p WHERE MONTH(p.dataHora) = MONTH(CURRENT_DATE) AND YEAR(p.dataHora) = YEAR(CURRENT_DATE) AND p.statusFila <> com.ufersa.backend_impressoes.model.enuns.StatusPedido.CANCELADO")
         long countPedidosNoMes();
 
-        // Exemplo se o campo for 'nomeCompleto'
         @Query("SELECT p FROM Pedido p " +
                         "WHERE (:status IS NULL OR p.statusFila = :status) " +
                         "AND (:termo IS NULL OR " +
-                        "LOWER(p.usuario.nomeCompleto) LIKE LOWER(CONCAT('%', :termo, '%')) OR " + // <-- AJUSTE AQUI
+                        "LOWER(p.usuario.nomeCompleto) LIKE LOWER(CONCAT('%', :termo, '%')) OR " + 
                         "LOWER(p.nomeArquivoOriginal) LIKE LOWER(CONCAT('%', :termo, '%')) OR " +
                         "CAST(p.idPedido AS string) LIKE CONCAT('%', :termo, '%')) " +
                         "ORDER BY p.dataHora ASC")

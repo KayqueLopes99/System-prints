@@ -19,7 +19,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     Optional<Usuario> findByCodigoRecuperacao(String codigoRecuperacao);
 
-    // Busca usuários cujo nome contém a sequência informada (case insensitive)
     List<Usuario> findByNomeCompletoContainingIgnoreCase(String nome);
 
 

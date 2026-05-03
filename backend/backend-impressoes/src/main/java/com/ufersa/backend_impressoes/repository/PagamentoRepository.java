@@ -9,6 +9,5 @@ import java.util.Optional;
 @Repository
 public interface PagamentoRepository extends JpaRepository<Pagamento, Integer> {
     
-    // Busca um pagamento associado a um pedido específico
     Optional<Pagamento> findByPedido_IdPedido(int idPedido);
 }

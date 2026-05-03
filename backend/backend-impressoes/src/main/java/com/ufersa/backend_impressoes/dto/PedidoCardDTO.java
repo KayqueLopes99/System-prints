@@ -20,18 +20,13 @@ public class PedidoCardDTO {
     private Double valorTotal;
     private int idUsuario;
     private CategoriaServico tipoServico;
-
-    // Essa string vai mandar formatado: "A4 • P&B • Frente e Verso" para facilitar
-    // no React
     private String detalhesImpressao;
-
     private String nomeEstudante;
 
-    // Atualize o construtor inteligente[cite: 22]
     public PedidoCardDTO(Pedido pedido) {
         this.idPedido = pedido.getIdPedido();
         this.idUsuario = pedido.getUsuario().getIdUsuario();
-        this.nomeEstudante = pedido.getUsuario().getNomeCompleto(); // Pegando do campo correto[cite: 29]
+        this.nomeEstudante = pedido.getUsuario().getNomeCompleto();
         this.dataHora = pedido.getDataHora();
         this.nomeArquivoOriginal = pedido.getNomeArquivoOriginal();
         this.statusFila = pedido.getStatusFila().name();

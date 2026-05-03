@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Administrador extends Usuario {
-    
+
     @Column(name = "cargo_setor", length = 100)
     private String cargoSetor;
 }

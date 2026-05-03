@@ -8,9 +8,7 @@ import java.util.List;
 import org.hibernate.annotations.JdbcTypeCode;
 import java.sql.Types;
 
-
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

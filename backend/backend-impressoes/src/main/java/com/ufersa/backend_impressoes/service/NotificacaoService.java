@@ -19,7 +19,6 @@ public class NotificacaoService {
 
     @Transactional
     public void gerarNotificacao(Usuario usuario, String titulo, String mensagem) {
-        // Verifica se o usuário deseja receber notificações antes de criar
         if (usuario.getPreferenciasNotificacao()) {
             Notificacao n = new Notificacao();
             n.setUsuario(usuario);
@@ -47,19 +46,14 @@ public class NotificacaoService {
         return repository.countByUsuario_IdUsuarioAndLidaFalse(idUsuario);
     }
 
-    // Adicione o UsuarioRepository nas dependências do Service
     @Autowired
     private UsuarioRepository usuarioRepository;
 
     @Transactional
     public void cadastrarNotificacaoGeral(String titulo, String mensagem) {
-        // 1. Busca todos os usuários cadastrados no sistema
         List<Usuario> todosUsuarios = usuarioRepository.findAll();
 
-        // 2. Percorre a lista e gera a notificação para cada um
         for (Usuario usuario : todosUsuarios) {
-            // O método gerarNotificacao já checa se o usuário quer receber
-            // (preferenciasNotificacao)
             gerarNotificacao(usuario, titulo, mensagem);
         }
     }

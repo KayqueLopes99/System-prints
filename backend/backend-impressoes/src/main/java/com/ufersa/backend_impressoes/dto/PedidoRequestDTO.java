@@ -13,8 +13,6 @@ public class PedidoRequestDTO {
     private String nomeArquivo;
     private int totalPaginas;
     private double tamanhoMb;
-    
-    // Detalhes do Item
     private int quantidade;
     private String tamanhoPapel;
     private Orientacao orientacao;

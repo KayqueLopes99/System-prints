@@ -18,7 +18,6 @@ public class Pagamento {
     @Column(name = "id_pagamento")
     private int idPagamento;
 
-    // Relação 1 para 1: Um pedido tem apenas um pagamento registrado
     @OneToOne
     @JoinColumn(name = "id_pedido", referencedColumnName = "id_pedido", nullable = false, unique = true)
     private Pedido pedido;

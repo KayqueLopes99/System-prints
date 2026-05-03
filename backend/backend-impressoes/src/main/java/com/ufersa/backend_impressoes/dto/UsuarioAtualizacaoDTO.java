@@ -8,7 +8,6 @@ public class UsuarioAtualizacaoDTO {
     private String email;
     private String senha;
     
-    // Campos específicos do Estudante
     private String matricula; 
     private String curso;     
 }

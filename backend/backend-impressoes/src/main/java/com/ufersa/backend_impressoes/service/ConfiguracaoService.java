@@ -11,7 +11,7 @@ public class ConfiguracaoService {
     @Autowired
     private ConfiguracaoRepository repository;
 
-    // Implementa o verificarStatusSetor()
+    
     public ConfiguracaoSistema obterConfiguracao() {
         return repository.findById(1).orElseGet(() -> {
             ConfiguracaoSistema padrao = new ConfiguracaoSistema();
@@ -21,7 +21,7 @@ public class ConfiguracaoService {
         });
     }
 
-    // Implementa o alterarStatusSetor()
+    
     public void alterarStatus(boolean status, String mensagem) {
         ConfiguracaoSistema config = obterConfiguracao();
         config.setSetorAberto(status);
