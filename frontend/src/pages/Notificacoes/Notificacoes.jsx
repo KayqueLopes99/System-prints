@@ -20,7 +20,7 @@ export default function Notificacoes() {
         // Atualiza no banco que o usuário viu a mensagem
         axios.patch(`http://localhost:8080/api/notificacoes/${id}/lida`)
             .then(() => {
-                setNotificacoes(notificacoes.map(n => 
+                setNotificacoes(notificacoes.map(n =>
                     n.idNotificacao === id ? { ...n, lida: true } : n
                 ));
             });
@@ -30,7 +30,8 @@ export default function Notificacoes() {
         <div className="notificacoes-container">
             <header className="header-notificacoes">
                 <button className="btn-voltar" onClick={() => navigate(-1)}>
-                    <ArrowLeft size={24} color="#1d448b" />
+                    {/* Diminuí um pouco o tamanho para 20 para caber melhor com o texto */}
+                    <ArrowLeft size={20} color="#1d448b" /> Voltar
                 </button>
                 <div className="titulo-notificacoes">
                     <Bell size={28} color="#1d448b" />
@@ -43,8 +44,8 @@ export default function Notificacoes() {
                     <p className="msg-vazia">Nenhuma notificação por enquanto.</p>
                 ) : (
                     notificacoes.map((n) => (
-                        <div 
-                            key={n.idNotificacao} 
+                        <div
+                            key={n.idNotificacao}
                             className={`card-notificacao ${n.lida ? 'lida' : 'nao-lida'}`}
                             onClick={() => marcarComoLida(n.idNotificacao)}
                         >

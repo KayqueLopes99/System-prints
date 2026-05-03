@@ -1,0 +1,197 @@
+/* --- SEUS ESTILOS ORIGINAIS (MANTIDOS) --- */
+
+.detalhes-container {
+    padding: 40px;
+    background: #f8fafc;
+    min-height: 100vh;
+}
+
+.detalhes-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.btn-voltar {
+    display: flex;
+    align-items: center;
+    border: 1.5px solid #1a3a6d;
+    background: white;
+    color: #1a3a6d;
+    padding: 24px 64px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    white-space: nowrap; 
+    flex-shrink: 0;      
+}
+
+.detalhes-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 25px;
+}
+
+.detalhes-card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+    border: 1px solid #edf2f7;
+}
+
+.detalhes-card h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #1a3a6d;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 12px;
+}
+
+.price-box {
+    background: #f0f7ff;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.price-value {
+    display: block;
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1a3a6d;
+}
+
+.btn-download-full {
+    width: 100%;
+    padding: 14px;
+    background: #1a3a6d;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.status-grid-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.st-btn {
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.st-btn.pronto {
+    background: #f59e0b;
+}
+
+.st-btn.concluido {
+    background: #10b981;
+}
+
+.st-btn.cancelado {
+    background: #ef4444;
+}
+
+/* --- NOVOS ESTILOS ADICIONADOS (MODAL E TOAST) --- */
+
+/* Overlay que escurece o fundo */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+/* Caixa branca do Modal */
+.modal-confirmacao {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.modal-confirmacao h2 {
+    margin: 15px 0 10px;
+    color: #1a3a6d;
+}
+
+.sub-modal {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 5px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+/* Botões específicos do Modal */
+.btn-confirmar {
+    flex: 1;
+    padding: 12px;
+    background: #1a3a6d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-cancelar {
+    flex: 1;
+    padding: 12px;
+    background: #eee;
+    color: #444;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Notificação flutuante (Toast) */
+.toast-feedback {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #10b981;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    z-index: 1100;
+    font-weight: 600;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}

@@ -172,6 +172,8 @@ public class PedidoService {
         Pedido p = pedidoRepository.findById(idPedido).get();
         p.setStatusFila(novoStatus);
         pedidoRepository.save(p);
+
+        dispararNotificacaoStatus(p);
     }
 
     public void cancelarPedido(int idPedido) {
@@ -306,6 +308,11 @@ public class PedidoService {
             case CANCELADO:
                 titulo = "Pedido Cancelado";
                 mensagem = "O pedido #" + pedido.getIdPedido() + " foi cancelado. Se tiver dúvidas, entre em contato.";
+                break;
+
+            case CONCLUIDO:
+                titulo = "Pedido Concluído";
+                mensagem = "Seu pedido #" + pedido.getIdPedido() + " foi concluído. Agradecemos pela preferência!";
                 break;
             default:
                 return;

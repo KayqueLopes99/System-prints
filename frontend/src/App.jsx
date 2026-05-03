@@ -24,6 +24,7 @@ import Relatorios from './pages/Relatorios/Relatorios';
 import NotificacaoGeral from './pages/NotificacaoGeral/NotificacaoGeral';
 import FilaPedidos  from './pages/FilaPedidos/filaPedidos';
 import PedidoConfiguracao from './pages/PedidoConfiguracao/PedidoConfiguracao'; 
+import PedidoDetalhes from './pages/PedidoDetalhes/PedidoDetalhes';
 
 export default function App() {
   return (
@@ -93,6 +94,9 @@ export default function App() {
 
         {/* Rota para a tela de Fila de Pedidos */}
         <Route path="/admin/fila-pedidos" element={<FilaPedidos />} />
+
+        {/* Rota para a tela de Detalhes do Pedido */}
+        <Route path="/pedidos-detalhe/:id" element={<PedidoDetalhes />} />
       </Routes>
     </Router>
   );

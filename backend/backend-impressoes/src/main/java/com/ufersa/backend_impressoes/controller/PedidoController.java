@@ -127,13 +127,12 @@ public class PedidoController {
         return ResponseEntity.ok(pedidoService.obterStatusFilaGeral());
     }
 
-    //     @GetMapping("/admin/fila")
+    // @GetMapping("/admin/fila")
     // public ResponseEntity<List<PedidoAdminDTO>> listarFilaParaAdmin() {
-    //     // Retorna a lista processada pelo Service[cite: 2, 17]
-    //     List<PedidoAdminDTO> fila = pedidoService.listarFilaGlobalAdmin();
-    //     return ResponseEntity.ok(fila);
+    // // Retorna a lista processada pelo Service[cite: 2, 17]
+    // List<PedidoAdminDTO> fila = pedidoService.listarFilaGlobalAdmin();
+    // return ResponseEntity.ok(fila);
     // }
-
 
     // No seu PedidoController[cite: 18]
     // Unificado: Agora aceita os parâmetros da barra de busca e do select
@@ -145,5 +144,14 @@ public class PedidoController {
         // Chama a lógica de busca dinâmica do Service
         List<PedidoAdminDTO> fila = pedidoService.buscarFilaAdminFiltrada(termo, status);
         return ResponseEntity.ok(fila);
+    }
+
+    // No PedidoController.java[cite: 26]
+    @PutMapping("/{id}/status")
+    public ResponseEntity<Void> atualizarStatus(
+            @PathVariable int id,
+            @RequestParam StatusPedido novoStatus) {
+        pedidoService.atualizarStatusPedido(id, novoStatus); // Usa o método que já existe no seu Service[cite: 27]
+        return ResponseEntity.ok().build();
     }
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { 
-    LayoutDashboard, ListOrdered, Users, Settings, 
-    Clock, Bell, LogOut, Eye, BarChart3, Search, Filter 
+import {
+    LayoutDashboard, ListOrdered, Users, Settings,
+    Clock, Bell, LogOut, Eye, BarChart3, Search, Filter
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -11,7 +11,7 @@ export default function FilaPedidos() {
     const navigate = useNavigate();
     const [pedidos, setPedidos] = useState([]);
     const [dataAtual, setDataAtual] = useState(new Date());
-    
+
     // Estados para os filtros[cite: 23]
     const [filtroTexto, setFiltroTexto] = useState('');
     const [filtroStatus, setFiltroStatus] = useState('TODOS');
@@ -29,8 +29,8 @@ export default function FilaPedidos() {
                 status: filtroStatus
             }
         })
-        .then(res => setPedidos(Array.isArray(res.data) ? res.data : []))
-        .catch(err => console.error("Erro ao carregar fila:", err));
+            .then(res => setPedidos(Array.isArray(res.data) ? res.data : []))
+            .catch(err => console.error("Erro ao carregar fila:", err));
     };
 
     // Efeito de busca com debounce de 300ms[cite: 23]
@@ -66,7 +66,7 @@ export default function FilaPedidos() {
                     <div className="nav-item" onClick={() => navigate('/admin/gerenciar-usuarios')}>
                         <Users size={20} /> <span>Gerenciar Usuários</span>
                     </div>
-                     <div className="nav-item" onClick={() => navigate('/admin/configuracoes')}>
+                    <div className="nav-item" onClick={() => navigate('/admin/configuracoes')}>
                         <Settings size={20} /> <span>Configurações</span>
                     </div>
                     <div className="nav-item" onClick={() => navigate('/admin/relatorios')}><BarChart3 size={20} /> <span>Relatórios</span></div>
@@ -95,17 +95,17 @@ export default function FilaPedidos() {
                     <div className="filtros-fila-wrapper">
                         <div className="search-box-admin">
                             <Search size={18} className="search-icon-svg" />
-                            <input 
-                                type="text" 
-                                placeholder="Buscar por ID, nome ou arquivo..." 
+                            <input
+                                type="text"
+                                placeholder="Buscar por ID, nome ou arquivo..."
                                 value={filtroTexto}
                                 onChange={(e) => setFiltroTexto(e.target.value)}
                             />
                         </div>
                         <div className="select-status-wrapper">
                             <Filter size={16} className="filter-icon-svg" />
-                            <select 
-                                value={filtroStatus} 
+                            <select
+                                value={filtroStatus}
                                 onChange={(e) => setFiltroStatus(e.target.value)}
                             >
                                 <option value="TODOS">Todos Status</option>
@@ -153,8 +153,14 @@ export default function FilaPedidos() {
                                                     {p.status || 'PENDENTE'}
                                                 </span>
                                             </td>
+
                                             <td className="actions-cell">
-                                                <button className="action-btn view" title="Visualizar Detalhes">
+                                                <button
+                                                    className="action-btn view"
+                                                    title="Visualizar Detalhes"
+                                                    // ⚠️ DEVE SER EXATAMENTE /pedidos-detalhe/[cite: 30]
+                                                    onClick={() => navigate(`/pedidos-detalhe/${p.idPedido}`)}
+                                                >
                                                     <Eye size={18} />
                                                 </button>
                                             </td>
