@@ -38,4 +38,10 @@ public class NotificacaoController {
         service.cadastrarNotificacaoGeral(dto.getTitulo(), dto.getMensagem());
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/enviar-geral")
+    public ResponseEntity<Void> enviarNotificacaoGeral(@RequestBody NotificacaoGeralDTO dto) {
+        service.cadastrarNotificacaoGeral(dto.getTitulo(), dto.getMensagem());
+        return ResponseEntity.ok().build();
+    }
 }

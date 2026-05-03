@@ -1,6 +1,7 @@
 package com.ufersa.backend_impressoes.controller;
 
 import com.ufersa.backend_impressoes.dto.EstatisticasPedidoDTO;
+import com.ufersa.backend_impressoes.dto.PedidoAdminDTO;
 import com.ufersa.backend_impressoes.dto.PedidoCardDTO;
 import com.ufersa.backend_impressoes.dto.PedidoRequestDTO;
 import com.ufersa.backend_impressoes.dto.StatusFilaDTO;
@@ -11,7 +12,12 @@ import com.ufersa.backend_impressoes.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import com.ufersa.backend_impressoes.repository.PedidoRepository;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -21,6 +27,12 @@ public class PedidoController {
 
     @Autowired
     private PedidoService pedidoService;
+
+    @Autowired
+    private PedidoRepository pedidoRepository;
+
+    @Autowired
+    private PedidoService service; // Injetando o service para usar no endpoint do admin
 
     // Rota para os cards: GET /api/pedidos/estatisticas/1
     @GetMapping("/estatisticas/{idUsuario}")
@@ -51,9 +63,23 @@ public class PedidoController {
     }
 
     // Criar um novo pedido
-    @PostMapping("/criar")
-    public ResponseEntity<Pedido> criarPedido(@RequestBody PedidoRequestDTO dto) {
-        return ResponseEntity.ok(pedidoService.confirmarPedido(dto));
+    @PostMapping(value = "/criar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Pedido> criarPedido(
+            @RequestPart("pedido") PedidoRequestDTO dto,
+            @RequestPart("file") MultipartFile file) throws IOException {
+        return ResponseEntity.ok(pedidoService.confirmarPedido(dto, file));
+    }
+
+    @GetMapping("/{id}/download")
+    public ResponseEntity<byte[]> baixarArquivo(@PathVariable int id) {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + pedido.getNomeArquivoOriginal() + "\"")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pedido.getDadosArquivo());
     }
 
     // Cancelar um pedido
@@ -84,8 +110,10 @@ public class PedidoController {
     // --- ROTAS DO ADMINISTRADOR ---
 
     @GetMapping("/admin/fila")
-    public ResponseEntity<List<PedidoCardDTO>> getFilaGlobal() {
-        return ResponseEntity.ok(pedidoService.listarFilaGlobalAdmin());
+    public ResponseEntity<List<PedidoAdminDTO>> listarFilaParaAdmin() {
+        // Retorna a lista processada pelo Service[cite: 2, 17]
+        List<PedidoAdminDTO> fila = service.listarFilaGlobalAdmin();
+        return ResponseEntity.ok(fila);
     }
 
     @PutMapping("/admin/chamar-proximo")

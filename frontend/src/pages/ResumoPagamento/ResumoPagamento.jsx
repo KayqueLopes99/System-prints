@@ -32,8 +32,8 @@ export default function ResumoPagamento() {
 
         setCarregando(true);
 
+        // 1. Cria o objeto de dados (JSON) igual ao seu PedidoRequestDTO[cite: 13, 20]
         const payload = {
-            // Garanta que esses nomes batem com o seu PedidoRequestDTO no Java
             idUsuario: parseInt(dadosPedido.idUsuario),
             nomeArquivo: dadosPedido.nomeArquivo,
             totalPaginas: dadosPedido.totalPaginas,
@@ -43,26 +43,34 @@ export default function ResumoPagamento() {
             orientacao: dadosPedido.orientacao,
             frenteVerso: dadosPedido.frenteVerso,
             tipoCor: dadosPedido.tipoCor,
-
-            // 👉 Para esta tela, o tipo deve ser IMPRESSAO
             tipoServico: "IMPRESSAO",
             metodoPagamento: metodoSelecionado
         };
 
+        // 2. Prepara o FormData para o envio "Multipart"
+        const formData = new FormData();
+
+        // Adiciona o JSON como um Blob (Essencial para o @RequestPart do Java reconhecer)[cite: 15]
+        formData.append("pedido", new Blob([JSON.stringify(payload)], {
+            type: 'application/json'
+        }));
+
+        // Adiciona o arquivo físico que veio da tela anterior
+        formData.append("file", dadosPedido.arquivoBruto);
+
         try {
             const response = await fetch("http://localhost:8080/api/pedidos/criar", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
+                // IMPORTANTE: Não defina Content-Type manualmente ao usar FormData. 
+                // O navegador fará isso automaticamente com o "boundary" correto.
+                body: formData
             });
 
             if (response.ok) {
                 setModalSucesso(true);
             } else {
-                // Tenta capturar a mensagem real do erro do Java
                 const erroTexto = await response.text();
-                console.error("Erro do Servidor:", erroTexto);
-                alert(`Erro 500: ${erroTexto || "Verifique os IDs de serviço no banco."}`);
+                alert(`Erro no servidor: ${erroTexto}`);
             }
         } catch (error) {
             console.error("Erro na conexão:", error);

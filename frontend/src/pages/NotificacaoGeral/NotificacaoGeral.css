@@ -1,0 +1,190 @@
+.notificacao-wrapper {
+    background-color: #f0f4f8;
+    min-height: 100vh; /* Ocupa a altura total da tela */
+    display: flex;
+    flex-direction: column; /* Coloca o cabeçalho em cima do card */
+    align-items: center;    /* Centraliza na horizontal */
+    justify-content: center; /* Centraliza na vertical */
+    padding: 20px;
+    font-family: 'Inter', sans-serif;
+}
+
+.notificacao-container {
+    width: 100%;
+    max-width: 800px; /* Largura máxima do seu card */
+    margin: 0 auto;   /* Garante que o container se comporte bem */
+}
+
+/* Ajuste no cabeçalho para alinhar com o card */
+.notificacao-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 25px;
+    width: 100%; /* Faz o título alinhar à esquerda do card */
+}
+
+
+
+.btn-voltar-circle {
+    background: white;
+    border: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    color: #1e3a8a;
+    transition: all 0.2s ease;
+}
+
+.btn-voltar-circle:hover {
+    transform: translateX(-3px);
+    background-color: #f8fafc;
+}
+
+.notificacao-card {
+    background: white;
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 15px 35px rgba(30, 58, 138, 0.05);
+}
+
+.info-banner {
+    background-color: #eff6ff;
+    color: #1e40af;
+    padding: 18px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    font-size: 14px;
+    line-height: 1.5;
+    border: 1px solid #dbeafe;
+}
+
+.input-block {
+    margin-bottom: 25px;
+}
+
+.input-block label {
+    display: block;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.input-block input, 
+.input-block textarea {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 16px;
+    background-color: #f8fafc;
+    color: #1e293b; /* Texto escuro para alto contraste */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input-block input::placeholder,
+.input-block textarea::placeholder {
+    color: #94a3b8;
+}
+
+.input-block input:focus, 
+.input-block textarea:focus {
+    outline: none;
+    border-color: #1e3a8a;
+    background-color: white;
+    box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.08);
+}
+
+
+
+.form-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 35px;
+    padding-top: 25px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.btn-cancel {
+    background: white;
+    border: 2px solid #e2e8f0;
+    padding: 12px 28px;
+    border-radius: 12px;
+    font-weight: 600;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-cancel:hover {
+    background-color: #f8fafc;
+    border-color: #cbd5e1;
+    color: #334155;
+}
+
+.btn-send {
+    background-color: #1e3a8a;
+    color: white;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2);
+    transition: all 0.3s ease;
+}
+
+.btn-send:hover {
+    background-color: #1e40af;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(30, 58, 138, 0.25);
+}
+
+.btn-send:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.status-alert {
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.status-alert.sucesso {
+    background-color: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #d1fae5;
+}
+
+.status-alert.erro {
+    background-color: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fee2e2;
+}
+
+/* Ajuste para telas menores */
+@media (max-width: 600px) {
+    .notificacao-card { padding: 20px; }
+    .form-footer { flex-direction: column-reverse; }
+    .btn-send, .btn-cancel { width: 100%; justify-content: center; }
+}

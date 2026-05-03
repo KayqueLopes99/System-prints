@@ -106,3 +106,36 @@ INSERT INTO horario_funcionamento (id_config, dia_semana, manha, tarde, noite) V
 (1, 'Sexta-feira',   '08:00 - 12:00', '13:30 - 18:00', '19:00 - 22:00'),
 (1, 'Sábado',        'Fechado',       'Fechado',       'Fechado'),
 (1, 'Domingo',       'Fechado',       'Fechado',       'Fechado');
+
+ALTER TABLE pedido ADD COLUMN dados_arquivo BYTEA;
+
+
+
+
+
+
+
+
+
+
+
+
+-- =========================================================================
+-- INSERINDO OS PREÇOS DOS SERVIÇOS (Baseados no PedidoService antigo)
+-- =========================================================================
+
+-- ID 1: Impressão P&B (R$ 0,15)[cite: 12]
+INSERT INTO servico (categoria_servico, preco_unitario, disponivel) 
+VALUES ('IMPRESSAO', 0.15, true);
+
+-- ID 2: Impressão Colorida (R$ 1,00)[cite: 12]
+INSERT INTO servico (categoria_servico, preco_unitario, disponivel) 
+VALUES ('IMPRESSAO', 1.00, true);
+
+-- ID 3: Valor Base da Encadernação (Capa + Espiral - R$ 5,00)[cite: 12]
+INSERT INTO servico (categoria_servico, preco_unitario, disponivel) 
+VALUES ('ENCADERNACAO', 5.00, true);
+
+-- ID 4: Adicional por folha na Encadernação (R$ 0,15)[cite: 12]
+INSERT INTO servico (categoria_servico, preco_unitario, disponivel) 
+VALUES ('ENCADERNACAO', 0.15, true);

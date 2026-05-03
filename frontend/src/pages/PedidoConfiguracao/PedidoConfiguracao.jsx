@@ -37,6 +37,7 @@ export default function PedidoConfiguracao() {
     const [valorTotal, setValorTotal] = useState(0.00);
 
     const sugestoesFormato = ['A4', 'A3'];
+    const [arquivoObjeto, setArquivoObjeto] = useState(null); // Novo estado para o arquivo real
 
     // --- BUSCA DADOS INICIAIS (PREÇOS E STATUS) ---
     useEffect(() => {
@@ -82,6 +83,7 @@ export default function PedidoConfiguracao() {
     const processarArquivo = async (file) => {
         if (!file) return;
         setErroAviso('');
+        setArquivoObjeto(file);
 
         const isFilePdf = file.type === 'application/pdf';
         setIsPdf(isFilePdf);
@@ -137,6 +139,7 @@ export default function PedidoConfiguracao() {
             orientacao: orientacao,
             frenteVerso: frenteVerso,
             tipoCor: tipoCor,
+            arquivoBruto: arquivoObjeto,
             valorTotal: valorTotal
         };
         navigate('/resumo-pagamento', { state: dadosParaResumo });

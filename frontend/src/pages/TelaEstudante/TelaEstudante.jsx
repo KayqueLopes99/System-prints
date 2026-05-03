@@ -1,26 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { Home, Printer, FileText, Lightbulb, Bell, Menu, Info } from 'lucide-react';
+import { Home, Printer, FileText, Lightbulb, Bell, Menu, Info, BellRing } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import './TelaEstudante.css';
 
 export default function TelaEstudante() {
   const [horarios, setHorarios] = useState([]);
-  const [setorAberto, setSetorAberto] = useState(true); // 👉 Novo estado para o status
+  const [setorAberto, setSetorAberto] = useState(true); 
+  const [naoLidas, setNaoLidas] = useState(0); // 👉 Estado para contar notificações não lidas[cite: 17]
   const navigate = useNavigate();
+  const idUsuario = localStorage.getItem('usuarioId') || 1;
 
   useEffect(() => {
-    // 1. Busca os horários de funcionamento
+    // 1. Busca os horários de funcionamento[cite: 19]
     fetch('http://localhost:8080/api/horarios')
       .then(response => response.json())
       .then(data => setHorarios(data))
       .catch(error => console.error("Erro ao buscar horários:", error));
 
-    // 2. Busca o status dinâmico do setor (Aberto/Fechado)
+    // 2. Busca o status dinâmico do setor (Aberto/Fechado)[cite: 19]
     fetch('http://localhost:8080/api/admin/status-setor')
       .then(res => res.json())
       .then(data => setSetorAberto(data.setorAberto))
       .catch(err => console.error("Erro ao buscar status do setor:", err));
-  }, []);
+
+    // 3. Busca o total de notificações não lidas[cite: 7, 17]
+    fetch(`http://localhost:8080/api/notificacoes/usuario/${idUsuario}/nao-lidas`)
+      .then(res => res.json())
+      .then(count => setNaoLidas(count))
+      .catch(err => console.error("Erro ao buscar notificações:", err));
+  }, [idUsuario]);
 
   const renderizarCelula = (texto) => {
     if (texto === 'Fechado') {
@@ -38,25 +46,29 @@ export default function TelaEstudante() {
           onClick={() => navigate('/perfil')}
           style={{ cursor: 'pointer' }}
         />
-        <Bell
-          size={32}
-          color="#1d448b"
-          onClick={() => navigate('/notificacoes')}
-          style={{ cursor: 'pointer' }}
-        />
+        
+        {/* 👉 Sino com Badge de Notificação[cite: 17] */}
+        <div className="container-sino" onClick={() => navigate('/notificacoes')} style={{ cursor: 'pointer' }}>
+          {naoLidas > 0 ? (
+            <>
+              <BellRing size={32} color="#1d448b" className="animar-sino" />
+              <span className="badge-notificacao">{naoLidas}</span>
+            </>
+          ) : (
+            <Bell size={32} color="#1d448b" />
+          )}
+        </div>
       </header>
 
       <main className="conteudo-principal">
         <h1 className="saudacao">Olá, estudante!</h1>
 
-        {/* 👉 Bloco dinâmico: Muda a classe e o texto conforme o admin */}
         <div className={setorAberto ? "botao-aberto" : "botao-fechado"}>
           {setorAberto ? "Aberto agora!" : "Fechado agora!"}
         </div>
 
         <h2 className="titulo-secao">Quadro de Horários</h2>
         
-        {/* ... restante do código da tabela e informações úteis ... */}
         <div className="tabela-container">
           <table className="tabela">
             <thead>

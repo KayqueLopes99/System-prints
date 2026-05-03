@@ -2,7 +2,6 @@ package com.ufersa.backend_impressoes.repository;
 
 import com.ufersa.backend_impressoes.model.Pedido;
 import com.ufersa.backend_impressoes.model.enuns.StatusPedido;
-import com.ufersa.backend_impressoes.model.enuns.CategoriaServico;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

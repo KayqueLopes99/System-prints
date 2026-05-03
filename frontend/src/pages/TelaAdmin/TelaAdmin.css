@@ -230,3 +230,113 @@
     text-transform: uppercase; /* Dá um ar mais profissional ao cargo[cite: 16] */
     margin-top: 2px; /* Pequeno ajuste para não "colar" na UFERSA[cite: 16] */
 }
+
+/* ... manter estilos anteriores ... */
+
+.pedidos-section {
+    margin-top: 50px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.section-header h2 {
+    font-size: 22px;
+    color: #333;
+    font-weight: 600;
+}
+
+.scroll-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.scroll-btn {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 8px;
+    cursor: pointer;
+    color: #1a3a6d;
+    transition: all 0.2s;
+}
+
+.scroll-btn:hover { background-color: #f0f0f0; border-color: #1a3a6d; }
+
+/* 👉 Tabela Estilo Premium */
+.table-container {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.pedidos-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.pedidos-table thead tr {
+    background-color: #1a3a6d; /* Azul UFERSA da imagem */
+    color: white;
+    text-align: left;
+}
+
+.pedidos-table th {
+    padding: 18px 15px;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.pedidos-table td {
+    padding: 15px;
+    color: #444;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.pedidos-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.student-name { font-weight: 600; color: #1a3a6d; }
+.file-name { font-style: italic; color: #666; }
+
+/* Status Badges */
+.status-badge {
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.status-badge.pendente { background-color: #fffde7; color: #fbc02d; }
+.status-badge.imprimindo { background-color: #e3f2fd; color: #1976d2; }
+.status-badge.pronto { background-color: #e8f5e9; color: #2e7d32; }
+
+/* Botões de Ação na Tabela */
+.actions-cell {
+    display: flex;
+    gap: 8px;
+}
+
+.action-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s;
+}
+
+.action-btn.download { background-color: #f0f4f8; color: #1a3a6d; }
+.action-btn.next { background-color: #e8f5e9; color: #2e7d32; }
+.action-btn:hover { opacity: 0.8; }

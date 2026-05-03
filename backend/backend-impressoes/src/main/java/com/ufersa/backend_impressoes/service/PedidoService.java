@@ -1,6 +1,7 @@
 package com.ufersa.backend_impressoes.service;
 
 import com.ufersa.backend_impressoes.dto.EstatisticasPedidoDTO;
+import com.ufersa.backend_impressoes.dto.PedidoAdminDTO;
 import com.ufersa.backend_impressoes.dto.PedidoCardDTO;
 import com.ufersa.backend_impressoes.dto.PedidoRequestDTO;
 import com.ufersa.backend_impressoes.dto.RelatorioDTO;
@@ -11,7 +12,6 @@ import com.ufersa.backend_impressoes.model.Servico;
 import com.ufersa.backend_impressoes.model.Usuario;
 import com.ufersa.backend_impressoes.model.enuns.NivelOcupacao;
 import com.ufersa.backend_impressoes.model.enuns.StatusPedido;
-import com.ufersa.backend_impressoes.model.enuns.TipoCor;
 import com.ufersa.backend_impressoes.repository.PedidoRepository;
 import com.ufersa.backend_impressoes.repository.ServicoRepository;
 import com.ufersa.backend_impressoes.repository.UsuarioRepository;
@@ -30,6 +30,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.time.Duration;
 import java.util.Map;
 
@@ -117,38 +120,31 @@ public class PedidoService {
     }
 
     @Transactional
-    public Pedido confirmarPedido(PedidoRequestDTO dto) {
+    public Pedido confirmarPedido(PedidoRequestDTO dto, MultipartFile arquivoReal) throws IOException {
 
-        // 1. VERIFICAÇÃO DE SEGURANÇA: O SETOR ESTÁ ABERTO?[cite: 9]
         var config = configuracaoService.obterConfiguracao();
         if (!config.isSetorAberto()) {
             throw new RuntimeException("Gráfica Fechada: " + config.getMensagemAviso());
         }
 
-        // Validação de limite de páginas (mantenha a sua lógica)
         if (dto.getTotalPaginas() > 120) {
             throw new RuntimeException("O limite de 120 páginas foi excedido.");
         }
 
-        // 1. Buscar usuário
         Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        // 2. Criar o objeto Pedido
         Pedido novoPedido = new Pedido();
         novoPedido.setUsuario(usuario);
         novoPedido.setDataHora(LocalDateTime.now());
         novoPedido.setStatusFila(StatusPedido.PENDENTE);
-        novoPedido.setNomeArquivoOriginal(dto.getNomeArquivo());
-        novoPedido.setTamanhoArquivoMb(dto.getTamanhoMb());
+
+        // Salvamento dos bytes reais do arquivo
+        novoPedido.setDadosArquivo(arquivoReal.getBytes());
+        novoPedido.setNomeArquivoOriginal(arquivoReal.getOriginalFilename());
+        novoPedido.setTamanhoArquivoMb((double) arquivoReal.getSize() / (1024 * 1024));
         novoPedido.setTotalPaginasArquivo(dto.getTotalPaginas());
 
-        // 3. Simular Upload
-        String urlSimulada = "uploads/" + System.currentTimeMillis() + "_"
-                + (dto.getNomeArquivo() != null ? dto.getNomeArquivo() : "encadernacao.pdf");
-        novoPedido.setArquivoUrl(urlSimulada);
-
-        // 4. Criar Item e calcular valor
         ItemPedido item = new ItemPedido();
         item.setPedido(novoPedido);
         item.setQuantidade(dto.getQuantidade());
@@ -156,39 +152,27 @@ public class PedidoService {
         item.setOrientacao(dto.getOrientacao());
         item.setFrenteVerso(dto.getFrenteVerso());
         item.setTipoCor(dto.getTipoCor());
-        item.setTipoServico(dto.getTipoServico()); // 👉 Seta o serviço (IMPRESSAO ou ENCADERNACAO)
+        item.setTipoServico(dto.getTipoServico());
 
-        // 💰 LÓGICA DE CÁLCULO DINÂMICA
-        // 💰 LÓGICA DE CÁLCULO DINÂMICA (SUBSTITUA A ANTIGA POR ESTA)
         double total = 0;
-
         if (dto.getTipoServico() == com.ufersa.backend_impressoes.model.enuns.CategoriaServico.IMPRESSAO) {
-            // Busca ID 1 para P&B ou ID 2 para Colorido[cite: 12]
-            double valorUnitario = (dto.getTipoCor() == TipoCor.PRETO_BRANCO)
+            double valorUnitario = (dto.getTipoCor() == com.ufersa.backend_impressoes.model.enuns.TipoCor.PRETO_BRANCO)
                     ? buscarPrecoPorId(1)
                     : buscarPrecoPorId(2);
-
             total = (valorUnitario * dto.getTotalPaginas()) * dto.getQuantidade();
-
-        } else if (dto.getTipoServico() == com.ufersa.backend_impressoes.model.enuns.CategoriaServico.ENCADERNACAO) {
-            // Busca ID 3 (Valor Base) e ID 4 (Adicional por folha)
+        } else {
             double valorBase = buscarPrecoPorId(3);
             double adicionalFolha = buscarPrecoPorId(4);
-
             total = (valorBase + (dto.getTotalPaginas() * adicionalFolha)) * dto.getQuantidade();
         }
 
         novoPedido.setValorTotal(total);
-
-        // Relacionar item ao pedido
         List<ItemPedido> itens = new ArrayList<>();
         itens.add(item);
         novoPedido.setItens(itens);
 
-        // 5. Salvar o PEDIDO
         Pedido pedidoSalvo = pedidoRepository.save(novoPedido);
 
-        // 6. Salvar o PAGAMENTO
         if (dto.getMetodoPagamento() != null) {
             Pagamento pagamento = new Pagamento();
             pagamento.setPedido(pedidoSalvo);
@@ -253,7 +237,7 @@ public class PedidoService {
     }
 
     // 2. Listar Fila Global (Visão do Admin)
-    public List<PedidoCardDTO> listarFilaGlobalAdmin() {
+    public List<PedidoCardDTO> listarFilaGlobalAdminPedido() {
         List<StatusPedido> statusAtivos = Arrays.asList(StatusPedido.PENDENTE, StatusPedido.NA_FILA,
                 StatusPedido.IMPRIMINDO);
         return pedidoRepository.findByStatusFilaInOrderByDataHoraAsc(statusAtivos)
@@ -304,24 +288,22 @@ public class PedidoService {
         }
     }
 
-    // Método consolidado para o Status da Fila[cite: 13, 17]
+    // 2. Status da Fila Geral (Badge de Ocupação) atualizado
     public StatusFilaDTO obterStatusFilaGeral() {
-        List<StatusPedido> statusAtivos = Arrays.asList(
-                StatusPedido.PENDENTE,
-                StatusPedido.NA_FILA,
-                StatusPedido.IMPRIMINDO);
+        // Considera apenas pedidos PENDENTES como carga de trabalho ativa[cite: 17]
+        List<StatusPedido> statusAtivosFila = Arrays.asList(StatusPedido.PENDENTE);
 
-        // 1. Conta o total de pedidos ativos[cite: 14]
-        long totalPedidos = pedidoRepository.countByStatusFilaIn(statusAtivos);
+        // Conta o total de pedidos que realmente estão na fila aguardando[cite: 17]
+        long totalPedidos = pedidoRepository.countByStatusFilaIn(statusAtivosFila);
 
-        // 2. Define o nível de ocupação[cite: 13]
+        // Define o nível de ocupação baseado na quantidade de pedidos PENDENTES[cite:
+        // 17]
         NivelOcupacao nivel = (totalPedidos <= 4) ? NivelOcupacao.BAIXA
                 : (totalPedidos <= 7) ? NivelOcupacao.MODERADA : NivelOcupacao.CHEIA;
 
-        // 3. Calcula o tempo estimado do próximo pedido na fila (ou do geral)[cite: 13]
-        // Buscamos o primeiro da fila para ter uma base de tempo[cite: 14]
+        // Busca o primeiro pedido da fila para estimar o tempo[cite: 17]
         String tempo = "Vazia";
-        Optional<Pedido> proximo = pedidoRepository.findFirstByStatusFilaInOrderByDataHoraAsc(statusAtivos);
+        Optional<Pedido> proximo = pedidoRepository.findFirstByStatusFilaInOrderByDataHoraAsc(statusAtivosFila);
 
         if (proximo.isPresent()) {
             tempo = estimarTempoFila(proximo.get().getIdPedido());
@@ -362,72 +344,86 @@ public class PedidoService {
     }
 
     // Adicione este método ao seu PedidoService
+    // 1. Estatísticas Gerais (Cards do Dashboard Admin) atualizadas para os Enums
+    // do Banco
     public Map<String, Long> obterEstatisticasGerais() {
         LocalDateTime inicioDoDia = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);
 
         Map<String, Long> stats = new HashMap<>();
 
-        // 1. Pendentes: PENDENTE + NA_FILA[cite: 10]
-        stats.put("pendentes", pedidoRepository.countByStatusFila(StatusPedido.PENDENTE) +
-                pedidoRepository.countByStatusFila(StatusPedido.NA_FILA));
+        // Pendentes: Apenas os pedidos que aguardam ação (Status PENDENTE)
+        stats.put("pendentes", pedidoRepository.countByStatusFila(StatusPedido.PENDENTE));
 
-        // 2. Em Processamento: IMPRIMINDO[cite: 10]
-        stats.put("processando", pedidoRepository.countByStatusFila(StatusPedido.IMPRIMINDO));
+        // Em Processamento: Definido como 0 pois o status intermediário foi removido
+        stats.put("processando", 0L);
 
-        // 3. Concluídos Hoje: PRONTO ou CONCLUIDO[cite: 10]
-        stats.put("concluidos", pedidoRepository.countByStatusFilaAndDataHoraAfter(StatusPedido.PRONTO, inicioDoDia));
+        // Concluídos Hoje: Soma de pedidos que estão prontos para entrega ou já
+        // finalizados
+        long concluidosHoje = pedidoRepository.countByStatusFilaAndDataHoraAfter(StatusPedido.PRONTO, inicioDoDia) +
+                pedidoRepository.countByStatusFilaAndDataHoraAfter(StatusPedido.CONCLUIDO, inicioDoDia);
+        stats.put("concluidos", concluidosHoje);
 
-        // 4. Cancelados Hoje[cite: 10]
+        // Cancelados Hoje[cite: 17]
         stats.put("cancelados",
                 pedidoRepository.countByStatusFilaAndDataHoraAfter(StatusPedido.CANCELADO, inicioDoDia));
 
         return stats;
     }
 
-public RelatorioDTO gerarRelatorioCompleto() {
-    RelatorioDTO relatorio = new RelatorioDTO();
+    public RelatorioDTO gerarRelatorioCompleto() {
+        RelatorioDTO relatorio = new RelatorioDTO();
 
-    // 1. RECEITA TOTAL (Mês atual)
-    Double receita = pedidoRepository.somarReceitaNoMesAtual();
-    relatorio.setReceitaTotalMes(receita != null ? receita : 0.0);
+        // 1. RECEITA TOTAL (Mês atual)
+        Double receita = pedidoRepository.somarReceitaNoMesAtual();
+        relatorio.setReceitaTotalMes(receita != null ? receita : 0.0);
 
-    // 2. TOTAL DE USUÁRIOS (Todos os cadastrados no sistema)
-    // Se quiser apenas os que pediram este mês, use contarUsuariosDistintosNoMes()
-    relatorio.setUsuariosAtivosMes(usuarioRepository.count());
+        // 2. TOTAL DE USUÁRIOS (Todos os cadastrados no sistema)
+        // Se quiser apenas os que pediram este mês, use contarUsuariosDistintosNoMes()
+        relatorio.setUsuariosAtivosMes(usuarioRepository.count());
 
-    // 3. TOTAL DE IMPRESSÕES (Mês atual)
-    Long totalImpressoes = pedidoRepository.contarItensPorCategoriaNoMes(
-        com.ufersa.backend_impressoes.model.enuns.CategoriaServico.IMPRESSAO
+        // 3. TOTAL DE IMPRESSÕES (Mês atual)
+        Long totalImpressoes = pedidoRepository.contarItensPorCategoriaNoMes(
+                com.ufersa.backend_impressoes.model.enuns.CategoriaServico.IMPRESSAO);
+        relatorio.setTotalImpressoesMes(totalImpressoes != null ? totalImpressoes : 0);
+
+        // 4. TICKET MÉDIO (Corrigido: Receita Mês / Qtd Pedidos Mês)
+        long totalPedidosMes = pedidoRepository.countPedidosNoMes();
+        relatorio.setTicketMedio(totalPedidosMes > 0 ? relatorio.getReceitaTotalMes() / totalPedidosMes : 0);
+
+        // --- 2. GRÁFICO DE PIZZA (Distribuição por Tipo de Serviço) ---
+        List<Object[]> distribuicaoRaw = pedidoRepository.buscarDistribuicaoPorServico();
+        Map<String, Double> pizzaData = new HashMap<>();
+        for (Object[] row : distribuicaoRaw) {
+            // row[0] é o Enum CategoriaServico, row[1] é a Soma (Long)
+            pizzaData.put(row[0].toString(), ((Long) row[1]).doubleValue());
+        }
+        relatorio.setDistribuicaoServicos(pizzaData);
+
+        // --- 3. GRÁFICO DE LINHA (Evolução Mensal) ---
+        List<Object[]> evolucaoRaw = pedidoRepository.buscarEvolucaoReceitaMensal();
+        Map<String, Double> linhaData = new LinkedHashMap<>(); // LinkedHashMap mantém a ordem dos meses
+        String[] mesesNomes = { "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez" };
+
+        for (Object[] row : evolucaoRaw) {
+            int mesNumero = (int) row[0]; // Retorna 1 para Janeiro, etc.
+            Double valor = (Double) row[1];
+            linhaData.put(mesesNomes[mesNumero - 1], valor);
+        }
+        relatorio.setEvolucaoReceitaMensal(linhaData);
+
+        return relatorio;
+    }
+
+    public List<PedidoAdminDTO> listarFilaGlobalAdmin() {
+    // Busca apenas os status que fazem parte da fila de trabalho do admin
+    List<StatusPedido> statusAtivos = Arrays.asList(
+        StatusPedido.PENDENTE, 
+        StatusPedido.PRONTO
     );
-    relatorio.setTotalImpressoesMes(totalImpressoes != null ? totalImpressoes : 0);
 
-    // 4. TICKET MÉDIO (Corrigido: Receita Mês / Qtd Pedidos Mês)
-    long totalPedidosMes = pedidoRepository.countPedidosNoMes();
-    relatorio.setTicketMedio(totalPedidosMes > 0 ? relatorio.getReceitaTotalMes() / totalPedidosMes : 0);
-
-
-    // --- 2. GRÁFICO DE PIZZA (Distribuição por Tipo de Serviço) ---
-    List<Object[]> distribuicaoRaw = pedidoRepository.buscarDistribuicaoPorServico();
-    Map<String, Double> pizzaData = new HashMap<>();
-    for (Object[] row : distribuicaoRaw) {
-        // row[0] é o Enum CategoriaServico, row[1] é a Soma (Long)
-        pizzaData.put(row[0].toString(), ((Long) row[1]).doubleValue());
-    }
-    relatorio.setDistribuicaoServicos(pizzaData);
-
-
-    // --- 3. GRÁFICO DE LINHA (Evolução Mensal) ---
-    List<Object[]> evolucaoRaw = pedidoRepository.buscarEvolucaoReceitaMensal();
-    Map<String, Double> linhaData = new LinkedHashMap<>(); // LinkedHashMap mantém a ordem dos meses
-    String[] mesesNomes = {"Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"};
-    
-    for (Object[] row : evolucaoRaw) {
-        int mesNumero = (int) row[0]; // Retorna 1 para Janeiro, etc.
-        Double valor = (Double) row[1];
-        linhaData.put(mesesNomes[mesNumero - 1], valor);
-    }
-    relatorio.setEvolucaoReceitaMensal(linhaData);
-
-    return relatorio;
+    return pedidoRepository.findByStatusFilaInOrderByDataHoraAsc(statusAtivos)
+            .stream()
+            .map(PedidoAdminDTO::new) // Utiliza o construtor da DTO para mapear os dados[cite: 2]
+            .collect(Collectors.toList());
 }
 }

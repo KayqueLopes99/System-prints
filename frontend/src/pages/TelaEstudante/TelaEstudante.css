@@ -1,4 +1,4 @@
-/* Fundo geral da tela[cite: 15] */
+/* Fundo geral da tela[cite: 18] */
 .app-container {
   background-color: #f8f7f2;
   min-height: 100vh;
@@ -28,28 +28,28 @@
   font-weight: bold;
 }
 
-/* Estilo para quando estiver aberto (Verde) */
+/* Estilo para quando estiver aberto (Verde)[cite: 18] */
 .botao-aberto {
-    background-color: #4ade80; /* Verde */
-    color: white;
-    padding: 10px 20px;
-    border-radius: 25px;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px;
-    display: inline-block;
+  background-color: #4ade80;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  display: inline-block;
 }
 
-/* Estilo para quando estiver fechado (Vermelho) */
+/* Estilo para quando estiver fechado (Vermelho)[cite: 18] */
 .botao-fechado {
-    background-color: #f87171; /* Vermelho */
-    color: white;
-    padding: 10px 20px;
-    border-radius: 25px;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px;
-    display: inline-block;
+  background-color: #f87171;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  display: inline-block;
 }
 
 .titulo-secao {
@@ -59,7 +59,7 @@
   font-weight: bold;
 }
 
-/* --- TABELA E CONTAINER PADRÃO[cite: 15] --- */
+/* --- TABELA E CONTAINER PADRÃO[cite: 18] --- */
 .tabela-container {
   width: 100%;
   border-radius: 12px;
@@ -95,9 +95,9 @@
   color: #a32a2a;
 }
 
-/* --- ESTILOS DO CARD DE INFO (Padronizado com Tabela)[cite: 15] --- */
+/* --- ESTILOS DO CARD DE INFO[cite: 18] --- */
 .info-topo-azul {
-  background-color: #1d448b; /* Mesmo azul do thead[cite: 15] */
+  background-color: #1d448b;
   color: white;
   padding: 15px;
   display: flex;
@@ -135,7 +135,7 @@
   font-size: 0.95rem;
 }
 
-/* NAVEGAÇÃO INFERIOR[cite: 15] */
+/* NAVEGAÇÃO INFERIOR[cite: 18] */
 .navegacao-inferior {
   position: fixed;
   bottom: 0;
@@ -160,4 +160,59 @@
 .icone-nav.ativo {
   background-color: white;
   color: #1d448b;
+}
+
+/* 👉 NOVOS ESTILOS PARA NOTIFICAÇÕES[cite: 16] */
+.container-sino {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.badge-notificacao {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #ef4444;
+  /* Vermelho */
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #f8f7f2;
+}
+
+.animar-sino {
+  animation: balanco 2s infinite;
+}
+
+@keyframes balanco {
+
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+
+  10%,
+  30%,
+  50% {
+    transform: rotate(10deg);
+  }
+
+  20%,
+  40%,
+  60% {
+    transform: rotate(-10deg);
+  }
+}
+
+.action-btn.view {
+  background: #e8f5e9;
+  color: #2e7d32;
+  align-items: center;
 }

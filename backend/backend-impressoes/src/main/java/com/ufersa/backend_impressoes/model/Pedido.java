@@ -5,7 +5,12 @@ import com.ufersa.backend_impressoes.model.enuns.StatusPedido;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import java.sql.Types;
+
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -49,6 +54,10 @@ public class Pedido {
 
     @Column(name = "valor_total")
     private Double valorTotal;
+
+    @JdbcTypeCode(Types.VARBINARY)
+    @Column(name = "dados_arquivo")
+    private byte[] dadosArquivo;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
