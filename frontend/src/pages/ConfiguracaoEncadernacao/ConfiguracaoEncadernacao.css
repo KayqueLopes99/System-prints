@@ -1,4 +1,3 @@
-/* Paleta: azul escuro (#1d448b), branco, cinza claro */
 :root {
     --blue-main: #1d448b;
     --gray-bg: #f9f9f9;
@@ -17,7 +16,6 @@
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
-/* 🔝 CABEÇALHO */
 .header-encadernacao {
     width: 100%;
     max-width: 500px;
@@ -49,20 +47,19 @@
     text-align: center;
 }
 
-/* No seu arquivo ConfiguracaoEncadernacao.css */
 
 .titulo-principal {
     font-size: 25px;
     color: var(--blue-main);
-    margin: 0 0 8px 0; /* 👉 ALTERADO: Aumentei o terceiro valor (bottom) para dar espaço abaixo */
+    margin: 0 0 8px 0; 
     font-weight: 700;
 }
 
 .subtitulo-principal {
-    font-size: 18px; /* 👉 ALTERADO: De 12px para 15px para ficar maior */
+    font-size: 18px; 
     color: var(--gray-text);
     text-transform: unset;
-    display: block; /* Garante que o espaçamento do margin funcione corretamente */
+    display: block; 
 
 }
 
@@ -74,7 +71,6 @@
     
 }
 
-/* CONTEÚDO */
 .content-encadernacao {
     width: 100%;
     max-width: 450px;
@@ -92,7 +88,6 @@
     margin-bottom: 12px;
 }
 
-/* 🔢 STEPPERS */
 .stepper-container {
     background-color: var(--white);
     border: 1.5px solid var(--gray-light);
@@ -134,7 +129,6 @@
     color: var(--blue-main);
 }
 
-/* 📎 UPLOAD */
 .secao-upload-vincular {
     display: flex;
     flex-direction: column;
@@ -239,7 +233,6 @@
     filter: brightness(1.1);
 }
 
-/* --- NOVO DESIGN DO CARD DE ARQUIVO --- */
 
 .arquivo-selecionado-card {
     margin-top: 20px;
@@ -250,7 +243,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 90%; /* Ajustado para não colar nas bordas da dropzone */
+    width: 90%; 
     max-width: 320px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     animation: fadeIn 0.3s ease;
@@ -281,7 +274,7 @@
     font-weight: 600;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; /* Corta nomes longos com "..." */
+    text-overflow: ellipsis; 
 }
 
 .btn-remover-arquivo-minimal {
@@ -305,7 +298,6 @@
     transform: scale(1.1);
 }
 
-/* Animação suave para aparecer */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(5px); }
     to { opacity: 1; transform: translateY(0); }

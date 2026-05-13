@@ -10,13 +10,11 @@ export default function CancelarPedido() {
     const { idPedido, nomeArquivo } = location.state || {};
     
     const [carregando, setCarregando] = useState(false);
-    // 👉 NOVO: Estado para mensagens de feedback (sucesso ou erro)
     const [statusFeedback, setStatusFeedback] = useState({ tipo: null, mensagem: '' });
 
     const handleCancelar = async () => {
         setCarregando(true);
         try {
-            // Chamada para o endpoint de cancelamento
             await axios.put(`http://localhost:8080/api/pedidos/${idPedido}/cancelar`);
             
             setStatusFeedback({ 
@@ -24,7 +22,6 @@ export default function CancelarPedido() {
                 mensagem: 'Pedido cancelado com sucesso!' 
             });
         } catch (error) {
-            // Captura a regra de 3 minutos do Service
             const msgErro = error.response?.data?.message || "O prazo de 5 minutos para cancelamento expirou.";
             
             setStatusFeedback({ 
@@ -40,7 +37,6 @@ export default function CancelarPedido() {
         return <div className="cancelar-container"><div className="modal-card">Pedido não encontrado.</div></div>;
     }
 
-    // 👉 TELA DE FEEDBACK (SUBSTITUI O ALERT)
     if (statusFeedback.tipo) {
         return (
             <div className="cancelar-container">

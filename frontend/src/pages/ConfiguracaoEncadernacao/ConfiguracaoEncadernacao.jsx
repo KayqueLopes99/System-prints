@@ -7,27 +7,22 @@ export default function ConfiguracaoEncadernacao() {
     const navigate = useNavigate();
     const fileInputRef = useRef(null);
 
-    // --- ESTADOS PARA DADOS DINÂMICOS ---
-    const [servicos, setServicos] = useState([]); //[cite: 8]
-    const [setorAberto, setSetorAberto] = useState(true); //
+    const [servicos, setServicos] = useState([]); 
+    const [setorAberto, setSetorAberto] = useState(true); 
     const [mensagemSetor, setMensagemSetor] = useState('');
 
-    // Estados de Configuração
     const [unidades, setUnidades] = useState(1);
     const [folhas, setFolhas] = useState(100);
     const [arquivo, setArquivo] = useState(null);
     const [isDragging, setIsDragging] = useState(false);
     const [total, setTotal] = useState(20.00);
 
-    // --- BUSCA PREÇOS E STATUS AO CARREGAR ---
     useEffect(() => {
-        // Busca serviços (ID 3 e 4 para encadernação)[cite: 8]
         fetch('http://localhost:8080/api/admin/servicos')
             .then(res => res.json())
             .then(data => setServicos(data))
             .catch(err => console.error("Erro ao buscar preços:", err));
 
-        // Busca status do setor[cite: 9]
         fetch('http://localhost:8080/api/admin/status-setor')
             .then(res => res.json())
             .then(data => {
@@ -37,13 +32,10 @@ export default function ConfiguracaoEncadernacao() {
             .catch(err => console.error("Erro ao buscar status do setor:", err));
     }, []);
 
-    // 💰 Lógica de Cálculo Dinâmica Atualizada
     useEffect(() => {
-        // Valores padrão (fallback) caso o banco demore[cite: 13]
         let precoBaseEncadernacao = 5.00;
         let precoPorFolha = 0.15;
 
-        // Se o banco carregou, busca os valores oficiais[cite: 11, 12]
         if (servicos.length > 0) {
             const servicoBase = servicos.find(s => (s.id_servico || s.idServico) === 3);
             const servicoFolha = servicos.find(s => (s.id_servico || s.idServico) === 4);
@@ -110,14 +102,13 @@ export default function ConfiguracaoEncadernacao() {
             </header>
 
             <main className="content-encadernacao">
-                {/* AVISO DE SETOR FECHADO[cite: 9] */}
                 {!setorAberto && (
                     <div className="aviso-setor-fechado" style={{
                         backgroundColor: '#ffebee', color: '#c62828', padding: '12px',
                         borderRadius: '8px', marginBottom: '15px', border: '1px solid #ef9a9a',
                         fontWeight: 'bold', textAlign: 'center', fontSize: '14px'
                     }}>
-                        ⚠️ {mensagemSetor || "O setor está fechado para encadernações."}
+                        {mensagemSetor || "O setor está fechado para encadernações."}
                     </div>
                 )}
 
@@ -192,7 +183,7 @@ export default function ConfiguracaoEncadernacao() {
                 <button 
                     className="btn-continuar-encadernacao" 
                     onClick={avancarParaPagamento}
-                    disabled={!setorAberto} // Desabilita se estiver fechado[cite: 9]
+                    disabled={!setorAberto} 
                 >
                     {setorAberto ? "continuar" : "indisponível"}
                 </button>

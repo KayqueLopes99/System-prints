@@ -84,7 +84,7 @@ export default function GerenciarUsuarios() {
                 <div className="sidebar-logo">
                     <div className="logo-icon-circle"><Settings size={24} color="#1a3a6d" /></div>
                     <div className="logo-text">
-                        <span className="ufersa-txt">UFERSA</span>
+                        <span className="ufersa-txt">Xerox</span>
                         <span className="admin-txt">Administrador</span>
                     </div>
                 </div>

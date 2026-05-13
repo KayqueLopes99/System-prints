@@ -16,7 +16,6 @@ export default function Cadastro() {
   const [cadastroSucesso, setCadastroSucesso] = useState(false);
   const [mostrarSenha, setMostrarSenha] = useState(false);
   
-  // 👉 ESTADOS DE ERRO PARA CADA CAMPO
   const [erroNome, setErroNome] = useState('');
   const [erroEmail, setErroEmail] = useState('');
   const [erroMatricula, setErroMatricula] = useState('');
@@ -26,11 +25,8 @@ export default function Cadastro() {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
-    // 👉 VALIDAÇÕES EM TEMPO REAL
 
-    // Validação de Nome (Apenas letras, acentos e espaços)
     if (name === 'nome') {
-      // Regex que aceita letras maiúsculas/minúsculas, caracteres acentuados e espaços
       if (value.length > 0 && !/^[a-zA-ZÀ-ÿ\s]+$/.test(value)) {
         setErroNome('O nome deve conter apenas letras e espaços');
       } else {
@@ -38,7 +34,6 @@ export default function Cadastro() {
       }
     }
     
-    // Validação de E-mail
     if (name === 'email') {
       if (value.length > 0 && !value.endsWith('@alunos.ufersa.edu.br') && !value.endsWith('@ufersa.edu.br')) {
         setErroEmail('Utilize seu e-mail @alunos.ufersa.edu.br');
@@ -47,7 +42,6 @@ export default function Cadastro() {
       }
     }
 
-    // Validação de Matrícula (Exatamente 10 números)
     if (name === 'matricula') {
       if (value.length > 0 && (value.length !== 10 || !/^\d+$/.test(value))) {
         setErroMatricula('A matrícula deve ter exatamente 10 números');
@@ -56,7 +50,6 @@ export default function Cadastro() {
       }
     }
 
-    // Validação de Senha (Mínimo de 8 caracteres)
     if (name === 'senha') {
       if (value.length > 0 && value.length < 8) {
         setErroSenha('A senha deve ter no mínimo 8 caracteres');
@@ -69,45 +62,39 @@ export default function Cadastro() {
   const handleCadastro = async (e) => {
     e.preventDefault();
 
-    // 👉 O .trim() salva vidas! Ele remove espaços invisíveis no começo e no final.
     const nomeLimpo = formData.nome.trim();
     const emailLimpo = formData.email.trim();
     const matriculaLimpa = formData.matricula.trim();
     const senhaLimpa = formData.senha.trim();
 
-    // 1. Validação Direta do Nome
     if (!nomeLimpo || !/^[a-zA-ZÀ-ÿ\s]+$/.test(nomeLimpo)) {
       alert('Erro no Nome: Verifique se está preenchido e não contém números.');
       return; 
     }
 
-    // 2. Validação Direta do E-mail (agora imune a espaços!)
     if (!emailLimpo.endsWith('@alunos.ufersa.edu.br') && !emailLimpo.endsWith('@ufersa.edu.br')) {
       alert(`Erro no E-mail: O e-mail precisa terminar com @alunos.ufersa.edu.br ou @ufersa.edu.br`);
       return; 
     }
 
-    // 3. Validação Direta da Matrícula
     if (matriculaLimpa.length !== 10 || !/^\d+$/.test(matriculaLimpa)) {
       alert(`Erro na Matrícula: Você digitou ${matriculaLimpa.length} caracteres, mas precisamos de exatamente 10 números.`);
       return; 
     }
 
-    // 4. Validação Direta da Senha
     if (senhaLimpa.length < 8) {
       alert('Erro na Senha: A senha deve ter no mínimo 8 caracteres.');
       return; 
     }
 
-    // Se tudo estiver certo, prepara para enviar ao Java!
-// Se tudo estiver certo, prepara para enviar ao Java!
+
     const dadosParaEnviar = {
       nomeCompleto: nomeLimpo,
       email: emailLimpo,
       senha: senhaLimpa,
       matricula: matriculaLimpa,
       curso: "Não informado",
-      tipo_usuario: "ESTUDANTE" // <-- ADICIONE ESTA LINHA
+      tipo_usuario: "ESTUDANTE" 
     };
 
     try {
@@ -124,22 +111,17 @@ export default function Cadastro() {
       
       let mensagemErro = "Ocorreu um erro inesperado ao conectar com o servidor.";
 
-      // Se o erro veio do back-end (Spring Boot) com uma resposta estruturada
       if (erro.response && erro.response.data) {
-          // Verifica se o Spring Boot mandou uma string simples
           if (typeof erro.response.data === 'string') {
               mensagemErro = erro.response.data;
           } 
-          // Verifica se é o formato padrão de erro do Spring Boot (JSON com propriedade 'message')
           else if (erro.response.data.message) {
               mensagemErro = erro.response.data.message;
           }
-          // Caso seja outro tipo de objeto JSON, tentamos convertê-lo em texto legível
           else {
               mensagemErro = JSON.stringify(erro.response.data);
           }
       } 
-      // Se não tem response, pode ser erro de rede (Servidor fora do ar, RabbitMQ caiu etc)
       else if (erro.message) {
           mensagemErro = erro.message;
       }
@@ -176,7 +158,6 @@ export default function Cadastro() {
 
             <form className="formulario" onSubmit={handleCadastro}>
               
-              {/* CAMPO DE NOME COM VALIDAÇÃO */}
               <div className="grupo-input">
                 <label>Nome Completo</label>
                 <div className="input-wrapper">
@@ -198,7 +179,6 @@ export default function Cadastro() {
                 )}
               </div>
 
-              {/* CAMPO DE MATRÍCULA COM VALIDAÇÃO */}
               <div className="grupo-input">
                 <label>Matrícula</label>
                 <div className="input-wrapper">
@@ -221,7 +201,6 @@ export default function Cadastro() {
                 )}
               </div>
 
-              {/* CAMPO DE E-MAIL COM VALIDAÇÃO */}
               <div className="grupo-input">
                 <label>E-mail Institucional</label>
                 <div className="input-wrapper">
@@ -243,7 +222,6 @@ export default function Cadastro() {
                 )}
               </div>
 
-              {/* CAMPO DE SENHA COM VALIDAÇÃO */}
               <div className="grupo-input">
                 <label>Senha</label>
                 <div className="input-wrapper">
@@ -280,7 +258,6 @@ export default function Cadastro() {
                 type="submit" 
                 className="btn-primario" 
                 style={{ marginTop: '16px' }}
-                // Desativa se ALGUM dos 4 campos tiver mensagem de erro
                 disabled={erroNome !== '' || erroEmail !== '' || erroMatricula !== '' || erroSenha !== ''}
               >
                 Finalizar Cadastro

@@ -24,7 +24,6 @@ export default function DicasContextuais() {
 
     return (
         <div className="dicas-container">
-            {/* 👉 OVERLAY: Aparece quando tem card ativo para fechar ao clicar fora */}
             {cardAtivo && (
                 <div className="overlay-escuro" onClick={() => setCardAtivo(null)} />
             )}

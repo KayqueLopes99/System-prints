@@ -28,7 +28,6 @@
     margin: 0;
 }
 
-/* Card Azul de Destaque */
 .card-sua-posicao {
     background-color: #1d448b;
     border-radius: 20px;
@@ -62,7 +61,6 @@
     font-size: 0.85rem;
 }
 
-/* Lista de Fila */
 .secao-pedidos-fila {
     background: white;
     border: 1px solid #1d448b;
@@ -87,7 +85,6 @@
     gap: 15px;
 }
 
-/* Card Individual na Lista */
 .card-item-fila {
     display: flex;
     gap: 15px;

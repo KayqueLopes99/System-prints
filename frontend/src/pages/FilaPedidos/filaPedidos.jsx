@@ -12,7 +12,6 @@ export default function FilaPedidos() {
     const [pedidos, setPedidos] = useState([]);
     const [dataAtual, setDataAtual] = useState(new Date());
 
-    // Estados para os filtros[cite: 23]
     const [filtroTexto, setFiltroTexto] = useState('');
     const [filtroStatus, setFiltroStatus] = useState('TODOS');
 
@@ -21,7 +20,6 @@ export default function FilaPedidos() {
         return () => clearInterval(timer);
     }, []);
 
-    // Função de busca conectada aos filtros[cite: 23, 27]
     const carregarFila = () => {
         axios.get('http://localhost:8080/api/pedidos/admin/fila', {
             params: {
@@ -33,7 +31,6 @@ export default function FilaPedidos() {
             .catch(err => console.error("Erro ao carregar fila:", err));
     };
 
-    // Efeito de busca com debounce de 300ms[cite: 23]
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
             carregarFila();
@@ -52,7 +49,7 @@ export default function FilaPedidos() {
                 <div className="sidebar-logo">
                     <div className="logo-icon-circle"><Settings size={24} color="#1a3a6d" /></div>
                     <div className="logo-text">
-                        <span className="ufersa-txt">UFERSA</span>
+                        <span className="ufersa-txt">Xerox</span>
                         <span className="admin-txt">Administrador</span>
                     </div>
                 </div>
@@ -91,7 +88,6 @@ export default function FilaPedidos() {
                 </header>
 
                 <section className="pedidos-full-section">
-                    {/* 👉 BARRA DE FILTROS ADICIONADA[cite: 23] */}
                     <div className="filtros-fila-wrapper">
                         <div className="search-box-admin">
                             <Search size={18} className="search-icon-svg" />
@@ -158,7 +154,6 @@ export default function FilaPedidos() {
                                                 <button
                                                     className="action-btn view"
                                                     title="Visualizar Detalhes"
-                                                    // ⚠️ DEVE SER EXATAMENTE /pedidos-detalhe/[cite: 30]
                                                     onClick={() => navigate(`/pedidos-detalhe/${p.idPedido}`)}
                                                 >
                                                     <Eye size={18} />

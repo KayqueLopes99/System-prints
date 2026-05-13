@@ -5,7 +5,6 @@
     font-family: Arial, sans-serif;
 }
 
-/* 👉 OVERLAY: Escurece o fundo ao dar zoom */
 .overlay-escuro {
     position: fixed;
     top: 0;
@@ -52,7 +51,6 @@
     flex-direction: column;
     gap: 15px;
     padding: 0 20px;
-    /* 👉 CENTRALIZAÇÃO: Limita o tamanho no notebook e centraliza */
     max-width: 600px; 
     margin: 0 auto;
 }
@@ -65,17 +63,16 @@
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     border: 1px solid #eee;
-    position: relative; /* Para manter o z-index funcionando */
+    position: relative; 
 }
 
 .card-dica.borda-azul { border-left: 6px solid #1d448b; }
 .card-dica.borda-verde { border-left: 6px solid #378C26; }
 
-/* 👉 ZOOM CENTRALIZADO: Fica grandinho e à frente de tudo[cite: 20] */
 .card-dica.zoom-ativo {
-    transform: scale(1.12); /* Fica "grandinho" na medida certa */
+    transform: scale(1.12); 
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-    z-index: 100; /* Acima do overlay */
+    z-index: 100; 
     border: 1px solid rgba(29, 68, 139, 0.2);
 }
 
@@ -105,7 +102,6 @@
     line-height: 1.5;
 }
 
-/* Menu inferior[cite: 20] */
 .navegacao-inferior {
     position: fixed;
     bottom: 0;
@@ -116,7 +112,7 @@
     align-items: center;
     padding: 10px 0;
     border-radius: 20px 20px 0 0;
-    z-index: 80; /* Abaixo do overlay */
+    z-index: 80; 
 }
 
 .icone-nav {

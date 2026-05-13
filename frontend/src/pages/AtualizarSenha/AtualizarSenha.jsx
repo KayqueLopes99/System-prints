@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // 👉 Importamos o axios aqui!
+import axios from 'axios'; 
 import { FiLock, FiEye, FiEyeOff, FiCheckCircle } from 'react-icons/fi';
 import { MdVpnKey } from 'react-icons/md';
 import '../RecuperarSenha/RecuperarSenha.css';
@@ -11,20 +11,16 @@ export default function AtualizarSenha() {
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [mostrarConfirmarSenha, setMostrarConfirmarSenha] = useState(false);
 
-  // 👉 ESTADOS DE ERRO E FEEDBACK
+
   const [erroSenha, setErroSenha] = useState('');
   const [erroConfirmarSenha, setErroConfirmarSenha] = useState('');
   const [sucesso, setSucesso] = useState(false);
   
-  // Estado para guardar o token (id) que vem da URL
   const [token, setToken] = useState('');
 
-  // 👉 useEffect roda assim que a tela abre para capturar o id da URL
   useEffect(() => {
-    // Exemplo de URL esperada: http://localhost:5173/AtualizarSenha?id=1c482516...
     const parametrosUrl = new URLSearchParams(window.location.search);
     
-    // Buscando por 'id' ao invés de 'token'
     const tokenDaUrl = parametrosUrl.get('id'); 
     
     if (tokenDaUrl) {
@@ -36,14 +32,12 @@ export default function AtualizarSenha() {
     const value = e.target.value;
     setSenha(value);
 
-    // Validação de tamanho da senha
     if (value.length > 0 && value.length < 8) {
       setErroSenha('A nova senha deve ter no mínimo 8 caracteres');
     } else {
       setErroSenha('');
     }
 
-    // Se o usuário já tiver digitado algo na confirmação, valida se as senhas deixaram de bater
     if (confirmarSenha.length > 0 && value !== confirmarSenha) {
       setErroConfirmarSenha('As senhas não coincidem');
     } else if (confirmarSenha.length > 0 && value === confirmarSenha) {
@@ -55,7 +49,6 @@ export default function AtualizarSenha() {
     const value = e.target.value;
     setConfirmarSenha(value);
 
-    // Validação se as senhas batem
     if (value.length > 0 && value !== senha) {
       setErroConfirmarSenha('As senhas não coincidem');
     } else {
@@ -66,7 +59,6 @@ export default function AtualizarSenha() {
   const handleAtualizar = async (e) => {
     e.preventDefault();
 
-    // Trava de segurança
     if (erroSenha || erroConfirmarSenha || senha === '' || confirmarSenha === '') {
       alert('Por favor, verifique se as senhas estão corretas e coincidem.');
       return;
@@ -78,14 +70,11 @@ export default function AtualizarSenha() {
     }
 
     try {
-      // 👉 Correção 1: Usando axios.put e a URL exata do Java
       await axios.put('http://localhost:8080/api/usuarios/alterar-senha', {
-        // 👉 Correção 2: O Java está esperando a palavra "email", então mandamos o nosso token dentro dela
         email: token, 
         novaSenha: senha 
       });
 
-      // Se deu tudo certo no Back-end:
       setSucesso(true);
       setTimeout(() => {
         window.location.href = '/login'; 
@@ -129,7 +118,6 @@ export default function AtualizarSenha() {
 
             <form className="formulario" onSubmit={handleAtualizar}>
               
-              {/* CAMPO: NOVA SENHA */}
               <div className="grupo-input">
                 <label>Nova Senha</label>
                 <div className="input-wrapper">
@@ -161,7 +149,6 @@ export default function AtualizarSenha() {
                 )}
               </div>
 
-              {/* CAMPO: CONFIRMAR NOVA SENHA */}
               <div className="grupo-input">
                 <label>Confirmar Nova Senha</label>
                 <div className="input-wrapper">

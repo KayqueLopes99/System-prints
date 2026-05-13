@@ -5,13 +5,13 @@ import Login from './pages/Login/Login';
 import Cadastro from './pages/Cadastro/Cadastro';
 import RecuperarSenha from './pages/RecuperarSenha/RecuperarSenha';
 import AtualizarSenha from './pages/AtualizarSenha/AtualizarSenha';
-import TelaEstudante from "./pages/TelaEstudante/TelaEstudante"; 
-import Perfil from './pages/Perfil/Perfil'; 
+import TelaEstudante from "./pages/TelaEstudante/TelaEstudante";
+import Perfil from './pages/Perfil/Perfil';
 import MeusPedidos from './pages/MeusPedidos/MeusPedidos';
 import NovoPedidoInicio from './pages/NovoPedidoInicio/NovoPedidoInicio';
 import ResumoPagamento from './pages/ResumoPagamento/ResumoPagamento';
 import ConfiguracaoEncadernacao from './pages/ConfiguracaoEncadernacao/ConfiguracaoEncadernacao';
-import  PagamentoEncadernacao from './pages/PagamentoEncadernacao/PagamentoEncadernacao';
+import PagamentoEncadernacao from './pages/PagamentoEncadernacao/PagamentoEncadernacao';
 import CancelarPedido from './pages/CancelarPedido/CancelarPedido';
 import DicasContextuais from './pages/DicasContextuais/DicasContextuais';
 import DetalhesFila from './pages/DetalhesFila/DetalhesFila';
@@ -21,8 +21,8 @@ import ConfiguracoesAdmin from './pages/ConfiguracoesAdmin/ConfiguracoesAdmin';
 import GerenciarUsuarios from './pages/GerenciarUsuarios/GerenciarUsuarios';
 import Relatorios from './pages/Relatorios/Relatorios';
 import NotificacaoGeral from './pages/NotificacaoGeral/NotificacaoGeral';
-import FilaPedidos  from './pages/FilaPedidos/filaPedidos';
-import PedidoConfiguracao from './pages/PedidoConfiguracao/PedidoConfiguracao'; 
+import FilaPedidos from './pages/FilaPedidos/filaPedidos';
+import PedidoConfiguracao from './pages/PedidoConfiguracao/PedidoConfiguracao';
 import PedidoDetalhes from './pages/PedidoDetalhes/PedidoDetalhes';
 
 export default function App() {
@@ -58,11 +58,11 @@ export default function App() {
         <Route path="/resumo-pagamento" element={<ResumoPagamento />} />
 
 
-          {/* Rota para a tela de Configuração de Encadernação */}
-          <Route path="/configuracao-encadernacao" element={<ConfiguracaoEncadernacao />} />
+        {/* Rota para a tela de Configuração de Encadernação */}
+        <Route path="/configuracao-encadernacao" element={<ConfiguracaoEncadernacao />} />
 
-          {/* Rota para a tela de Pagamento de Encadernação */}
-          <Route path="/pagamento-encadernacao" element={<PagamentoEncadernacao />} />
+        {/* Rota para a tela de Pagamento de Encadernação */}
+        <Route path="/pagamento-encadernacao" element={<PagamentoEncadernacao />} />
 
         {/* Rota para a tela de Cancelar Pedido */}
         <Route path="/cancelar-pedido" element={<CancelarPedido />} />

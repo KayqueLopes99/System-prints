@@ -12,16 +12,13 @@ export default function DetalhesFila() {
     const idUsuarioLogado = parseInt(localStorage.getItem('usuarioId') || 1);
 
     useEffect(() => {
-        // 1. Busca a Fila Global
         axios.get(`http://localhost:8080/api/pedidos/admin/fila`)
             .then(res => {
                 setFila(res.data);
                 
-                // Encontra a posição do primeiro pedido do usuário logado na fila[cite: 12]
                 const index = res.data.findIndex(p => p.idUsuario === idUsuarioLogado);
                 const pos = index !== -1 ? `${index + 1}º` : 'Fora da fila';
 
-                // 2. Busca o Status Geral (Tempo e Nível) consolidado[cite: 12]
                 axios.get(`http://localhost:8080/api/pedidos/fila/status-geral`)
                     .then(s => {
                         setStatusGeral({
@@ -71,7 +68,6 @@ export default function DetalhesFila() {
                     {fila.map((pedido, index) => {
                         const ehMeuPedido = pedido.idUsuario === idUsuarioLogado;
                         
-                        // Lógica para definir o nome do serviço
                         const nomeServico = pedido.tipoServico === 'ENCADERNACAO' 
                             ? 'Serviço de Encadernação' 
                             : 'Impressão';
@@ -89,7 +85,6 @@ export default function DetalhesFila() {
                                     </div>
                                     <p className="id-pedido-text">Pedido #{pedido.idPedido}</p>
                                     
-                                    {/* 👉 AJUSTE: Nome do serviço no lugar do arquivo e remoção do nome do arquivo[cite: 12] */}
                                     <p className="servico-label-text">
                                         {nomeServico}
                                     </p>

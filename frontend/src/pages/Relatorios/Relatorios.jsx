@@ -32,7 +32,7 @@ export default function Relatorios() {
                 <div className="sidebar-logo">
                     <div className="logo-icon-circle"><Settings size={24} color="#1a3a6d" /></div>
                     <div className="logo-text">
-                        <span className="ufersa-txt">UFERSA</span>
+                        <span className="ufersa-txt">Xerox</span>
                         <span className="admin-txt">Administrador</span>
                     </div>
                 </div>
@@ -51,7 +51,7 @@ export default function Relatorios() {
                 <header className="report-header">
                     <div className="header-info">
                         <h1>Relatórios</h1>
-                        <p>Análise de desempenho UFERSA</p>
+                        <p>Análise de desempenho</p>
                     </div>
                    
                 </header>
