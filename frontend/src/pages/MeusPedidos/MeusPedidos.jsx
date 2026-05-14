@@ -7,15 +7,12 @@ import './MeusPedidos.css';
 export default function MeusPedidos() {
     const navigate = useNavigate();
 
-    // Estados de Controle de Abas
     const [abaPrincipal, setAbaPrincipal] = useState('ativos');
     const [subAba, setSubAba] = useState('TODOS');
 
-    // Estados dos Dados
     const [estatisticas, setEstatisticas] = useState({ totalPedidos: 0, totalPaginas: 0, totalGasto: 0 });
     const [pedidos, setPedidos] = useState([]);
 
-    // 👉 NOVO: Estado para as informações da fila global
     const [infoFila, setInfoFila] = useState({
         tempo: 'Calculando...',
         nivel: 'Carregando...',
@@ -24,15 +21,12 @@ export default function MeusPedidos() {
 
     const idUsuario = localStorage.getItem('usuarioId') || 1;
 
-    // Efeito 1: Carrega estatísticas e Informações da Fila
-    // 👉 NOVO: Busca consolidada com apenas uma chamada
+
     useEffect(() => {
-        // Busca estatísticas do usuário (Mantido)
         axios.get(`http://localhost:8080/api/pedidos/estatisticas/${idUsuario}`)
             .then(res => setEstatisticas(res.data))
             .catch(err => console.error("Erro nas estatísticas:", err));
 
-        // 👉 CHAMADA ÚNICA PARA A FILA
         axios.get(`http://localhost:8080/api/pedidos/fila/status-geral`)
             .then(res => {
                 const nivelTraduzido = res.data.nivelOcupacao === 'BAIXA' ? 'Fila Baixa' :
@@ -47,7 +41,6 @@ export default function MeusPedidos() {
             .catch(err => console.error("Erro ao buscar status da fila:", err));
     }, [idUsuario]);
 
-    // Efeito 2: Carrega a lista de pedidos (Mantido original)
     useEffect(() => {
         let url = '';
         if (abaPrincipal === 'ativos') {
@@ -81,7 +74,6 @@ export default function MeusPedidos() {
                 </div>
             </div>
 
-            {/* 👉 NOVO: Card Status da Fila (Conforme imagem) */}
             {abaPrincipal === 'ativos' && (
                 <div className="card-status-fila">
                     <span className="titulo-fila">Status da Fila</span>
@@ -124,7 +116,6 @@ export default function MeusPedidos() {
                 </div>
             )}
 
-            {/* Mantive as estatísticas originais abaixo do novo card */}
             <div className="estatisticas-container">
                 <div className="card-stat">
                     <FileText className="icone" size={24} color="#1d448b" />

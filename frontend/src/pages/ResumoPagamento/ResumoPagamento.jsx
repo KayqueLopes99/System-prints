@@ -6,15 +6,15 @@ import './ResumoPagamento.css';
 export default function ResumoPagamento() {
     const location = useLocation();
     const navigate = useNavigate();
-    const dadosPedido = location.state; // Recebe os dados da tela anterior
+    const dadosPedido = location.state; 
 
     const [metodoSelecionado, setMetodoSelecionado] = useState(null);
     const [carregando, setCarregando] = useState(false);
 
-    // 👉 NOVO: Estado para controlar a exibição do Modal de Sucesso
+
     const [modalSucesso, setModalSucesso] = useState(false);
 
-    // Se o usuário tentar acessar a URL direto sem dados, volta para o início
+
     if (!dadosPedido) {
         return (
             <div className="erro-dados-container">
@@ -32,7 +32,7 @@ export default function ResumoPagamento() {
 
         setCarregando(true);
 
-        // 1. Cria o objeto de dados (JSON) igual ao seu PedidoRequestDTO[cite: 13, 20]
+
         const payload = {
             idUsuario: parseInt(dadosPedido.idUsuario),
             nomeArquivo: dadosPedido.nomeArquivo,
@@ -47,22 +47,22 @@ export default function ResumoPagamento() {
             metodoPagamento: metodoSelecionado
         };
 
-        // 2. Prepara o FormData para o envio "Multipart"
+
         const formData = new FormData();
 
-        // Adiciona o JSON como um Blob (Essencial para o @RequestPart do Java reconhecer)[cite: 15]
+
         formData.append("pedido", new Blob([JSON.stringify(payload)], {
             type: 'application/json'
         }));
 
-        // Adiciona o arquivo físico que veio da tela anterior
+
         formData.append("file", dadosPedido.arquivoBruto);
 
         try {
             const response = await fetch("http://localhost:8080/api/pedidos/criar", {
                 method: "POST",
-                // IMPORTANTE: Não defina Content-Type manualmente ao usar FormData. 
-                // O navegador fará isso automaticamente com o "boundary" correto.
+
+                
                 body: formData
             });
 
@@ -82,7 +82,7 @@ export default function ResumoPagamento() {
 
     return (
         <div className="resumo-container">
-            {/* CABEÇALHO */}
+
             <header className="config-header">
                 <button className="btn-voltar-topo" onClick={() => navigate(-1)}>
                     <ChevronLeft size={24} />
@@ -90,9 +90,9 @@ export default function ResumoPagamento() {
                 <h1>Resumo e Pagamento</h1>
             </header>
 
-            {/* CONTEÚDO PRINCIPAL */}
+
             <main className="resumo-content">
-                {/* CARD DE RESUMO */}
+
                 <section className="card-resumo-detalhes">
                     <div className="resumo-header">
                         <Printer size={20} color="#1d448b" />
@@ -126,7 +126,7 @@ export default function ResumoPagamento() {
 
                 <h2 className="titulo-pagamento">Como deseja pagar no balcão?</h2>
 
-                {/* BOTÕES DE PAGAMENTO */}
+
                 <div className="grade-pagamento">
                     <button
                         className={`btn-metodo ${metodoSelecionado === 'PIX' ? 'selecionado' : ''}`}
@@ -158,9 +158,9 @@ export default function ResumoPagamento() {
                 </p>
             </main>
 
-            {/* FOOTER COM AÇÕES */}
+
             <footer className="footer-resumo-botoes">
-                {/* 👉 NOVO: Botão Voltar para visualizar/editar na tela anterior */}
+
                 <button className="btn-outline-voltar" onClick={() => navigate(-1)} disabled={carregando}>
                     Voltar e editar
                 </button>
@@ -174,14 +174,13 @@ export default function ResumoPagamento() {
                 </button>
             </footer>
 
-            {/* =========================================
-               👉 MODAL DE SUCESSO (ESTILO APP)
-               ========================================= */}
+
+
             {modalSucesso && (
                 <div className="modal-overlay">
                     <div className="modal-content">
                         <div className="modal-icon-success">
-                            {/* Ícone verde igual da sua imagem */}
+
                             <CheckCircle2 size={70} color="#26d451" strokeWidth={1.5} />
                         </div>
                         <h2>Tudo pronto!</h2>
@@ -189,7 +188,7 @@ export default function ResumoPagamento() {
                             Seu pedido foi enviado para a fila.<br />
                             Dirija-se ao balcão para pagamento e retirada.
                         </p>
-                        {/* Botão final que leva para a lista de pedidos */}
+
                         <button className="btn-modal-final" onClick={() => navigate('/pedidos')}>
                             Ver meus pedidos
                         </button>

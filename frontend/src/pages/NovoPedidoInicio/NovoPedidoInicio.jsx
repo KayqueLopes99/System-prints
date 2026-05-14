@@ -6,13 +6,12 @@ import './NovoPedidoInicio.css';
 export default function NovoPedidoInicio() {
     const navigate = useNavigate();
 
-    // Estado para controlar qual serviço está selecionado
     const [servicoSelecionado, setServicoSelecionado] = useState(null);
 
     return (
         <div className="novo-pedido-container">
             <header className="novo-pedido-header">
-                {/* 👉 ADICIONADO: Ícone grande no topo */}
+                
                 <div className="header-icon-container">
                     <Printer size={60} color="#1d448b" strokeWidth={1.5} />
                 </div>
@@ -58,17 +57,14 @@ export default function NovoPedidoInicio() {
                     </label>
                 </section>
 
-                {/* Botão Avançar que só renderiza se tiver serviço selecionado */}
                 {servicoSelecionado && (
                     <div className="container-avancar">
                         <button
                             className="botao-avancar"
                             onClick={() => {
-                                // 👇 Verifica se o serviço selecionado é a impressão
                                 if (servicoSelecionado === 'impressao') {
                                     navigate('/configuracao-pedido', { state: { tipoServico: servicoSelecionado } });
                                 } else {
-                                    // Se for encadernação, avisa o usuário (pois faremos essa tela depois)
                                     navigate('/configuracao-encadernacao', { state: { tipoServico: servicoSelecionado } });
                                 }
                             }}
@@ -81,7 +77,6 @@ export default function NovoPedidoInicio() {
 
             </main>
 
-            {/* MENU INFERIOR */}
             <nav className="navegacao-inferior dark-nav">
                 <div className="icone-nav" onClick={() => navigate('/estudante')}>
                     <Home size={26} color="#fff" />

@@ -41,7 +41,7 @@
   margin-bottom: 30px;
 }
 
-/* UPLOAD (COM DRAG AND DROP) */
+
 .caixa-upload {
   border: 2px dashed #1d448b;
   border-radius: 16px;
@@ -79,7 +79,7 @@
   color: #999;
 }
 
-/* CARD ARQUIVO */
+
 .card-arquivo {
   background-color: #fff;
   border-radius: 12px;
@@ -140,7 +140,6 @@
   gap: 4px;
 }
 
-/* PREVIEW REAL DO DOCUMENTO */
 .preview-documento-real {
   width: 100%;
   height: 600px; 
@@ -169,7 +168,6 @@
   text-align: center;
 }
 
-/* CAMPOS E DROPDOWNS */
 .titulo-secao-interna {
   font-size: 18px;
   color: #333;
@@ -229,12 +227,11 @@
   color: #1d448b;
 }
 
-/* 👉 NOVO: QUANTIDADE CENTRALIZADA */
 .controle-quantidade {
   margin: 35px 0 25px 0;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centraliza tudo horizontalmente */
+  align-items: center; 
   text-align: center;
 }
 
@@ -248,7 +245,7 @@
 .stepper {
   display: flex;
   align-items: center;
-  justify-content: center; /* Centraliza os botões */
+  justify-content: center; 
   gap: 25px;
   margin-top: 10px;
 }
@@ -280,7 +277,7 @@
   text-align: center;
 }
 
-/* TOTAL */
+
 .caixa-total {
   background-color: #fff;
   padding: 20px;
@@ -298,7 +295,6 @@
   color: #1d448b;
 }
 
-/* FOOTER */
 .footer-acoes {
   padding: 20px;
   background-color: #fff;

@@ -10,7 +10,6 @@ export default function Perfil() {
     const [editando, setEditando] = useState(false);
     const [mostrarSenha, setMostrarSenha] = useState(false);
 
-    // 👉 NOVO: Estado para a mensagem de aviso na tela
     const [feedback, setFeedback] = useState(null);
 
     const [perfil, setPerfil] = useState({
@@ -23,7 +22,6 @@ export default function Perfil() {
 
     const idUsuarioLogado = localStorage.getItem('usuarioId') || 1;
 
-    // 👉 NOVO: Efeito para limpar a mensagem automaticamente
     useEffect(() => {
         if (feedback) {
             const timer = setTimeout(() => setFeedback(null), 3000);
@@ -62,12 +60,10 @@ export default function Perfil() {
 
             await axios.put(`http://localhost:8080/api/usuarios/${idUsuarioLogado}`, dadosParaEnviar);
 
-            // 👉 Substituído Alert por Feedback na tela
             setFeedback({ texto: "Perfil atualizado com sucesso!", tipo: "sucesso" });
             setEditando(false);
         } catch (error) {
             const msgErro = error.response?.data?.message || "Erro desconhecido";
-            // 👉 Substituído Alert por Feedback na tela
             setFeedback({ texto: "Erro ao salvar: " + msgErro, tipo: "erro" });
         }
     };
@@ -75,7 +71,7 @@ export default function Perfil() {
     const limparCache = () => {
         localStorage.clear();
         sessionStorage.clear();
-        // 👉 Mostra aviso rápido antes de sair
+
         setFeedback({ texto: "Cache limpo! Redirecionando...", tipo: "sucesso" });
         setTimeout(() => navigate('/'), 1500);
     };
@@ -88,7 +84,7 @@ export default function Perfil() {
 
     return (
         <div className="perfil-container">
-            {/* 👉 NOVO: Componente de Aviso na Tela */}
+
             {feedback && (
                 <div className={`feedback-perfil feedback-${feedback.tipo}`}>
                     {feedback.texto}

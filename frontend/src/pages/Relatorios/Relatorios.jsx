@@ -9,11 +9,10 @@ export default function Relatorios() {
     const [dados, setDados] = useState(null);
 
     useEffect(() => {
-        // Busca os dados do AdminController[cite: 4]
+
         fetch('http://localhost:8080/api/admin/relatorios')
             .then(res => res.json())
             .then(data => {
-                // Conversão de MAP para ARRAY (O que o Recharts entende)
                 const pizzaArray = Object.entries(data.distribuicaoServicos).map(([name, value]) => ({ name, value }));
                 const linhaArray = Object.entries(data.evolucaoReceitaMensal).map(([month, value]) => ({ month, value }));
                 
@@ -56,7 +55,7 @@ export default function Relatorios() {
                    
                 </header>
 
-                {/* CARDS COM DADOS REAIS DO BACKEND[cite: 3] */}
+
                 <div className="stats-grid">
                     <div className="stat-card-mini">
                         <div className="card-top"><div className="icon-wrap blue"><FileText size={20} /></div></div>
@@ -81,7 +80,7 @@ export default function Relatorios() {
                 </div>
 
                 <div className="charts-main-grid">
-                    {/* GRÁFICO DE PIZZA (Distribuição)[cite: 3] */}
+
                     <section className="chart-card">
                         <h3>Distribuição por Tipo de Serviço</h3>
                         <ResponsiveContainer width="100%" height={300}>
@@ -97,7 +96,7 @@ export default function Relatorios() {
                         </ResponsiveContainer>
                     </section>
 
-                    {/* GRÁFICO DE LINHA (Evolução Mensal)[cite: 3] */}
+
                     <section className="chart-card">
                         <h3>Evolução da Receita Mensal</h3>
                         <ResponsiveContainer width="100%" height={300}>

@@ -33,7 +33,7 @@
     margin: 0;
 }
 
-/* Cards de Notificação */
+
 .lista-notificacoes {
     display: flex;
     flex-direction: column;
@@ -58,7 +58,7 @@
 
 .faixa-lateral {
     width: 6px;
-    background-color: #1d448b; /* Tudo azul conforme pedido */
+    background-color: #1d448b; 
 }
 
 .nao-lida {

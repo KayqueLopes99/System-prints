@@ -29,7 +29,7 @@ export default function PagamentoEncadernacao() {
 
         setCarregando(true);
 
-        // 1. Prepara o objeto de dados (JSON) compatível com o DTO do Back-end[cite: 11]
+        
         const payload = {
             idUsuario: parseInt(dadosPedido.idUsuario),
             nomeArquivo: dadosPedido.nomeArquivo || "Material Físico",
@@ -44,22 +44,18 @@ export default function PagamentoEncadernacao() {
             metodoPagamento: metodoSelecionado
         };
 
-        // 2. Prepara o FormData para o envio Multipart (Igual ao ResumoPagamento)
         const formData = new FormData();
 
-        // Adiciona o JSON como um Blob (Essencial para o Spring reconhecer o @RequestPart)
         formData.append("pedido", new Blob([JSON.stringify(payload)], {
             type: 'application/json'
         }));
 
-        // Adiciona o arquivo físico que veio da tela anterior[cite: 25]
-        // Se não houver arquivo físico (ex: encadernação de material já impresso), envia um blob vazio para não quebrar o Controller
+        
         formData.append("file", dadosPedido.arquivoBruto || new Blob([], { type: 'application/pdf' }));
 
         try {
             const response = await fetch("http://localhost:8080/api/pedidos/criar", {
                 method: "POST",
-                // IMPORTANTE: Não definir headers manualmente aqui. O FormData faz isso sozinho[cite: 25].
                 body: formData
             });
 

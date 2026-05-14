@@ -47,10 +47,9 @@ export default function PedidoDetalhes() {
 
     return (
         <div className="detalhes-container">
-            {/* Feedback de Sucesso[cite: 33] */}
             {feedback && <div className="toast-feedback">{feedback}</div>}
 
-            {/* Modal de Confirmação Customizado[cite: 33] */}
+            
             {modal.aberto && (
                 <div className="modal-overlay">
                     <div className="modal-confirmacao">

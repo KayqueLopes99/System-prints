@@ -1,14 +1,12 @@
-/* --- Container Principal --- */
 .pedidos-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #f4f7f6; /* Fundo cinza bem clarinho */
+  background-color: #f4f7f6; 
   font-family: Arial, sans-serif;
-  padding-bottom: 80px; /* Espaço para o menu inferior */
+  padding-bottom: 80px; 
 }
 
-/* --- Cabeçalho de Abas --- */
 .cabecalho-abas {
   background-color: #ffffff;
   border-radius: 0 0 16px 16px;
@@ -54,7 +52,6 @@
   box-shadow: 0 4px 6px rgba(29, 68, 139, 0.3);
 }
 
-/* --- Sub-abas (Histórico) --- */
 .sub-abas {
   display: flex;
   justify-content: space-around;
@@ -81,7 +78,6 @@
 .btn-sub-aba.ativo-concluido { background-color: #378C26; color: #fff; }
 .btn-sub-aba.ativo-cancelado { background-color: #a71d1d; color: #fff; }
 
-/* --- Cartões de Estatísticas --- */
 .estatisticas-container {
   display: flex;
   justify-content: space-between;
@@ -105,7 +101,6 @@
 .card-stat h3 { margin: 0; font-size: 1.2rem; color: #333; }
 .card-stat p { margin: 5px 0 0 0; font-size: 0.9rem; color: #666; font-weight: bold; }
 
-/* --- Lista de Pedidos --- */
 .lista-pedidos-box {
   background-color: #ffffff;
   border-radius: 12px;
@@ -129,7 +124,6 @@
   gap: 15px;
 }
 
-/* --- Cartão do Pedido Individual --- */
 .pedido-card {
   border: 1px solid #e0e0e0;
   border-radius: 12px;
@@ -174,7 +168,7 @@
 }
 
 .tag {
-  background-color: #a8c1e8; /* Azul clarinho das tags */
+  background-color: #a8c1e8; 
   color: #1d448b;
   padding: 4px 8px;
   border-radius: 4px;
@@ -211,7 +205,6 @@
   font-size: 0.95rem;
 }
 
-/* --- Navegação Inferior (Idêntica à Tela Estudante) --- */
 .navegacao-inferior {
   position: fixed;
   bottom: 0;
@@ -243,7 +236,6 @@
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
-/* Ajuste para as tags ficarem bonitas como no print */
 .pedido-tags {
   display: flex;
   gap: 8px;
@@ -251,8 +243,8 @@
 }
 
 .tag {
-  background-color: #e8f0fe; /* Azul clarinho de fundo */
-  color: #1d448b;            /* Azul escuro do texto */
+  background-color: #e8f0fe; 
+  color: #1d448b;            
   padding: 6px 12px;
   border-radius: 8px;
   font-size: 0.85rem;
@@ -262,7 +254,7 @@
 
 .pedido-card {
     position: relative;
-    padding-right: 65px; /* Espaço para a coluna de ícones à direita */
+    padding-right: 65px; 
 }
 
 .card-acoes-status {
@@ -270,13 +262,13 @@
     top: 15px;
     right: 15px;
     display: flex;
-    flex-direction: column; /* Força um ficar em cima do outro */
+    flex-direction: column; 
     align-items: center;
-    gap: 12px; /* Espaçamento entre os círculos */
+    gap: 12px; 
 }
 
 .btn-cancelar-card-novo {
-    width: 32px; /* Mesmo tamanho da sua ampulheta */
+    width: 32px; 
     height: 32px;
     border-radius: 50%;
     display: flex;
@@ -294,10 +286,10 @@
     transform: scale(1.1);
 }
 
-/* --- Novo Card Status da Fila --- */
+
 .card-status-fila {
     background-color: #ffffff;
-    border: 2px solid #1d448b; /* Borda azul oficial */
+    border: 2px solid #1d448b; 
     border-radius: 20px;
     margin: 0 15px 20px 15px;
     padding: 20px;
@@ -336,7 +328,7 @@
 
 .label-fila {
     font-size: 0.95rem;
-    color: #8fa2bc; /* Tom de azul acinzentado do print */
+    color: #8fa2bc; 
     font-weight: 500;
 }
 
@@ -346,7 +338,6 @@
     font-weight: bold;
 }
 
-/* Botão Ver Fila Detalhada */
 .btn-ver-fila-detalhada {
     margin-top: 5px;
     padding: 10px;
@@ -368,7 +359,6 @@
     background-color: #f0f4f8;
 }
 
-/* Garante que o card de estatísticas não suba demais */
 .estatisticas-container {
     margin-top: 5px;
 }

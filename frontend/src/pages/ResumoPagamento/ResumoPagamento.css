@@ -5,7 +5,7 @@
     flex-direction: column;
 }
 
-/* Reutilizando estilo do header para consistência */
+
 .config-header {
     background-color: #fff;
     padding: 20px;
@@ -37,7 +37,7 @@
     flex: 1;
 }
 
-/* Card de Resumo */
+
 .card-resumo-detalhes {
     background-color: #fff;
     border-radius: 16px;
@@ -88,7 +88,7 @@
     color: #1d448b;
 }
 
-/* Pagamento */
+
 .titulo-pagamento {
     font-size: 16px;
     color: #333;
@@ -138,13 +138,13 @@
     font-style: italic;
 }
 
-/* Footer com dois botões */
+
 .footer-resumo-botoes {
     padding: 20px;
     background-color: #fff;
     border-top: 1px solid #eee;
     display: grid;
-    grid-template-columns: 1fr 1fr; /* 👉 Dois botões iguais */
+    grid-template-columns: 1fr 1fr; 
     gap: 15px;
 }
 
@@ -165,7 +165,7 @@
     cursor: not-allowed;
 }
 
-/* 👉 Estilo do Botão Voltar (Outline) */
+
 .btn-outline-voltar {
     background: none;
     border: 2px solid #1d448b;
@@ -182,7 +182,7 @@
     cursor: not-allowed;
 }
 
-/* Estilo para erro de dados */
+
 .erro-dados-container {
     padding: 40px;
     text-align: center;
@@ -198,38 +198,35 @@
     border-radius: 8px;
 }
 
-/* =========================================
-   👉 CSS DO MODAL (ESTILO DA IMAGEM)
-   ========================================= */
 
-/* Fundo escuro semi-transparente que cobre tudo */
+
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Transparência igual da imagem */
+    background-color: rgba(0, 0, 0, 0.6); 
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* Garante que fica por cima de tudo */
+    z-index: 1000; 
     padding: 20px;
 }
 
-/* A caixa branca centralizada */
+
 .modal-content {
     background-color: #fff;
-    border-radius: 20px; /* Bordas bem arredondadas igual na foto */
+    border-radius: 20px; 
     padding: 40px 30px;
     width: 100%;
-    max-width: 340px; /* Largura boa para celular */
+    max-width: 340px; 
     text-align: center;
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    animation: abrirModal 0.3s ease-out; /* Animação leve de entrada */
+    animation: abrirModal 0.3s ease-out; 
 }
 
-/* Efeito de zoom na entrada do modal */
+
 @keyframes abrirModal {
     from { transform: scale(0.8); opacity: 0; }
     to { transform: scale(1); opacity: 1; }
@@ -255,7 +252,7 @@
     margin: 0 0 35px 0;
 }
 
-/* Botão final dentro do modal */
+
 .btn-modal-final {
     width: 100%;
     background-color: #1d448b;

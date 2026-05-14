@@ -1,4 +1,4 @@
-/* --- Container Principal --- */
+
 .perfil-container {
   display: flex;
   flex-direction: column;
@@ -7,7 +7,7 @@
   font-family: Arial, sans-serif;
 }
 
-/* --- Header --- */
+
 .perfil-header {
   display: flex;
   justify-content: space-between;
@@ -31,7 +31,6 @@
   gap: 24px;
 }
 
-/* --- Card de Dados --- */
 .card-dados {
   background-color: #ffffff;
   border-radius: 12px;
@@ -54,7 +53,6 @@
   font-size: 1.1rem;
 }
 
-/* --- Botões de Ação (Editar/Salvar) --- */
 .btn-acao {
   display: flex;
   align-items: center;
@@ -78,7 +76,6 @@
   animation: brilho-verde 2s infinite ease-in-out;
 }
 
-/* --- Grupos de Campos --- */
 .campo-grupo {
   display: flex;
   flex-direction: column;
@@ -106,7 +103,6 @@
   box-sizing: border-box;
 }
 
-/* Estado desabilitado (apenas leitura) */
 .campo-grupo input:disabled {
   background-color: #fff;
   border-color: transparent;
@@ -116,7 +112,6 @@
   cursor: default;
 }
 
-/* --- Lógica da Senha e do Olho --- */
 .destaque-senha input {
   border-color: #1d448b !important;
   background-color: #eef3fb !important;
@@ -150,12 +145,12 @@
   color: #1d448b;
 }
 
-/* --- Área de Perigo e Configurações --- */
+
 .area-perigo {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  align-items: flex-start; /* 👉 Garante que tudo dentro dessa área alinhe à esquerda */
+  align-items: flex-start; 
 }
 
 .area-perigo h3 {
@@ -164,15 +159,14 @@
   font-size: 1rem;
 }
 
-/* Botões Inferiores menores e alinhados à esquerda */
 .btn-limpar-cache, .btn-sair {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
   width: 100%;
-  max-width: 300px; /* Limita a largura dos botões */
-  margin: 0;        /* 👉 Deixa no canto esquerdo */
+  max-width: 300px; 
+  margin: 0;        
   padding: 16px;
   background-color: #fff;
   border-radius: 8px;
@@ -202,7 +196,6 @@
   background-color: #f0f0f0;
 }
 
-/* --- Animações e Feedbacks --- */
 @keyframes brilho-verde {
   0% { box-shadow: 0 0 5px rgba(55, 140, 38, 0.3); }
   50% { box-shadow: 0 0 15px rgba(55, 140, 38, 0.6); }
@@ -222,7 +215,7 @@
     border-radius: 12px;
     margin-bottom: 10px;
     box-shadow: var(--shadow);
-    width: 100%; /* Garante que o switch ocupe a largura certa */
+    width: 100%; 
     box-sizing: border-box;
 }
 
@@ -233,7 +226,7 @@
     font-weight: 500;
 }
 
-/* Estilo do Switch (O botão deslizante) */
+
 .switch {
   position: relative;
   display: inline-block;
@@ -274,7 +267,6 @@ input:checked + .slider:before {
   transform: translateX(26px);
 }
 
-/* --- Novo: Mensagem de Feedback (Aviso na Tela) --- */
 .feedback-perfil {
   position: fixed;
   top: 20px;

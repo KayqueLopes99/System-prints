@@ -65,7 +65,6 @@
   color: var(--text-h, #333);
 }
 
-/* Estrutura do Input com Ícone */
 .input-wrapper {
   position: relative;
   display: flex;

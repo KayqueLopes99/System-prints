@@ -14,7 +14,6 @@ export default function NotificacaoGeral() {
     const handleEnviar = async (e) => {
         e.preventDefault();
         
-        // Validação básica local antes do envio
         if (!titulo.trim() || !mensagem.trim()) {
             setStatus({ tipo: 'erro', texto: 'Preencha todos os campos antes de disparar o aviso.' });
             return;
@@ -24,7 +23,6 @@ export default function NotificacaoGeral() {
         setStatus({ tipo: '', texto: '' });
 
         try {
-            // Chamada ao endpoint que utiliza o NotificacaoService.cadastrarNotificacaoGeral
             await axios.post('http://localhost:8080/api/notificacoes/enviar-geral', {
                 titulo,
                 mensagem

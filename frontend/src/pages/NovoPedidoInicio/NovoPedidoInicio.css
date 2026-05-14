@@ -1,26 +1,20 @@
-/* Container Geral */
 .novo-pedido-container {
   min-height: 100vh;
   background-color: #f8f9fa;
   font-family: Arial, sans-serif;
-  /* 👉 AUMENTADO: Espaço para a navbar respirar mais */
   padding-bottom: 110px; 
   display: flex;
   flex-direction: column;
 }
 
-/* Cabeçalho */
 .novo-pedido-header {
   background-color: #fff;
-  /* 👉 AUMENTADO: Padding vertical para dar mais destaque */
   padding: 40px 20px; 
   border-bottom: 1px solid #e0e0e0;
   text-align: center;
-  /* 👉 ADICIONADO: Sombra leve */
   box-shadow: 0 2px 10px rgba(0,0,0,0.03);
 }
 
-/* 👉 ADICIONADO: Container do ícone do topo */
 .header-icon-container {
   margin-bottom: 20px;
   display: flex;
@@ -30,61 +24,57 @@
 
 .novo-pedido-header h1 {
   color: #1d448b;
-  font-size: 28px; /* 👉 AUMENTADO */
-  margin: 0 0 8px 0; /* 👉 AJUSTADO */
+  font-size: 28px; 
+  margin: 0 0 8px 0; 
   font-weight: bold;
 }
 
 .novo-pedido-header p {
   color: #666;
-  font-size: 15px; /* 👉 AUMENTADO */
+  font-size: 15px; 
   margin: 0;
-  max-width: 300px; /* 👉 ADICIONADO: Para quebrar linha bonitinho */
-  margin: 0 auto; /* 👉 ADICIONADO: Centralizar o parágrafo */
+  max-width: 300px; 
+  margin: 0 auto; 
 }
 
 .novo-pedido-main {
-  /* 👉 AUMENTADO: Padding lateral */
   padding: 30px 24px; 
 }
 
-/* Títulos das seções */
 .titulo-secao {
   text-align: center;
-  font-size: 18px; /* 👉 AUMENTADO */
+  font-size: 18px; 
   color: #333;
   font-weight: bold;
-  /* 👉 AUMENTADO: Margem inferior */
   margin: 10px 0 25px 0; 
 }
 
-/* Cards de Serviços */
 .card-servico {
   background-color: #fff;
-  padding: 20px; /* 👉 AUMENTADO */
-  border-radius: 16px; /* 👉 AUMENTADO: Bordas mais arredondadas */
+  padding: 20px; 
+  border-radius: 16px; 
   display: flex;
   align-items: center;
-  margin-bottom: 20px; /* 👉 AUMENTADO */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* 👉 AJUSTADO: Sombra mais suave */
+  margin-bottom: 20px; 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
   cursor: pointer;
-  border: 2px solid transparent; /* 👉 AJUSTADO: Borda mais grossa para o hover */
+  border: 2px solid transparent; 
   transition: all 0.2s ease-in-out;
 }
 
 .card-servico:hover {
   border-color: #1d448b;
-  transform: translateY(-2px); /* 👉 ADICIONADO: Efeito de flutuar */
+  transform: translateY(-2px); 
 }
 
 .icone-servico {
-  width: 55px; /* 👉 AUMENTADO */
-  height: 55px; /* 👉 AUMENTADO */
+  width: 55px; 
+  height: 55px; 
   border-radius: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 18px; /* 👉 AUMENTADO */
+  margin-right: 18px; 
   flex-shrink: 0;
   background-color: #f0f0f0;
 }
@@ -98,35 +88,35 @@
 }
 
 .info-servico h3 {
-  margin: 0 0 4px 0; /* 👉 AJUSTADO */
-  font-size: 17px; /* 👉 AUMENTADO */
+  margin: 0 0 4px 0; 
+  font-size: 17px; 
   color: #333;
   font-weight: 600;
 }
 
 .sub-info {
-  font-size: 13px; /* 👉 AUMENTADO */
+  font-size: 13px; 
   color: #666;
   display: block;
-  margin-bottom: 5px; /* 👉 AJUSTADO */
+  margin-bottom: 5px; 
 }
 
 .descricao-servico {
   font-size: 11px;
   color: #888;
   margin: 0;
-  line-height: 1.4; /* 👉 AUMENTADO */
+  line-height: 1.4; 
 }
 
 .checkbox-servico {
-  width: 22px; /* 👉 AUMENTADO */
-  height: 22px; /* 👉 AUMENTADO */
+  width: 22px; 
+  height: 22px; 
   accent-color: #1d448b;
   cursor: pointer;
-  margin-left: 10px; /* 👉 ADICIONADO */
+  margin-left: 10px; 
 }
 
-/* Navbar Inferior Escura */
+
 .navegacao-inferior.dark-nav {
   background-color: #1d448b;
   position: fixed;
@@ -136,11 +126,11 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  height: 75px; /* 👉 AUMENTADO */
-  border-top-left-radius: 20px; /* 👉 AUMENTADO */
-  border-top-right-radius: 20px; /* 👉 AUMENTADO */
+  height: 75px; 
+  border-top-left-radius: 20px; 
+  border-top-right-radius: 20px; 
   z-index: 100;
-  box-shadow: 0 -4px 10px rgba(0,0,0,0.1); /* 👉 ADICIONADO */
+  box-shadow: 0 -4px 10px rgba(0,0,0,0.1); 
 }
 
 .icone-nav {
@@ -148,14 +138,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10px; /* 👉 ADICIONADO: Área de clique maior */
+  padding: 10px; 
 }
 
-/* =========================================
-   BOTÃO AVANÇAR
-   ========================================= */
 .container-avancar {
-  margin-top: 25px; /* 👉 AUMENTADO */
+  margin-top: 25px; 
   display: flex;
   justify-content: center;
   padding-bottom: 20px;
@@ -165,18 +152,18 @@
   background-color: #1d448b;
   color: #ffffff;
   border: none;
-  padding: 18px 0; /* 👉 AUMENTADO */
+  padding: 18px 0; 
   width: 100%;
-  border-radius: 14px; /* 👉 AUMENTADO */
-  font-size: 17px; /* 👉 AUMENTADO */
+  border-radius: 14px; 
+  font-size: 17px; 
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(29, 68, 139, 0.25); /* 👉 AJUSTADO */
+  box-shadow: 0 4px 12px rgba(29, 68, 139, 0.25); 
   transition: all 0.2s ease;
 }
 
 .botao-avancar:hover {
-  background-color: #15356e; /* 👉 ADICIONADO */
+  background-color: #15356e; 
 }
 
 .botao-avancar:active {

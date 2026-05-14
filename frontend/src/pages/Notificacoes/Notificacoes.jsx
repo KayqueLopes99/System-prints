@@ -10,14 +10,12 @@ export default function Notificacoes() {
     const idUsuario = localStorage.getItem('usuarioId') || 1;
 
     useEffect(() => {
-        // Busca a lista de notificações do usuário
         axios.get(`http://localhost:8080/api/notificacoes/usuario/${idUsuario}`)
             .then(res => setNotificacoes(res.data))
             .catch(err => console.error("Erro ao carregar notificações:", err));
     }, [idUsuario]);
 
     const marcarComoLida = (id) => {
-        // Atualiza no banco que o usuário viu a mensagem
         axios.patch(`http://localhost:8080/api/notificacoes/${id}/lida`)
             .then(() => {
                 setNotificacoes(notificacoes.map(n =>
@@ -30,7 +28,7 @@ export default function Notificacoes() {
         <div className="notificacoes-container">
             <header className="header-notificacoes">
                 <button className="btn-voltar" onClick={() => navigate(-1)}>
-                    {/* Diminuí um pouco o tamanho para 20 para caber melhor com o texto */}
+                    
                     <ArrowLeft size={20} color="#1d448b" /> Voltar
                 </button>
                 <div className="titulo-notificacoes">

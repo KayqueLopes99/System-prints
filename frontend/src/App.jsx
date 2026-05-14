@@ -37,6 +37,8 @@ export default function App() {
 
         {/* Rota de Recuperar Senha */}
         <Route path="/recuperar-senha" element={<RecuperarSenha />} />
+
+        {/* Rota de Atualizar Senha */}
         <Route path="/AtualizarSenha" element={<AtualizarSenha />} />
 
         {/* Rota da Tela Principal do Estudante */}

@@ -8,7 +8,6 @@ export default function RecuperarSenha() {
   const [email, setEmail] = useState('');
   const [erroEmail, setErroEmail] = useState('');
   
-  // 👉 NOVOS ESTADOS PARA FEEDBACK
   const [mensagemSucesso, setMensagemSucesso] = useState('');
   const [erroServidor, setErroServidor] = useState('');
   const [carregando, setCarregando] = useState(false);
@@ -17,7 +16,6 @@ export default function RecuperarSenha() {
     const value = e.target.value;
     setEmail(value);
     
-    // Limpa avisos de erro/sucesso enquanto o usuário digita novamente
     setErroServidor('');
     setMensagemSucesso('');
 
@@ -35,7 +33,6 @@ export default function RecuperarSenha() {
   const handleRecuperar = async (e) => {
     e.preventDefault();
     
-    // Reset de mensagens antes de tentar
     setErroServidor('');
     setMensagemSucesso('');
 
@@ -44,12 +41,10 @@ export default function RecuperarSenha() {
     setCarregando(true);
 
     try {
-      // Chamada para o seu Back-end
       await axios.post('http://localhost:8080/api/usuarios/recuperar-senha', { email });
       
       setMensagemSucesso('Link enviado! Verifique sua caixa de entrada e spam.');
       
-      // Redireciona para o login após um tempo para o usuário ler a mensagem
       setTimeout(() => {
         window.location.href = '/';
       }, 4000);
@@ -57,7 +52,6 @@ export default function RecuperarSenha() {
     } catch (erro) {
       console.error("Erro ao solicitar recuperação:", erro);
       
-      // Tratamento de erro específico
       if (erro.response && erro.response.status === 404) {
         setErroEmail('E-mail não encontrado em nossa base de dados.');
       } else {
@@ -104,12 +98,12 @@ export default function RecuperarSenha() {
                 value={email}
                 onChange={handleChangeEmail}
                 required
-                // Aplica borda vermelha se houver erro de validação ou do servidor
+
                 style={(erroEmail || erroServidor) ? { borderColor: '#d32f2f' } : {}}
               />
             </div>
 
-            {/* MENSAGENS DE FEEDBACK ABAIXO DO INPUT */}
+
             {erroEmail && (
               <span style={{ color: '#d32f2f', fontSize: '0.85rem', marginTop: '4px', display: 'block' }}>
                 {erroEmail}
