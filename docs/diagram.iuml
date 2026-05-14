@@ -43,7 +43,6 @@ enum TipoPagamento {
   CARTAO
 }
 
-' --- Definição das Classes ---
 class "Usuario" as usuario {
   - id_usuario : int
   - nome_completo : String
@@ -165,7 +164,7 @@ class "Notificacao" as notificacao {
   + marcarComoLida() 
 }
 
-' ... Restante das classes e relacionamentos (Mantidos) ...
+
 class "Horario_Funcionamento" as horario {
   - id_horario : int 
   --

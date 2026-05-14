@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-// 👉 Adicionamos o FiAlertCircle para o aviso de erro
 import { FiPrinter, FiUser, FiLock, FiEye, FiEyeOff, FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
 import './Login.css';
 
@@ -11,14 +10,13 @@ export default function Login() {
   const [mostrarSenha, setMostrarSenha] = useState(false);
 
   const [exibirSucesso, setExibirSucesso] = useState(false);
-  // 👉 NOVO ESTADO: Controla a mensagem de erro na tela
   const [erroAviso, setErroAviso] = useState('');
 
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setErroAviso(''); // Limpa o erro anterior ao tentar logar de novo
+    setErroAviso(''); 
 
     try {
       const resposta = await axios.post('http://localhost:8080/api/usuarios/login', {
@@ -28,29 +26,25 @@ export default function Login() {
 
       console.log("Usuário autenticado:", resposta.data);
 
-      // SALVE O OBJETO INTEIRO PARA O PERFIL USAR
       localStorage.setItem('usuarioLogado', JSON.stringify(resposta.data));
-      // Mantém o ID se já usar em outros lugares
       localStorage.setItem('usuarioId', resposta.data.idUsuario);
       setExibirSucesso(true);
 
-      // 1. Pega o campo que agora o Java vai enviar corretamente
       const tipo = resposta.data.tipo_usuario;
 
-      // 2. Define o destino
+      
       const destino = tipo === 'ADMINISTRADOR' ? '/admin' : '/estudante';
 
       console.log("Tipo do usuário logado:", tipo);
       console.log("Indo para:", destino);
 
-      // 3. REMOVA as aspas e use a variável 'destino' aqui!
+      
       setTimeout(() => {
-        navigate(destino); // 👉 Sem aspas, para usar a variável!
+        navigate(destino); 
       }, 2000);
     } catch (erro) {
       console.error("Erro no login:", erro);
 
-      // Tratamento inteligente da mensagem de erro (igual fizemos no cadastro)
       let textoErro = "E-mail/Matrícula ou senha incorretos.";
       if (erro.response && erro.response.data) {
         if (typeof erro.response.data === 'string') {
@@ -62,7 +56,6 @@ export default function Login() {
         textoErro = "Erro de conexão com o servidor.";
       }
 
-      // 👉 Em vez de alert(), salvamos no estado para aparecer na tela!
       setErroAviso(textoErro);
     }
   };
@@ -72,14 +65,12 @@ export default function Login() {
       <div className="card-interface">
 
         {exibirSucesso ? (
-          /* --- TELA DE SUCESSO COM ANIMAÇÃO --- */
           <div className="container-sucesso">
             <FiCheckCircle className="icone-sucesso-animado" size={80} color="#378C26" />
             <h2 style={{ color: '#378C26', marginTop: '15px' }}>Login com Sucesso!</h2>
             <p style={{ color: '#666', marginTop: '5px' }}>Redirecionando...</p>
           </div>
         ) : (
-          /* --- TELA DE FORMULÁRIO PADRÃO --- */
           <>
             <div className="logo-container">
               <div className="logo-circulo">
@@ -93,7 +84,7 @@ export default function Login() {
               <p>Digite seu acesso</p>
             </div>
 
-            {/* 👉 AVISO DE ERRO NA TELA (Renderiza apenas se erroAviso não for vazio) */}
+            
             {erroAviso && (
               <div style={{
                 backgroundColor: '#ffebee',
@@ -124,7 +115,7 @@ export default function Login() {
                     value={email}
                     onChange={(e) => {
                       setEmail(e.target.value);
-                      setErroAviso(''); // 👉 Limpa o erro se o usuário começar a digitar de novo
+                      setErroAviso(''); 
                     }}
                     required
                   />
@@ -141,7 +132,7 @@ export default function Login() {
                     value={senha}
                     onChange={(e) => {
                       setSenha(e.target.value);
-                      setErroAviso(''); // 👉 Limpa o erro se o usuário começar a digitar de novo
+                      setErroAviso(''); 
                     }}
                     required
                     style={{ paddingRight: '40px' }}

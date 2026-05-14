@@ -5,10 +5,10 @@ CREATE TYPE orientacao_enum AS ENUM ('RETRATO', 'PAISAGEM');
 CREATE TYPE tipo_cor_enum AS ENUM ('PRETO_BRANCO', 'COLORIDO');
 CREATE TYPE metodo_pagamento_enum AS ENUM ('PIX', 'DINHEIRO', 'CARTAO');
 
--- 2. TABELA USUARIO (Com estratégia de herança Single Table)
+-- 2. TABELA USUARIO
 CREATE TABLE usuario (
     id_usuario SERIAL PRIMARY KEY,
-    tipo_usuario VARCHAR(50) NOT NULL, -- 'ESTUDANTE' ou 'ADMINISTRADOR'
+    tipo_usuario VARCHAR(50) NOT NULL,
     nome_completo VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     senha VARCHAR(255) NOT NULL,
@@ -35,18 +35,19 @@ CREATE TABLE pedido (
     data_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status_fila status_fila_enum DEFAULT 'PENDENTE',
     arquivo_url VARCHAR(500),
-    nome_arquivo_original VARCHAR(255), -- Nome amigável para o React
+    nome_arquivo_original VARCHAR(255),
     tamanho_arquivo_mb DECIMAL(10,2),
     total_paginas_arquivo INT,
     valor_total DECIMAL(10,2),
-    dados_arquivo BYTEA -- 👉 ESSENCIAL: Armazena o arquivo físico
+    dados_arquivo BYTEA
+    
 );
 
 -- 5. TABELA ITEM_PEDIDO
 CREATE TABLE item_pedido (
     id_item SERIAL PRIMARY KEY,
     id_pedido INT REFERENCES pedido(id_pedido) ON DELETE CASCADE,
-    tipo_servico VARCHAR(50) NOT NULL, -- Diferencia os tipos no relatório
+    tipo_servico VARCHAR(50) NOT NULL, 
     quantidade INT NOT NULL DEFAULT 1,
     tamanho_papel VARCHAR(20),
     orientacao orientacao_enum,

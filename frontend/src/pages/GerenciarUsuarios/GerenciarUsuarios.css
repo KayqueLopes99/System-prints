@@ -79,7 +79,7 @@
 .badge-tipo.estudante { background: #f0f4f8; color: #555; }
 .badge-tipo.administrador { background: #1a3a6d; color: white; }
 
-/* Modal */
+
 .modal-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;

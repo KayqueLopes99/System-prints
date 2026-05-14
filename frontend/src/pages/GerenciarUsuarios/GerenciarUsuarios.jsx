@@ -12,7 +12,6 @@ export default function GerenciarUsuarios() {
     const [busca, setBusca] = useState('');
     const [mostrarModal, setMostrarModal] = useState(false);
     
-    // Estado para o formulário de novo Administrador[cite: 17]
     const [novoAdmin, setNovoAdmin] = useState({
         nome: '',
         email: '',
@@ -20,7 +19,6 @@ export default function GerenciarUsuarios() {
         cargo: ''
     });
 
-    // Notificação (estilo Toast)
     const [notificacao, setNotificacao] = useState({ visivel: false, texto: '', tipo: '' });
 
     const avisar = (texto, tipo) => {
@@ -28,7 +26,6 @@ export default function GerenciarUsuarios() {
         setTimeout(() => setNotificacao({ ...notificacao, visivel: false }), 4000);
     };
 
-    // 🔄 Carregar usuários do banco
     const carregarUsuarios = (termo = '') => {
         const url = termo 
             ? `http://localhost:8080/api/admin/usuarios?nome=${termo}` 
@@ -42,13 +39,11 @@ export default function GerenciarUsuarios() {
 
     useEffect(() => carregarUsuarios(), []);
 
-    // 🔍 Busca dinâmica ao digitar
     useEffect(() => {
         const timer = setTimeout(() => carregarUsuarios(busca), 300);
         return () => clearTimeout(timer);
     }, [busca]);
 
-    // ➕ Cadastrar Administrador Interno[cite: 18]
     const handleCadastrarAdmin = async (e) => {
         e.preventDefault();
         try {
@@ -148,7 +143,6 @@ export default function GerenciarUsuarios() {
                 </section>
             </main>
 
-            {/* MODAL DE CADASTRO */}
             {mostrarModal && (
                 <div className="modal-overlay">
                     <div className="modal-content">

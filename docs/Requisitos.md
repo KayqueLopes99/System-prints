@@ -1,4 +1,3 @@
-
 # Documento de Requisitos - Sistema de Gestão de Impressões (KLIJ)
 
 ### 1. Requisitos Funcionais (RF)
