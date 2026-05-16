@@ -3,15 +3,12 @@
 Este é um sistema desenvolvido para facilitar a solicitação, acompanhamento e administração de serviços de impressão e encadernação universitária. O projeto integra uma interface moderna em React com um back-end em Spring Boot e armazenamento seguro de arquivos em PostgreSQL.
 
 ## Principais Funcionalidades
-
-O sistema cobre todo o fluxo operacional do setor de xerox:
-
 *   **Perfis de Acesso**: Interfaces distintas para **Estudantes** (solicitação e acompanhamento) e **Administradores** (gestão de fila e financeiro).
 *   **Upload e Configuração de PDF**: Envio remoto de arquivos com seleção de parâmetros como cor (P&B/Colorido), orientação, frente e verso e quantidade de cópias.
 *   **Cálculo Automático e Encadernação**: Cálculo de preço em tempo real, suportando serviços de encadernação com valor base e adicional por folha.
 *   **Gestão de Fila em Tempo Real**: Monitoramento de status (PENDENTE, PRONTO, CONCLUIDO, CANCELADO) e estimativa de tempo de espera.
 *   **Notificações Instantâneas**: Alertas automáticos para o aluno quando o pedido está pronto para retirada.
-*   **Dashboard Administrativo**: Painel para o gestor com relatórios de faturamento, ticket médio e estatísticas de uso do setor.
+*   **Dashboard Administrativo**: Painel para o gestor com relatórios de faturamento e estatísticas de uso do setor.
 *   **Segurança de Documentos**: Armazenamento binário de arquivos (`BYTEA`) no banco de dados, garantindo que o arquivo original nunca se perca.
 
 ## Tecnologias Utilizadas
