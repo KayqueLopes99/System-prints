@@ -1,6 +1,6 @@
 # Sistema de Gerenciamento de Impressões 
 
-Este é um sistema desenvolvido para facilitar a solicitação, acompanhamento e administração de serviços de impressão e encadernação universitária. O projeto integra uma interface moderna em React com um back-end em Spring Boot e armazenamento seguro de arquivos em PostgreSQL.
+Este é um sistema desenvolvido para facilitar a solicitação, acompanhamento e administração de serviços de impressão e encadernação. O projeto integra uma interface moderna em React com um back-end em Spring Boot e armazenamento seguro de arquivos em PostgreSQL.
 
 ## Principais Funcionalidades
 *   **Perfis de Acesso**: Interfaces distintas para **Estudantes** (solicitação e acompanhamento) e **Administradores** (gestão de fila e financeiro).
