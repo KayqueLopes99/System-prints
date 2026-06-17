@@ -16,7 +16,6 @@ import java.util.Optional;
 // import java.util.UUID;
 import java.util.List;
 
-
 @Service
 public class UsuarioService {
 
@@ -27,31 +26,47 @@ public class UsuarioService {
     // private RabbitTemplate rabbitTemplate;
 
     public Usuario autenticarUsuario(String login, String senhaDigitada) {
-        Optional<Usuario> usuarioNoBanco = usuarioRepository.findByEmailOrMatricula(login);
+        // 1. Busca o usuário ou lança erro se não achar
+        Usuario usuario = usuarioRepository.findByEmailOrMatricula(login)
+                .orElseThrow(() -> new RuntimeException("E-mail/Matrícula ou senha incorretos."));
 
-        if (usuarioNoBanco.isPresent() && usuarioNoBanco.get().getSenha().equals(senhaDigitada)) {
-            return usuarioNoBanco.get();
+        // 2. Verifica se a senha existe no banco antes de comparar
+        if (usuario.getSenha() == null || !usuario.getSenha().equals(senhaDigitada)) {
+            throw new RuntimeException("E-mail/Matrícula ou senha incorretos.");
         }
-        throw new RuntimeException("E-mail/Matrícula ou senha incorretos.");
+
+        return usuario;
     }
 
+    // public Usuario autenticarUsuario(String login, String senhaDigitada) {
+    // Optional<Usuario> usuarioNoBanco =
+    // usuarioRepository.findByEmailOrMatricula(login);
+
+    // if (usuarioNoBanco.isPresent() &&
+    // usuarioNoBanco.get().getSenha().equals(senhaDigitada)) {
+    // return usuarioNoBanco.get();
+    // }
+    // throw new RuntimeException("E-mail/Matrícula ou senha incorretos.");
+    // }
+
     // public void recuperarSenha(String email) {
-    //     Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(email);
+    // Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(email);
 
-    //     if (usuarioOptional.isPresent()) {
-    //         Usuario usuario = usuarioOptional.get();
-    //         String codigo = UUID.randomUUID().toString();
+    // if (usuarioOptional.isPresent()) {
+    // Usuario usuario = usuarioOptional.get();
+    // String codigo = UUID.randomUUID().toString();
 
-    //         usuario.setCodigoRecuperacao(codigo);
-    //         usuario.setDataExpiracao(LocalDateTime.now().plusMinutes(30));
-    //         usuarioRepository.save(usuario);
+    // usuario.setCodigoRecuperacao(codigo);
+    // usuario.setDataExpiracao(LocalDateTime.now().plusMinutes(30));
+    // usuarioRepository.save(usuario);
 
-    //         String link = "http://localhost:5173/AtualizarSenha?id=" + codigo;
-    //         EmailMensagemDTO mensagemEmail = new EmailMensagemDTO(usuario.getEmail(), link);
-    //         rabbitTemplate.convertAndSend(RabbitMQConfig.FILA_EMAIL, mensagemEmail);
-    //     } else {
-    //         throw new RuntimeException("E-mail não encontrado no sistema.");
-    //     }
+    // String link = "http://localhost:5173/AtualizarSenha?id=" + codigo;
+    // EmailMensagemDTO mensagemEmail = new EmailMensagemDTO(usuario.getEmail(),
+    // link);
+    // rabbitTemplate.convertAndSend(RabbitMQConfig.FILA_EMAIL, mensagemEmail);
+    // } else {
+    // throw new RuntimeException("E-mail não encontrado no sistema.");
+    // }
     // }
 
     public void alterarSenha(String codigo, String novaSenha) {
@@ -89,37 +104,38 @@ public class UsuarioService {
         Usuario usuarioExistente = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new RuntimeException("Utilizador não encontrado."));
 
-        if (dto.getNomeCompleto() != null) usuarioExistente.setNomeCompleto(dto.getNomeCompleto());
-        if (dto.getEmail() != null) usuarioExistente.setEmail(dto.getEmail());
+        if (dto.getNomeCompleto() != null)
+            usuarioExistente.setNomeCompleto(dto.getNomeCompleto());
+        if (dto.getEmail() != null)
+            usuarioExistente.setEmail(dto.getEmail());
 
         if (dto.getSenha() != null && !dto.getSenha().trim().isEmpty()) {
             usuarioExistente.setSenha(dto.getSenha());
         }
 
-        
         if (usuarioExistente instanceof Estudante) {
             Estudante estudante = (Estudante) usuarioExistente;
-            
-            if (dto.getMatricula() != null) estudante.setMatricula(dto.getMatricula());
-            if (dto.getCurso() != null) estudante.setCurso(dto.getCurso());
-            
-            return usuarioRepository.save(estudante); 
+
+            if (dto.getMatricula() != null)
+                estudante.setMatricula(dto.getMatricula());
+            if (dto.getCurso() != null)
+                estudante.setCurso(dto.getCurso());
+
+            return usuarioRepository.save(estudante);
         }
 
         return usuarioRepository.save(usuarioExistente);
     }
 
-
     public Administrador cadastrarAdministradorInterno(String nome, String email, String senha, String cargo) {
         Administrador admin = new Administrador();
         admin.setNomeCompleto(nome);
         admin.setEmail(email);
-        admin.setSenha(senha); 
+        admin.setSenha(senha);
         admin.setCargoSetor(cargo);
-        
+
         return usuarioRepository.save(admin);
     }
-
 
     public List<Usuario> listarTodos() {
         return usuarioRepository.findAll();
