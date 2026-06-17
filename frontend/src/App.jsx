@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Login from './pages/Login/Login';
 import Cadastro from './pages/Cadastro/Cadastro';
-import RecuperarSenha from './pages/RecuperarSenha/RecuperarSenha';
+// import RecuperarSenha from './pages/RecuperarSenha/RecuperarSenha';
 import AtualizarSenha from './pages/AtualizarSenha/AtualizarSenha';
 import TelaEstudante from "./pages/TelaEstudante/TelaEstudante";
 import Perfil from './pages/Perfil/Perfil';
@@ -35,8 +35,8 @@ export default function App() {
         {/* Rota de Cadastro */}
         <Route path="/cadastro" element={<Cadastro />} />
 
-        {/* Rota de Recuperar Senha */}
-        <Route path="/recuperar-senha" element={<RecuperarSenha />} />
+        {/* Rota de Recuperar Senha
+        <Route path="/recuperar-senha" element={<RecuperarSenha />} /> */}
 
         {/* Rota de Atualizar Senha */}
         <Route path="/AtualizarSenha" element={<AtualizarSenha />} />

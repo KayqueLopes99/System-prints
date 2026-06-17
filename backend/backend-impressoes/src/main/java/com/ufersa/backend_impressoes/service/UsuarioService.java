@@ -1,19 +1,19 @@
 package com.ufersa.backend_impressoes.service;
 
-import com.ufersa.backend_impressoes.config.RabbitMQConfig;
-import com.ufersa.backend_impressoes.dto.EmailMensagemDTO;
+// import com.ufersa.backend_impressoes.config.RabbitMQConfig;
+// import com.ufersa.backend_impressoes.dto.EmailMensagemDTO;
 import com.ufersa.backend_impressoes.dto.UsuarioAtualizacaoDTO;
 import com.ufersa.backend_impressoes.model.Administrador;
 import com.ufersa.backend_impressoes.model.Estudante;
 import com.ufersa.backend_impressoes.model.Usuario;
 import com.ufersa.backend_impressoes.repository.UsuarioRepository;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+// import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
+// import java.util.UUID;
 import java.util.List;
 
 
@@ -23,8 +23,8 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
+    // @Autowired
+    // private RabbitTemplate rabbitTemplate;
 
     public Usuario autenticarUsuario(String login, String senhaDigitada) {
         Optional<Usuario> usuarioNoBanco = usuarioRepository.findByEmailOrMatricula(login);
@@ -35,24 +35,24 @@ public class UsuarioService {
         throw new RuntimeException("E-mail/Matrícula ou senha incorretos.");
     }
 
-    public void recuperarSenha(String email) {
-        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(email);
+    // public void recuperarSenha(String email) {
+    //     Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(email);
 
-        if (usuarioOptional.isPresent()) {
-            Usuario usuario = usuarioOptional.get();
-            String codigo = UUID.randomUUID().toString();
+    //     if (usuarioOptional.isPresent()) {
+    //         Usuario usuario = usuarioOptional.get();
+    //         String codigo = UUID.randomUUID().toString();
 
-            usuario.setCodigoRecuperacao(codigo);
-            usuario.setDataExpiracao(LocalDateTime.now().plusMinutes(30));
-            usuarioRepository.save(usuario);
+    //         usuario.setCodigoRecuperacao(codigo);
+    //         usuario.setDataExpiracao(LocalDateTime.now().plusMinutes(30));
+    //         usuarioRepository.save(usuario);
 
-            String link = "http://localhost:5173/AtualizarSenha?id=" + codigo;
-            EmailMensagemDTO mensagemEmail = new EmailMensagemDTO(usuario.getEmail(), link);
-            rabbitTemplate.convertAndSend(RabbitMQConfig.FILA_EMAIL, mensagemEmail);
-        } else {
-            throw new RuntimeException("E-mail não encontrado no sistema.");
-        }
-    }
+    //         String link = "http://localhost:5173/AtualizarSenha?id=" + codigo;
+    //         EmailMensagemDTO mensagemEmail = new EmailMensagemDTO(usuario.getEmail(), link);
+    //         rabbitTemplate.convertAndSend(RabbitMQConfig.FILA_EMAIL, mensagemEmail);
+    //     } else {
+    //         throw new RuntimeException("E-mail não encontrado no sistema.");
+    //     }
+    // }
 
     public void alterarSenha(String codigo, String novaSenha) {
         Optional<Usuario> usuarioOptional = usuarioRepository.findByCodigoRecuperacao(codigo);

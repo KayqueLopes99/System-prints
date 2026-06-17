@@ -33,19 +33,19 @@ public class UsuarioController {
         }
     }
 
-    @PostMapping("/recuperar-senha")
-    public ResponseEntity<?> recuperarSenha(@RequestBody Map<String, String> dados) {
-        try {
-            String email = dados.get("email");
+    // @PostMapping("/recuperar-senha")
+    // public ResponseEntity<?> recuperarSenha(@RequestBody Map<String, String> dados) {
+    //     try {
+    //         String email = dados.get("email");
 
-            usuarioService.recuperarSenha(email);
+    //         usuarioService.recuperarSenha(email);
 
-            return ResponseEntity.ok("E-mail de recuperação enviado com sucesso! Verifique sua caixa de entrada.");
+    //         return ResponseEntity.ok("E-mail de recuperação enviado com sucesso! Verifique sua caixa de entrada.");
 
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
+    //     } catch (RuntimeException e) {
+    //         return ResponseEntity.badRequest().body(e.getMessage());
+    //     }
+    // }
 
     @PutMapping("/alterar-senha")
     public ResponseEntity<?> alterarSenha(@RequestBody Map<String, String> dados) {

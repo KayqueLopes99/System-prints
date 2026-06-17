@@ -1,16 +1,16 @@
-package com.ufersa.backend_impressoes.config;
+// package com.ufersa.backend_impressoes.config;
 
-import org.springframework.amqp.core.Queue;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+// import org.springframework.amqp.core.Queue;
+// import org.springframework.context.annotation.Bean;
+// import org.springframework.context.annotation.Configuration;
 
-@Configuration
-public class RabbitMQConfig {
+// @Configuration
+// public class RabbitMQConfig {
 
-    public static final String FILA_EMAIL = "fila.email.recuperacao";
+//     public static final String FILA_EMAIL = "fila.email.recuperacao";
 
-    @Bean
-    public Queue filaEmail() {
-        return new Queue(FILA_EMAIL, true);
-    }
-}
+//     @Bean
+//     public Queue filaEmail() {
+//         return new Queue(FILA_EMAIL, true);
+//     }
+// }

@@ -151,7 +151,7 @@ export default function Login() {
                 <label className="checkbox-label">
                   <input type="checkbox" /> Lembrar de mim
                 </label>
-                <a href="/recuperar-senha" className="link-destaque">Esqueci a senha</a>
+                {/* <a href="/recuperar-senha" className="link-destaque">Esqueci a senha</a> */}
               </div>
 
               <button type="submit" className="btn-primario">ENTRAR</button>
