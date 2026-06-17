@@ -23,7 +23,7 @@ export default function NotificacaoGeral() {
         setStatus({ tipo: '', texto: '' });
 
         try {
-            await axios.post('http://localhost:8080/api/notificacoes/enviar-geral', {
+            await axios.post('https://api-impressoes-kayque-99.onrender.com/api/notificacoes/enviar-geral', {
                 titulo,
                 mensagem
             });

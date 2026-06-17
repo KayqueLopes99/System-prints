@@ -15,7 +15,7 @@ export default function CancelarPedido() {
     const handleCancelar = async () => {
         setCarregando(true);
         try {
-            await axios.put(`http://localhost:8080/api/pedidos/${idPedido}/cancelar`);
+            await axios.put(`https://api-impressoes-kayque-99.onrender.com/api/pedidos/${idPedido}/cancelar`);
             
             setStatusFeedback({ 
                 tipo: 'sucesso', 

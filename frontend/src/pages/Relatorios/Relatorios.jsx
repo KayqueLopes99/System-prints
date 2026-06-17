@@ -10,7 +10,7 @@ export default function Relatorios() {
 
     useEffect(() => {
 
-        fetch('http://localhost:8080/api/admin/relatorios')
+        fetch('https://api-impressoes-kayque-99.onrender.com/api/admin/relatorios')
             .then(res => res.json())
             .then(data => {
                 const pizzaArray = Object.entries(data.distribuicaoServicos).map(([name, value]) => ({ name, value }));

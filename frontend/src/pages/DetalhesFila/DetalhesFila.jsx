@@ -12,14 +12,14 @@ export default function DetalhesFila() {
     const idUsuarioLogado = parseInt(localStorage.getItem('usuarioId') || 1);
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/pedidos/admin/fila`)
+        axios.get(`https://api-impressoes-kayque-99.onrender.com/api/pedidos/admin/fila`)
             .then(res => {
                 setFila(res.data);
                 
                 const index = res.data.findIndex(p => p.idUsuario === idUsuarioLogado);
                 const pos = index !== -1 ? `${index + 1}º` : 'Fora da fila';
 
-                axios.get(`http://localhost:8080/api/pedidos/fila/status-geral`)
+                axios.get(`https://api-impressoes-kayque-99.onrender.com/api/pedidos/fila/status-geral`)
                     .then(s => {
                         setStatusGeral({
                             tempo: s.data.tempoEstimado,

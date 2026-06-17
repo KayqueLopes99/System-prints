@@ -59,7 +59,7 @@ export default function ResumoPagamento() {
         formData.append("file", dadosPedido.arquivoBruto);
 
         try {
-            const response = await fetch("http://localhost:8080/api/pedidos/criar", {
+            const response = await fetch("https://api-impressoes-kayque-99.onrender.com/api/pedidos/criar", {
                 method: "POST",
 
                 

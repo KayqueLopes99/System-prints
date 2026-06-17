@@ -19,7 +19,7 @@ export default function Login() {
     setErroAviso(''); 
 
     try {
-      const resposta = await axios.post('http://localhost:8080/api/usuarios/login', {
+      const resposta = await axios.post('https://api-impressoes-kayque-99.onrender.com/api/usuarios/login', {
         email: email.trim(),
         senha: senha.trim()
       });

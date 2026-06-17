@@ -47,7 +47,7 @@ npm install jspdf jspdf-autotable
     ```bash
     ./mvnw spring-boot:run
     ```
-    *(O servidor rodará em `http://localhost:8080`)*
+    *(O servidor rodará em `https://api-impressoes-kayque-99.onrender.com`)*
 
 ### 2. Rodando o Front-End (React)
 1.  Navegue até a pasta do frontend:

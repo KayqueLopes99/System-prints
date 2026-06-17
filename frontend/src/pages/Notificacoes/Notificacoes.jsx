@@ -10,13 +10,13 @@ export default function Notificacoes() {
     const idUsuario = localStorage.getItem('usuarioId') || 1;
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/notificacoes/usuario/${idUsuario}`)
+        axios.get(`https://api-impressoes-kayque-99.onrender.com/api/notificacoes/usuario/${idUsuario}`)
             .then(res => setNotificacoes(res.data))
             .catch(err => console.error("Erro ao carregar notificações:", err));
     }, [idUsuario]);
 
     const marcarComoLida = (id) => {
-        axios.patch(`http://localhost:8080/api/notificacoes/${id}/lida`)
+        axios.patch(`https://api-impressoes-kayque-99.onrender.com/api/notificacoes/${id}/lida`)
             .then(() => {
                 setNotificacoes(notificacoes.map(n =>
                     n.idNotificacao === id ? { ...n, lida: true } : n

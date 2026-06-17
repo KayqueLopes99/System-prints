@@ -42,13 +42,13 @@ export default function PedidoConfiguracao() {
     // --- BUSCA DADOS INICIAIS (PREÇOS E STATUS) ---
     useEffect(() => {
         // Busca os preços configurados pelo Admin[cite: 8]
-        fetch('http://localhost:8080/api/admin/servicos')
+        fetch('https://api-impressoes-kayque-99.onrender.com/api/admin/servicos')
             .then(res => res.json())
             .then(data => setServicos(data))
             .catch(err => console.error("Erro ao buscar preços:", err));
 
         // Busca o status atual da gráfica[cite: 9]
-        fetch('http://localhost:8080/api/admin/status-setor')
+        fetch('https://api-impressoes-kayque-99.onrender.com/api/admin/status-setor')
             .then(res => res.json())
             .then(data => {
                 setSetorAberto(data.setorAberto);

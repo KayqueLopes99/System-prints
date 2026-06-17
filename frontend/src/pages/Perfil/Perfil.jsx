@@ -30,7 +30,7 @@ export default function Perfil() {
     }, [feedback]);
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/usuarios/${idUsuarioLogado}`)
+        axios.get(`https://api-impressoes-kayque-99.onrender.com/api/usuarios/${idUsuarioLogado}`)
             .then(response => {
                 setPerfil({
                     nomeCompleto: response.data.nomeCompleto || '',
@@ -58,7 +58,7 @@ export default function Perfil() {
                 delete dadosParaEnviar.senha;
             }
 
-            await axios.put(`http://localhost:8080/api/usuarios/${idUsuarioLogado}`, dadosParaEnviar);
+            await axios.put(`https://api-impressoes-kayque-99.onrender.com/api/usuarios/${idUsuarioLogado}`, dadosParaEnviar);
 
             setFeedback({ texto: "Perfil atualizado com sucesso!", tipo: "sucesso" });
             setEditando(false);

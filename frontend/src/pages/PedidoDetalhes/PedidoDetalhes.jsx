@@ -19,14 +19,14 @@ export default function PedidoDetalhes() {
     }, [id]);
 
     const carregarDetalhes = () => {
-        axios.get(`http://localhost:8080/api/pedidos/${id}`)
+        axios.get(`https://api-impressoes-kayque-99.onrender.com/api/pedidos/${id}`)
             .then(res => setPedido(res.data))
             .catch(err => console.error("Erro ao carregar detalhes:", err));
     };
 
     const confirmarMudancaStatus = () => {
         const novoStatus = modal.status;
-        axios.put(`http://localhost:8080/api/pedidos/${id}/status?novoStatus=${novoStatus}`)
+        axios.put(`https://api-impressoes-kayque-99.onrender.com/api/pedidos/${id}/status?novoStatus=${novoStatus}`)
             .then(() => {
                 carregarDetalhes();
                 setModal({ aberto: false, status: '' });
@@ -40,7 +40,7 @@ export default function PedidoDetalhes() {
     };
 
     const fazerDownload = () => {
-        window.open(`http://localhost:8080/api/pedidos/${id}/download`, '_blank');
+        window.open(`https://api-impressoes-kayque-99.onrender.com/api/pedidos/${id}/download`, '_blank');
     };
 
     if (!pedido) return <div className="loading-container">Carregando detalhes...</div>;

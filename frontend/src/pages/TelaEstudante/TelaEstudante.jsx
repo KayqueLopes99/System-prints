@@ -11,17 +11,17 @@ export default function TelaEstudante() {
   const idUsuario = localStorage.getItem('usuarioId') || 1;
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/horarios')
+    fetch('https://api-impressoes-kayque-99.onrender.com/api/horarios')
       .then(response => response.json())
       .then(data => setHorarios(data))
       .catch(error => console.error("Erro ao buscar horários:", error));
 
-    fetch('http://localhost:8080/api/admin/status-setor')
+    fetch('https://api-impressoes-kayque-99.onrender.com/api/admin/status-setor')
       .then(res => res.json())
       .then(data => setSetorAberto(data.setorAberto))
       .catch(err => console.error("Erro ao buscar status do setor:", err));
 
-    fetch(`http://localhost:8080/api/notificacoes/usuario/${idUsuario}/nao-lidas`)
+    fetch(`https://api-impressoes-kayque-99.onrender.com/api/notificacoes/usuario/${idUsuario}/nao-lidas`)
       .then(res => res.json())
       .then(count => setNaoLidas(count))
       .catch(err => console.error("Erro ao buscar notificações:", err));
