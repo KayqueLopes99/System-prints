@@ -41,7 +41,7 @@ export default function RecuperarSenha() {
     setCarregando(true);
 
     try {
-      await axios.post('https://api-impressoes-kayque-99.onrender.com/api/usuarios/recuperar-senha', { email });
+      await axios.post('https://backend-impressoes-ufersa.onrender.com/api/usuarios/recuperar-senha', { email });
       
       setMensagemSucesso('Link enviado! Verifique sua caixa de entrada e spam.');
       

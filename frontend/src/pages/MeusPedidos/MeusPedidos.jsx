@@ -23,11 +23,11 @@ export default function MeusPedidos() {
 
 
     useEffect(() => {
-        axios.get(`https://api-impressoes-kayque-99.onrender.com/api/pedidos/estatisticas/${idUsuario}`)
+        axios.get(`https://backend-impressoes-ufersa.onrender.com/api/pedidos/estatisticas/${idUsuario}`)
             .then(res => setEstatisticas(res.data))
             .catch(err => console.error("Erro nas estatísticas:", err));
 
-        axios.get(`https://api-impressoes-kayque-99.onrender.com/api/pedidos/fila/status-geral`)
+        axios.get(`https://backend-impressoes-ufersa.onrender.com/api/pedidos/fila/status-geral`)
             .then(res => {
                 const nivelTraduzido = res.data.nivelOcupacao === 'BAIXA' ? 'Fila Baixa' :
                     res.data.nivelOcupacao === 'MODERADA' ? 'Fila Moderada' : 'Fila Cheia';
@@ -44,10 +44,10 @@ export default function MeusPedidos() {
     useEffect(() => {
         let url = '';
         if (abaPrincipal === 'ativos') {
-            url = `https://api-impressoes-kayque-99.onrender.com/api/pedidos/ativos/${idUsuario}`;
+            url = `https://backend-impressoes-ufersa.onrender.com/api/pedidos/ativos/${idUsuario}`;
         } else {
-            if (subAba === 'TODOS') url = `https://api-impressoes-kayque-99.onrender.com/api/pedidos/historico/${idUsuario}`;
-            else url = `https://api-impressoes-kayque-99.onrender.com/api/pedidos/usuario/${idUsuario}/status/${subAba}`;
+            if (subAba === 'TODOS') url = `https://backend-impressoes-ufersa.onrender.com/api/pedidos/historico/${idUsuario}`;
+            else url = `https://backend-impressoes-ufersa.onrender.com/api/pedidos/usuario/${idUsuario}/status/${subAba}`;
         }
 
         axios.get(url)

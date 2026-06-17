@@ -37,7 +37,7 @@ export default function ConfiguracoesAdmin() {
 
     useEffect(() => {
         // Busca Preços
-        fetch('https://api-impressoes-kayque-99.onrender.com/api/admin/servicos')
+        fetch('https://backend-impressoes-ufersa.onrender.com/api/admin/servicos')
             .then(res => res.json())
             .then(data => {
                 setPrecos({
@@ -50,7 +50,7 @@ export default function ConfiguracoesAdmin() {
             .catch(err => console.error("Erro ao buscar preços:", err));
 
         // Busca Horários[cite: 15]
-        fetch('https://api-impressoes-kayque-99.onrender.com/api/horarios')
+        fetch('https://backend-impressoes-ufersa.onrender.com/api/horarios')
             .then(res => res.json())
             .then(data => setHorarios(data))
             .catch(err => console.error("Erro ao buscar horários:", err));
@@ -60,10 +60,10 @@ export default function ConfiguracoesAdmin() {
     const salvarAlteracoesPreco = async () => {
         try {
             await Promise.all([
-                fetch(`https://api-impressoes-kayque-99.onrender.com/api/admin/servicos/1/preco?novoPreco=${precos.pb}`, { method: 'PATCH' }),
-                fetch(`https://api-impressoes-kayque-99.onrender.com/api/admin/servicos/2/preco?novoPreco=${precos.colorido}`, { method: 'PATCH' }),
-                fetch(`https://api-impressoes-kayque-99.onrender.com/api/admin/servicos/3/preco?novoPreco=${precos.encBase}`, { method: 'PATCH' }),
-                fetch(`https://api-impressoes-kayque-99.onrender.com/api/admin/servicos/4/preco?novoPreco=${precos.encFolha}`, { method: 'PATCH' })
+                fetch(`https://backend-impressoes-ufersa.onrender.com/api/admin/servicos/1/preco?novoPreco=${precos.pb}`, { method: 'PATCH' }),
+                fetch(`https://backend-impressoes-ufersa.onrender.com/api/admin/servicos/2/preco?novoPreco=${precos.colorido}`, { method: 'PATCH' }),
+                fetch(`https://backend-impressoes-ufersa.onrender.com/api/admin/servicos/3/preco?novoPreco=${precos.encBase}`, { method: 'PATCH' }),
+                fetch(`https://backend-impressoes-ufersa.onrender.com/api/admin/servicos/4/preco?novoPreco=${precos.encFolha}`, { method: 'PATCH' })
             ]);
             avisar("Preços atualizados com sucesso!", "sucesso");
         } catch (error) {
@@ -81,7 +81,7 @@ export default function ConfiguracoesAdmin() {
     const salvarTodosHorarios = async () => {
         try {
             await Promise.all(horarios.map(h =>
-                fetch(`https://api-impressoes-kayque-99.onrender.com/api/horarios/${h.idHorario}`, {
+                fetch(`https://backend-impressoes-ufersa.onrender.com/api/horarios/${h.idHorario}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(h)

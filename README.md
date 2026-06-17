@@ -47,7 +47,7 @@ npm install jspdf jspdf-autotable
     ```bash
     ./mvnw spring-boot:run
     ```
-    *(O servidor rodará em `https://api-impressoes-kayque-99.onrender.com`)*
+    *(O servidor rodará em `https://backend-impressoes-ufersa.onrender.com`)*
 
 ### 2. Rodando o Front-End (React)
 1.  Navegue até a pasta do frontend:
@@ -66,4 +66,4 @@ npm install jspdf jspdf-autotable
 #### EMERGENCIA: Durante o desenvolvimento local, a URL da API deve ser ajustada para `http://localhost:8080` para garantir que as requisições sejam direcionadas corretamente ao servidor Spring Boot rodando localmente. Para produção, mantenha a URL como
 
 
-https://api-impressoes-kayque-99.onrender.com para produção, http://localhost:8080 para desenvolvimento local. Certifique-se de ajustar a URL da API no arquivo `src/apiConfig.js` conforme necessário durante o desenvolvimento.
+https://backend-impressoes-ufersa.onrender.com para produção, http://localhost:8080 para desenvolvimento local. Certifique-se de ajustar a URL da API no arquivo `src/apiConfig.js` conforme necessário durante o desenvolvimento.

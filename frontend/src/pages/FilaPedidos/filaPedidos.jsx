@@ -21,7 +21,7 @@ export default function FilaPedidos() {
     }, []);
 
     const carregarFila = () => {
-        axios.get('https://api-impressoes-kayque-99.onrender.com/api/pedidos/admin/fila', {
+        axios.get('https://backend-impressoes-ufersa.onrender.com/api/pedidos/admin/fila', {
             params: {
                 termo: filtroTexto,
                 status: filtroStatus

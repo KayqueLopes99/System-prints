@@ -70,7 +70,7 @@ export default function AtualizarSenha() {
     }
 
     try {
-      await axios.put('https://api-impressoes-kayque-99.onrender.com/api/usuarios/alterar-senha', {
+      await axios.put('https://backend-impressoes-ufersa.onrender.com/api/usuarios/alterar-senha', {
         email: token, 
         novaSenha: senha 
       });

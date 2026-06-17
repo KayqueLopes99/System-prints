@@ -18,12 +18,12 @@ export default function ConfiguracaoEncadernacao() {
     const [total, setTotal] = useState(20.00);
 
     useEffect(() => {
-        fetch('https://api-impressoes-kayque-99.onrender.com/api/admin/servicos')
+        fetch('https://backend-impressoes-ufersa.onrender.com/api/admin/servicos')
             .then(res => res.json())
             .then(data => setServicos(data))
             .catch(err => console.error("Erro ao buscar preços:", err));
 
-        fetch('https://api-impressoes-kayque-99.onrender.com/api/admin/status-setor')
+        fetch('https://backend-impressoes-ufersa.onrender.com/api/admin/status-setor')
             .then(res => res.json())
             .then(data => {
                 setSetorAberto(data.setorAberto);

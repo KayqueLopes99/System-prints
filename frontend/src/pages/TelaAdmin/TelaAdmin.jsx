@@ -34,7 +34,7 @@ export default function TelaAdmin() {
     }, []);
 
     const carregarDados = () => {
-        axios.get('https://api-impressoes-kayque-99.onrender.com/api/admin/estatisticas-gerais')
+        axios.get('https://backend-impressoes-ufersa.onrender.com/api/admin/estatisticas-gerais')
             .then(res => setStats({
                 pendentes: res.data.pendentes || 0,
                 aguardandoRetirada: res.data.processando || 0,
@@ -43,11 +43,11 @@ export default function TelaAdmin() {
             }))
             .catch(err => console.error("Erro estatísticas:", err));
 
-        axios.get('https://api-impressoes-kayque-99.onrender.com/api/pedidos/admin/fila')
+        axios.get('https://backend-impressoes-ufersa.onrender.com/api/pedidos/admin/fila')
             .then(res => setPedidos(Array.isArray(res.data) ? res.data : []))
             .catch(err => console.error("Erro ao carregar fila:", err));
 
-        axios.get(`https://api-impressoes-kayque-99.onrender.com/api/pedidos/fila/status-geral`)
+        axios.get(`https://backend-impressoes-ufersa.onrender.com/api/pedidos/fila/status-geral`)
             .then(res => {
                 const nivel = res.data.nivelOcupacao === 'BAIXA' ? 'Fila Baixa' :
                     res.data.nivelOcupacao === 'MODERADA' ? 'Fila Moderada' : 'Fila Cheia';
@@ -66,7 +66,7 @@ export default function TelaAdmin() {
 
     const toggleSetor = () => {
         const novoStatus = !setorAberto;
-        axios.put(`https://api-impressoes-kayque-99.onrender.com/api/admin/status-setor?status=${novoStatus}&mensagem=${novoStatus ? "Aberto" : "Fechado"}`)
+        axios.put(`https://backend-impressoes-ufersa.onrender.com/api/admin/status-setor?status=${novoStatus}&mensagem=${novoStatus ? "Aberto" : "Fechado"}`)
             .then(() => setSetorAberto(novoStatus));
     };
 

@@ -28,8 +28,8 @@ export default function GerenciarUsuarios() {
 
     const carregarUsuarios = (termo = '') => {
         const url = termo 
-            ? `https://api-impressoes-kayque-99.onrender.com/api/admin/usuarios?nome=${termo}` 
-            : 'https://api-impressoes-kayque-99.onrender.com/api/admin/usuarios';
+            ? `https://backend-impressoes-ufersa.onrender.com/api/admin/usuarios?nome=${termo}` 
+            : 'https://backend-impressoes-ufersa.onrender.com/api/admin/usuarios';
             
         fetch(url)
             .then(res => res.json())
@@ -47,7 +47,7 @@ export default function GerenciarUsuarios() {
     const handleCadastrarAdmin = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('https://api-impressoes-kayque-99.onrender.com/api/admin/usuarios/admin', {
+            const response = await fetch('https://backend-impressoes-ufersa.onrender.com/api/admin/usuarios/admin', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(novoAdmin)

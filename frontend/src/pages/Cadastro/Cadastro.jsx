@@ -98,7 +98,7 @@ export default function Cadastro() {
     };
 
     try {
-      await axios.post('https://api-impressoes-kayque-99.onrender.com/api/usuarios/cadastrar/estudante', dadosParaEnviar);
+      await axios.post('https://backend-impressoes-ufersa.onrender.com/api/usuarios/cadastrar/estudante', dadosParaEnviar);
 
       setCadastroSucesso(true);
 
