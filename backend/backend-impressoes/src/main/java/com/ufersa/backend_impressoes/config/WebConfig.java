@@ -9,7 +9,8 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://system-prints-pox1.vercel.app") // URL exata da sua Vercel
+                // A mudança mágica está aqui: trocamos para allowedOriginPatterns
+                .allowedOriginPatterns("https://*.vercel.app", "http://localhost:3000")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
